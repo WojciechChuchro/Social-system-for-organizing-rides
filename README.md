@@ -1,1 +1,1 @@
-# Social-system-for-organizing-rides
+# Social system for organizing rides
