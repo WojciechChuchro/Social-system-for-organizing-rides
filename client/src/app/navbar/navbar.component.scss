@@ -1,0 +1,32 @@
+$primary-color: #002b53;
+$text-color: #ffffff;
+$hover-color: darken($text-color, 20%);
+$transition-duration: 0.3s;
+$transition-easing: ease-in-out;
+$font-size: 1.25rem;
+
+.navbar {
+  font-size: $font-size;
+  width: 100%;
+  background-color: $primary-color;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 0 1rem 0;
+
+  a {
+    margin: 2rem;
+    color: $text-color;
+    text-decoration: none;
+  }
+
+  a:hover {
+    transition: color $transition-duration $transition-easing;
+    color: $hover-color;
+  }
+  &-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+}
