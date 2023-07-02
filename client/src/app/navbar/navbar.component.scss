@@ -1,22 +1,16 @@
-$primary-color: #002b53;
-$text-color: #ffffff;
-$hover-color: darken($text-color, 20%);
-$transition-duration: 0.3s;
-$transition-easing: ease-in-out;
-$font-size: 1.25rem;
+@import "../../variables";
 
 .navbar {
-  font-size: $font-size;
   width: 100%;
-  background-color: $primary-color;
+  border-bottom: 1px solid $secoundary;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.7rem 0 1rem 0;
+  padding: $base-padding 0 $base-padding 0;
 
   a {
-    margin: 2rem;
-    color: $text-color;
+    margin: $base-margin * 2;
+    color: $secoundary;
     text-decoration: none;
   }
 
@@ -27,6 +21,6 @@ $font-size: 1.25rem;
   &-content {
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
+    padding: $base-padding;
   }
 }
