@@ -7,9 +7,10 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, LoginComponent, RegisterComponent, HomeComponent],
+  declarations: [AppComponent, NavbarComponent, LoginComponent, RegisterComponent, HomeComponent, ProfileComponent],
   imports: [BrowserModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent],
