@@ -3,13 +3,13 @@
 .btn {
   border-radius: $border-radius;
   padding: $base-padding;
-  width: $base-width * 4;
+  width: $base-width * 6;
 }
 
 .btn:hover {
   cursor: pointer;
-  transition: color $transition-duration $transition-easing;
-  color: $hover-color;
+  transition: background-color $transition-duration $transition-easing;
+  background-color: $hover-color;
 }
 
 .btn-primary {
