@@ -1,0 +1,18 @@
+@import "./variables";
+
+.btn {
+  border-radius: $border-radius;
+  padding: $base-padding;
+  width: $base-width * 4;
+}
+
+.btn:hover {
+  cursor: pointer;
+  transition: color $transition-duration $transition-easing;
+  color: $hover-color;
+}
+
+.btn-primary {
+  color: $primary;
+  background-color: $secoundary;
+}

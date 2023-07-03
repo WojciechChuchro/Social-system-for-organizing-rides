@@ -1,4 +1,7 @@
-@import "./variables";
+@import "./styles/buttons";
+@import "./styles/containers";
+@import "./styles/forms";
+@import "./styles/variables";
 
 * {
   font-size: $base-font-size;
@@ -9,4 +12,5 @@ body {
   margin: 0;
   padding: 0;
   background-color: $primary;
+  color: $secoundary;
 }

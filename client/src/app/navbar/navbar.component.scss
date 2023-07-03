@@ -18,6 +18,7 @@
     transition: color $transition-duration $transition-easing;
     color: $hover-color;
   }
+
   &-content {
     display: flex;
     justify-content: space-between;
