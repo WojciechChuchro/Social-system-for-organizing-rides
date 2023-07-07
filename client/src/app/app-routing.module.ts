@@ -4,11 +4,31 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
+import { SearchComponent } from './search/search.component';
+import { CreateRideComponent } from './create-ride/create-ride.component';
+import { CreateRideDriverComponent } from './create-ride-driver/create-ride-driver.component';
+import { CreateRidePassangerComponent } from './create-ride-passanger/create-ride-passanger.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
+  },
+  {
+    path: 'search',
+    component: SearchComponent,
+  },
+  {
+    path: 'createRide',
+    component: CreateRideComponent,
+  },
+  {
+    path: 'createRideDriver',
+    component: CreateRideDriverComponent,
+  },
+  {
+    path: 'createRidePassanger',
+    component: CreateRidePassangerComponent,
   },
   {
     path: 'profile',
