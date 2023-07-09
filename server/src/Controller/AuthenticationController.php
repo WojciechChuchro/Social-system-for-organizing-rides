@@ -41,6 +41,7 @@
 			return $this->json(['message' => 'User registered successfully'], Response::HTTP_CREATED);
 
 		}
+		
 		public function login(EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $passwordHasher): JsonResponse {
 			$credentials = json_decode($request->getContent(), true);
 			$login = $credentials['login'];
@@ -48,10 +49,7 @@
 
 			$userRepository = $entityManager->getRepository(User::class);
 			$user = $userRepository->findOneBy(['login' => $login]);
-			$hashedPassword = $passwordHasher->hashPassword(
-				$user,
-				$password
-			);
+
 			if (!$user) {
 				return $this->json(['error' => 'Invalid login credentials.']);
 			}

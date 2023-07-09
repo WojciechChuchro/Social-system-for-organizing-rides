@@ -12,10 +12,22 @@ import { SearchComponent } from './search/search.component';
 import { CreateRideComponent } from './create-ride/create-ride.component';
 import { CreateRideDriverComponent } from './create-ride-driver/create-ride-driver.component';
 import { CreateRidePassangerComponent } from './create-ride-passanger/create-ride-passanger.component';
-
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, LoginComponent, RegisterComponent, HomeComponent, ProfileComponent, SearchComponent, CreateRideComponent, CreateRideDriverComponent, CreateRidePassangerComponent],
-  imports: [BrowserModule, AppRoutingModule],
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    LoginComponent,
+    RegisterComponent,
+    HomeComponent,
+    ProfileComponent,
+    SearchComponent,
+    CreateRideComponent,
+    CreateRideDriverComponent,
+    CreateRidePassangerComponent,
+  ],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
 })

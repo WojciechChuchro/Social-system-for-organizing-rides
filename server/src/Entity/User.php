@@ -29,7 +29,7 @@ class User implements PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 9)]
     private ?string $phone_number = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $profile_picture = null;
 
     public function getId(): ?int
