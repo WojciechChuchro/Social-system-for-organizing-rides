@@ -1,33 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Social-system-for-organizing-rides" uuid="70921e4c-6fbe-4111-8b70-350c034b9683">
+    <data-source source="LOCAL" name="Php my admin" uuid="ba110f7a-d76e-4863-b42d-6aad52488d49">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>mysql://wojtek:wojtek@127.0.0.1:3310/social-system-for-organizing-rides?serverVersion=5.7</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="@localhost" uuid="2b53e2f9-f29a-4bf0-a332-90271c2889ce">
-      <driver-ref>oracle.19</driver-ref>
-      <synchronize>true</synchronize>
-      <auto-commit>false</auto-commit>
-      <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
-      <jdbc-url>jdbc:oracle:thin:@localhost:1521:XE</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="@localhost [2]" uuid="400c4f7a-51dd-4839-82b9-e6b8190782b7">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
+      <remarks>Social system for organizing rides</remarks>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3310</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="MySQL" uuid="3e9a1cae-4e33-4ab5-a02b-e05a69458bdf">
-      <driver-ref>mysql.8</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>mysql://social-system-for-organizing-rides:3310/5.7</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
