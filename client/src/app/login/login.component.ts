@@ -1,5 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { UserService } from '../services/user'; // Update the path accordingly
+
+interface LoginResponse {
+  message: string;
+  id_user: number;
+}
 
 @Component({
   selector: 'app-login',
@@ -9,9 +15,9 @@ import { Component } from '@angular/core';
 export class LoginComponent {
   login!: string;
   password!: string;
-  // repeatPassword!: string;
+  loginResponse: LoginResponse | undefined = undefined;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   handleLogin() {
     const requestBody = {
@@ -20,8 +26,10 @@ export class LoginComponent {
     };
 
     this.http.post('http://127.0.0.1:8000/login', requestBody).subscribe(
-      (response) => {
-        console.log('Registration successful:', response);
+      (response:  any) => {
+        this.loginResponse = response;
+        this.userService.setUserId(response.id_user);
+        console.log(this.loginResponse);
       },
       (error) => {
         console.error('Registration error:', error);
