@@ -58,7 +58,7 @@
 				return $this->json(['error' => 'Invalid login credentials.']);
 			}
 
-			return $this->json(['message' => 'Logged in successfully']);
+			return $this->json(['message' => 'Logged in successfully', "user" => $user->getId()]);
 		}
 
 
