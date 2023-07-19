@@ -1,4 +1,3 @@
-import { UserService } from './services/user.service';
 import { Component } from '@angular/core';
 import { User } from 'src/types/user';
 // import { UserService } from './services/user'; // Update the path accordingly
