@@ -5,76 +5,78 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
-class User implements PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id_user = null;
+    private ?int $id = null;
 
-    #[ORM\Column(length: 30)]
-    private ?string $name = null;
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
 
-    #[ORM\Column(length: 30)]
-    private ?string $surename = null;
+    #[ORM\Column]
+    private array $roles = [];
 
-    #[ORM\Column(length: 30)]
-    private ?string $login = null;
-
-    #[ORM\Column(length: 255)]
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
     private ?string $password = null;
-
-    #[ORM\Column(length: 9)]
-    private ?string $phone_number = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $profile_picture = null;
 
     public function getId(): ?int
     {
-        return $this->id_user;
+        return $this->id;
     }
 
-    public function getName(): ?string
+    public function getEmail(): ?string
     {
-        return $this->name;
+        return $this->email;
     }
 
-    public function setName(string $name): static
+    public function setEmail(string $email): static
     {
-        $this->name = $name;
+        $this->email = $email;
 
         return $this;
     }
 
-    public function getSurename(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->surename;
+        return (string) $this->email;
     }
 
-    public function setSurename(string $surename): static
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
     {
-        $this->surename = $surename;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
 
         return $this;
     }
 
-    public function getLogin(): ?string
-    {
-        return $this->login;
-    }
-
-    public function setLogin(string $login): static
-    {
-        $this->login = $login;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -86,27 +88,12 @@ class User implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhoneNumber(): ?string
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
     {
-        return $this->phone_number;
-    }
-
-    public function setPhoneNumber(string $phone_number): static
-    {
-        $this->phone_number = $phone_number;
-
-        return $this;
-    }
-
-    public function getProfilePicture(): ?string
-    {
-        return $this->profile_picture;
-    }
-
-    public function setProfilePicture(string $profile_picture): static
-    {
-        $this->profile_picture = $profile_picture;
-
-        return $this;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 }
