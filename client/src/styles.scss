@@ -1,17 +1,9 @@
-@import "./styles/buttons";
-@import "./styles/containers";
-@import "./styles/forms";
-@import "./styles/variables";
-@import "./styles/elements";
-
-* {
-  font-size: $base-font-size;
-  font-family: "Roboto", sans-serif;
-}
+@import "~@angular/material/prebuilt-themes/purple-green.css";
 html,
 body {
+  height: 100%;
+}
+
+body {
   margin: 0;
-  padding: 0;
-  background-color: $primary;
-  color: $secoundary;
 }
