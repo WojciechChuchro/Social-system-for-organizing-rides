@@ -13,8 +13,18 @@
       <a routerLink="yourRides" mat-list-item>Your Rides</a>
       <a routerLink="messages" mat-list-item>Messages</a>
       <a routerLink="profile" mat-list-item>Profile</a>
-      <a routerLink="login" mat-list-item>Login</a>
-      <a routerLink="register" mat-list-item="accent">Register</a>
+      <!-- Conditionally show login/register buttons -->
+      <a *ngIf="!isLoggedIn" routerLink="login" mat-list-item> Login </a>
+      <a
+        *ngIf="!isLoggedIn"
+        routerLink="registration"
+        mat-list-item
+        color="accent"
+      >
+        Register
+      </a>
+      <!-- Show logout button when logged in -->
+      <a *ngIf="isLoggedIn" (click)="logout()" mat-list-item> Logout </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

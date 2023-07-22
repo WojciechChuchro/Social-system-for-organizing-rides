@@ -1,0 +1,46 @@
+<mat-card class="flex-center-column-container">
+  <mat-form-field>
+    <input matInput [(ngModel)]="email" placeholder="Email" required />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [(ngModel)]="name" placeholder="Name" required />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [(ngModel)]="surname" placeholder="Surname" required />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      [(ngModel)]="phone_number"
+      placeholder="Phone Number"
+      required
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      type="password"
+      [(ngModel)]="password"
+      placeholder="Password"
+      required
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      type="password"
+      [(ngModel)]="repeatPassword"
+      placeholder="Repeat Password"
+      required
+    />
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="handleRegister()">
+    Register
+  </button>
+</mat-card>

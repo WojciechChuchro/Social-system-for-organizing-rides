@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
+import { RegistrationComponent } from './registration/registration.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SearchComponent } from './search/search.component';
 import { CreateRideComponent } from './create-ride/create-ride.component';
@@ -34,13 +34,13 @@ const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
   },
+  // {
+  //   path: 'login',
+  //   component: LoginComponent,
+  // },
   {
-    path: 'login',
-    component: LoginComponent,
-  },
-  {
-    path: 'register',
-    component: RegisterComponent,
+    path: 'registration',
+    component: RegistrationComponent,
   },
 ];
 

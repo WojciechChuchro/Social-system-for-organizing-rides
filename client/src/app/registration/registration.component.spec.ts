@@ -7,15 +7,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 
-import { OeuComponent } from './oeu.component';
+import { RegistrationComponent } from './registration.component';
 
-describe('OeuComponent', () => {
-  let component: OeuComponent;
-  let fixture: ComponentFixture<OeuComponent>;
+describe('RegistrationComponent', () => {
+  let component: RegistrationComponent;
+  let fixture: ComponentFixture<RegistrationComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [OeuComponent],
+      declarations: [RegistrationComponent],
       imports: [
         NoopAnimationsModule,
         ReactiveFormsModule,
@@ -29,7 +29,7 @@ describe('OeuComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OeuComponent);
+    fixture = TestBed.createComponent(RegistrationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -3,8 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { RegisterComponent } from './register/register.component';
+
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SearchComponent } from './search/search.component';
@@ -22,15 +21,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { OeuComponent } from './oeu/oeu.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
+import { RegistrationComponent } from './registration/registration.component';
 
-const importComponents = [
+const declarationComponents = [
   AppComponent,
-  RegisterComponent,
   HomeComponent,
   ProfileComponent,
   SearchComponent,
@@ -38,25 +36,34 @@ const importComponents = [
   CreateRideDriverComponent,
   CreateRidePassangerComponent,
   HeaderComponent,
-  OeuComponent,
+  RegistrationComponent,
+];
+
+const importModules = [
+  BrowserModule,
+  AppRoutingModule,
+  FormsModule,
+  HttpClientModule,
+  BrowserAnimationsModule,
+  MaterialModule,
+  MatToolbarModule,
+  MatButtonModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatListModule,
+  MatInputModule,
+  MatSelectModule,
+  MatRadioModule,
+  MatCardModule,
+  ReactiveFormsModule,
 ];
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  declarations: [importComponents],
+  declarations: [declarationComponents],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MaterialModule,
-    LoginComponent,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
+    importModules,
     MatInputModule,
+    MatButtonModule,
     MatSelectModule,
     MatRadioModule,
     MatCardModule,
