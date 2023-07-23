@@ -1,1 +1,77 @@
-<p>create-ride-driver works!</p>
+<mat-card class="flex-center-container">
+  <mat-card-header>
+    <mat-card-title>Create Ride</mat-card-title>
+  </mat-card-header>
+  <div class="flex-center-column-container">
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="starting point"
+        [(ngModel)]="starting_point"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Destination"
+        [(ngModel)]="destination"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="departure time"
+        [(ngModel)]="departure_time"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        placeholder="Arrival Time"
+        [(ngModel)]="arrival_time"
+        required
+      />
+    </mat-form-field>
+  </div>
+  <div class="flex-center-column-container">
+    <mat-form-field>
+      <input matInput [(ngModel)]="price" placeholder="price" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="car_model"
+        placeholder="Car Model"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="registration_number"
+        placeholder="Registration Number"
+        required
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        [(ngModel)]="number_of_seats"
+        placeholder="Number of seats"
+        required
+      />
+    </mat-form-field>
+  </div>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="handleCreateRide()">
+      Register
+    </button>
+  </mat-card-actions>
+</mat-card>
