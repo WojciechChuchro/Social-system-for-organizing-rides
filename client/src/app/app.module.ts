@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
 import { AboutusComponent } from './aboutus/aboutus.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SearchComponent } from './search/search.component';
@@ -26,6 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { RegistrationComponent } from './registration/registration.component';
+import { LoginComponent } from './login/login.component';
 
 const declarationComponents = [
   AppComponent,
@@ -37,6 +36,7 @@ const declarationComponents = [
   CreateRidePassangerComponent,
   HeaderComponent,
   RegistrationComponent,
+  LoginComponent,
 ];
 
 const importModules = [

@@ -1,66 +1,25 @@
-<div class="example-container">
+<mat-card class="login-card">
+  <mat-card-header>
+    <mat-card-title>Login</mat-card-title>
+  </mat-card-header>
+
   <mat-form-field>
-    <mat-label>Enter your email</mat-label>
+    <input matInput [(ngModel)]="email" placeholder="Email" required />
+  </mat-form-field>
+
+  <mat-form-field>
     <input
       matInput
-      placeholder="pat@example.com"
-      [formControl]="email"
+      type="password"
+      [(ngModel)]="password"
+      placeholder="Password"
       required
     />
-    <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
   </mat-form-field>
-  <mat-form-field>
-    <mat-label>Enter your password</mat-label>
-    <input matInput [type]="hide ? 'password' : 'text'" />
-    <button
-      mat-icon-button
-      matSuffix
-      (click)="hide = !hide"
-      [attr.aria-label]="'Hide password'"
-      [attr.aria-pressed]="hide"
-    >
-      <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="handleLogin()">
+      Login
     </button>
-  </mat-form-field>
-</div>
-
-<!-- <div class="flex-center-column-container">
-  <mat-form-field>
-    <mat-label>Input</mat-label>
-    <input matInput />
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Select</mat-label>
-    <mat-select>
-      <mat-option value="one">First option</mat-option>
-      <mat-option value="two">Second option</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Textarea</mat-label>
-    <textarea matInput></textarea>
-  </mat-form-field>
-  <input
-    class="ipt"
-    type="text"
-    [(ngModel)]="login"
-    placeholder="Login"
-    required
-  />
-  <input
-    class="ipt"
-    type="text"
-    [(ngModel)]="password"
-    placeholder="Password"
-    required
-  />
-
-  <button
-    mat-stroked-button
-    color="primary"
-    type="submit"
-    (click)="handleLogin()"
-  >
-    Login
-  </button>
-</div> -->
+  </mat-card-actions>
+</mat-card>

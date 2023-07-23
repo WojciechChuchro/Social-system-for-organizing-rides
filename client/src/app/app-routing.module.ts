@@ -34,10 +34,10 @@ const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
   },
-  // {
-  //   path: 'login',
-  //   component: LoginComponent,
-  // },
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
   {
     path: 'registration',
     component: RegistrationComponent,

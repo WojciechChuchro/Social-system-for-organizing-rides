@@ -1,4 +1,7 @@
 <mat-card class="flex-center-column-container">
+  <mat-card-header>
+    <mat-card-title>Registration</mat-card-title>
+  </mat-card-header>
   <mat-form-field>
     <input matInput [(ngModel)]="email" placeholder="Email" required />
   </mat-form-field>
@@ -39,8 +42,9 @@
       required
     />
   </mat-form-field>
-
-  <button mat-raised-button color="primary" (click)="handleRegister()">
-    Register
-  </button>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="handleRegister()">
+      Register
+    </button>
+  </mat-card-actions>
 </mat-card>
