@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
+import { AboutusComponent } from './aboutus/aboutus.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SearchComponent } from './search/search.component';
@@ -11,8 +11,8 @@ import { CreateRidePassangerComponent } from './create-ride-passanger/create-rid
 
 const routes: Routes = [
   {
-    path: '',
-    component: HomeComponent,
+    path: 'aboutUs',
+    component: AboutusComponent,
   },
   {
     path: 'search',
