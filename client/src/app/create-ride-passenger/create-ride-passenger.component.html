@@ -1,0 +1,58 @@
+<mat-card class="flex-center-column-container">
+  <mat-card-header>
+    <mat-card-title>Registration</mat-card-title>
+  </mat-card-header>
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="starting point"
+      [(ngModel)]="starting_point"
+      required
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Destination"
+      [(ngModel)]="destination"
+      required
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Earliest departure time"
+      [(ngModel)]="earliest_departure_time"
+      required
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      placeholder="Latest departure time"
+      [(ngModel)]="latest_departure_time"
+      required
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input
+      matInput
+      [(ngModel)]="number_of_passengers"
+      placeholder="Number of passengers"
+      required
+    />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [(ngModel)]="max_price" placeholder="Max price" required />
+  </mat-form-field>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="handleCreateRide()">
+      Register
+    </button>
+  </mat-card-actions>
+</mat-card>

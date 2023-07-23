@@ -7,7 +7,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { SearchComponent } from './search/search.component';
 import { CreateRideComponent } from './create-ride/create-ride.component';
 import { CreateRideDriverComponent } from './create-ride-driver/create-ride-driver.component';
-import { CreateRidePassangerComponent } from './create-ride-passanger/create-ride-passanger.component';
+import { CreateRidePassengerComponent } from './create-ride-passenger/create-ride-passenger.component';
 
 const routes: Routes = [
   {
@@ -27,8 +27,8 @@ const routes: Routes = [
     component: CreateRideDriverComponent,
   },
   {
-    path: 'createRidePassanger',
-    component: CreateRidePassangerComponent,
+    path: 'createRidePassenger',
+    component: CreateRidePassengerComponent,
   },
   {
     path: 'profile',

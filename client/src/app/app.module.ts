@@ -7,7 +7,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { SearchComponent } from './search/search.component';
 import { CreateRideComponent } from './create-ride/create-ride.component';
 import { CreateRideDriverComponent } from './create-ride-driver/create-ride-driver.component';
-import { CreateRidePassangerComponent } from './create-ride-passanger/create-ride-passanger.component';
+import { CreateRidePassengerComponent } from './create-ride-passenger/create-ride-passenger.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,7 +33,7 @@ const declarationComponents = [
   SearchComponent,
   CreateRideComponent,
   CreateRideDriverComponent,
-  CreateRidePassangerComponent,
+  CreateRidePassengerComponent,
   HeaderComponent,
   RegistrationComponent,
   LoginComponent,
