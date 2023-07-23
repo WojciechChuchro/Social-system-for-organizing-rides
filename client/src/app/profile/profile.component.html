@@ -1,21 +1,38 @@
 <div class="flex-center-container">
-  <div class="flex-center-column-container">
-    Driver Rating 4
-    <input class="ipt" type="text" placeholder="John" />
-    <input class="ipt" type="text" placeholder="Smith" />
-    <input class="ipt" type="text" placeholder="123456789" />
-    <input class="ipt" type="email" placeholder="jognsmith@gmail.com" />
-    <input class="ipt" type="password" placeholder="Password" />
-    <button class="btn primary" type="submit">Save Changes</button>
+  <div class="flex-center-column-container p-1">
+    <h2>Driver Rating: 4</h2>
+    <mat-form-field>
+      <input matInput type="text" placeholder="John" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" placeholder="Smith" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" placeholder="123456789" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="email" placeholder="johnsmith@gmail.com" />
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="password" placeholder="Password" />
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">
+      Save Changes
+    </button>
   </div>
-  <div class="flex-center-column-container">
-    Profile Icon
-    <textarea
-      class="ipt"
-      placeholder="Preferences"
-      cols="30"
-      rows="14"
-    ></textarea>
-    <button class="btn primary" type="submit">Change Password</button>
+  <div class="flex-center-column-container p-1">
+    <h2>Profile Icon</h2>
+    <mat-form-field>
+      <textarea
+        style="resize: none"
+        matInput
+        placeholder="Preferences"
+        cols="30"
+        rows="14"
+      ></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">
+      Change Password
+    </button>
   </div>
 </div>
