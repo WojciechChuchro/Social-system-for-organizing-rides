@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
 export class LoginComponent {
   email: string = '';
   password: string = '';
+  hidePassword: boolean = true;
 
   handleLogin() {
     // Implement your login logic here
@@ -15,5 +16,9 @@ export class LoginComponent {
       email: this.email,
       password: this.password,
     });
+  }
+
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
   }
 }

@@ -1,20 +1,26 @@
-<mat-card class="login-card">
+<mat-card class="flex-center-column-container">
   <mat-card-header>
     <mat-card-title>Login</mat-card-title>
   </mat-card-header>
 
   <mat-form-field>
     <input matInput [(ngModel)]="email" placeholder="Email" required />
+    <button mat-icon-button matSuffix>
+      <mat-icon>login</mat-icon>
+    </button>
   </mat-form-field>
 
   <mat-form-field>
     <input
       matInput
-      type="password"
+      [type]="hidePassword ? 'password' : 'text'"
       [(ngModel)]="password"
       placeholder="Password"
       required
     />
+    <button mat-icon-button matSuffix (click)="togglePasswordVisibility()">
+      <mat-icon>{{ hidePassword ? "visibility_off" : "visibility" }}</mat-icon>
+    </button>
   </mat-form-field>
 
   <mat-card-actions>
