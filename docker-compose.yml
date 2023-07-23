@@ -1,42 +1,88 @@
-version: "3"
+# version: "3"
 
+# services:
+#   phpmyadmin-service:
+#     image: phpmyadmin:latest
+#     container_name: phpmyadmin-container
+#     environment:
+#       - PMA_ARBITRARY=1
+#       - PMA_HOST=mysql-container
+#       - PMA_USER=wojtek
+#       - PMA_PASSWORD=wojtek
+#     ports:
+#       - 8888:80
+
+#   angular-service:
+#     container_name: angular-container
+#     build:
+#       context: ./client
+#       dockerfile: Dockerfile
+#     ports:
+#       - 8080:80
+
+#   symfony-service:
+#     container_name: symfony-container
+#     build:
+#       context: ./server
+#       dockerfile: Dockerfile
+#     ports:
+#       - 8000:8000
+#     depends_on:
+#       - mysql-service
+
+#   mysql-service:
+#     image: mysql:latest
+#     container_name: mysql-container
+#     environment:
+#       - MYSQL_ROOT_PASSWORD=wojtek
+#       - MYSQL_DATABASE=social-system-for-organizing-rides
+#       - MYSQL_USER=wojtek
+#       - MYSQL_PASSWORD=wojtek
+#     ports:
+#       - 3306:3306
+version: "3.8"
 services:
-  phpmyadmin-service:
-    image: phpmyadmin:latest
-    container_name: phpmyadmin-container
+  # Mysql database container
+  db:
+    image: mysql
+    container_name: db_symfony
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
     environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=mysql-container
-      - PMA_USER=wojtek
-      - PMA_PASSWORD=wojtek
-    ports:
-      - 8888:80
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    networks:
+      - symfony-network
 
-  angular-service:
-    container_name: angular-container
-    build:
-      context: ./client
-      dockerfile: Dockerfile
+  # phpmyadmin container
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    depends_on:
+      - db
     ports:
       - 8080:80
-
-  symfony-service:
-    container_name: symfony-container
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    ports:
-      - 8000:8000
-    depends_on:
-      - mysql-service
-
-  mysql-service:
-    image: mysql:latest
-    container_name: mysql-container
     environment:
-      - MYSQL_ROOT_PASSWORD=wojtek
-      - MYSQL_DATABASE=social-system-for-organizing-rides
-      - MYSQL_USER=wojtek
-      - MYSQL_PASSWORD=wojtek
+      PMA_HOST: db
+    networks:
+      - symfony-network
+
+  # Symfony apache project container
+  www:
+    build: docker/php
+    container_name: symfony
     ports:
-      - 3306:3306
+      - "8741:80"
+    volumes:
+      - ./docker/php/vhosts:/etc/apache2/sites-enabled
+      - ./:/var/www
+    restart: always
+    networks:
+      - symfony-network
+
+networks:
+  symfony-network:
+
+volumes:
+  db-data:

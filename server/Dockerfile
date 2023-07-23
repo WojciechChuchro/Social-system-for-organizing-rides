@@ -1,21 +1,15 @@
-# Use the official PHP image as the base
-FROM php:8.1-apache
+FROM php:8.0.3-fpm
 
-# Set the working directory inside the container
-WORKDIR /var/www/html
+WORKDIR /app
 
-# Install dependencies and extensions
-RUN apt-get update && apt-get install -y \
-    libzip-dev \
-    unzip \
-    && docker-php-ext-install zip pdo_mysql \
-    && a2enmod rewrite
+RUN apt-get update
 
-# Copy the entire Symfony project
-COPY . .
+RUN apt-get -y install git zip libpq-dev
 
-# Expose the port on which the Symfony application will run
-EXPOSE 8000
+RUN docker-php-ext-install pdo pdo_pgsql pgsql
 
-# Define the command to start the Symfony application
-CMD [ "apache2-foreground" ]
+RUN curl -sL https://getcomposer.org/installer | php -- --install-dir /usr/bin --filename composer
+
+RUN pecl install xdebug
+
+CMD ["php-fpm"]
