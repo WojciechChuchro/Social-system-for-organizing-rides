@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../shared/auth/auth.service';
 import { LoginForm } from 'src/types/user';
-
+import { CookieService } from 'ngx-cookie-service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoginStatusService } from '../shared/login-status.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -15,18 +17,32 @@ export class LoginComponent {
   hidePassword: boolean = true;
   loading: boolean = false;
 
-  constructor(private auth: AuthService) {}
+  constructor(
+    private auth: AuthService,
+    private cookieService: CookieService,
+    private snackBar: MatSnackBar,
+    private loginStatusService: LoginStatusService
+  ) {}
+
+  showAlert(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
+
   handleLogin() {
     console.log(this.loginForm);
     this.loading = true;
     this.auth.login(this.loginForm).subscribe({
-      next: () => {
-        alert('login successful');
+      next: (data: any) => {
+        this.cookieService.set('JsonWebToken', data.token);
+        this.showAlert('login successful', 'Close', 3000);
+        this.loginStatusService.setLoginStatus(true);
         this.loading = false;
       },
       error: (error) => {
         this.loading = false;
-        alert('login failed');
+        this.showAlert('login failed', 'Close', 3000);
       },
     });
   }

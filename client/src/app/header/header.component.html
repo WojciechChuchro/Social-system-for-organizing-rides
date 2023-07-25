@@ -15,9 +15,11 @@
       <a routerLink="messages" mat-list-item>Messages</a>
       <a routerLink="profile" mat-list-item>Profile</a>
 
-      <a *ngIf="!isLoggedIn" routerLink="login" mat-list-item> Login </a>
+      <a *ngIf="!(isLoggedIn$ | async)" routerLink="login" mat-list-item>
+        Login
+      </a>
       <a
-        *ngIf="!isLoggedIn"
+        *ngIf="!(isLoggedIn$ | async)"
         routerLink="registration"
         mat-list-item
         color="accent"
@@ -25,7 +27,9 @@
         Register
       </a>
       <!-- Show logout button when logged in -->
-      <a *ngIf="isLoggedIn" (click)="logout()" mat-list-item> Logout </a>
+      <a *ngIf="isLoggedIn$ | async" (click)="logout()" mat-list-item>
+        Logout
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
