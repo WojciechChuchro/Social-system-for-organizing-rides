@@ -4,7 +4,12 @@
   </mat-card-header>
 
   <mat-form-field>
-    <input matInput [(ngModel)]="email" placeholder="Email" required />
+    <input
+      matInput
+      [(ngModel)]="loginForm.email"
+      placeholder="Email"
+      required
+    />
     <button mat-icon-button matSuffix>
       <mat-icon>login</mat-icon>
     </button>
@@ -14,7 +19,7 @@
     <input
       matInput
       [type]="hidePassword ? 'password' : 'text'"
-      [(ngModel)]="password"
+      [(ngModel)]="loginForm.password"
       placeholder="Password"
       required
     />
@@ -27,5 +32,6 @@
     <button mat-raised-button color="primary" (click)="handleLogin()">
       Login
     </button>
+    <mat-spinner *ngIf="loading">loading</mat-spinner>
   </mat-card-actions>
 </mat-card>

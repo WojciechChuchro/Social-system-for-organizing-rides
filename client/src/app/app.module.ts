@@ -25,6 +25,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { RegistrationComponent } from './registration/registration.component';
 import { LoginComponent } from './login/login.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 const declarationComponents = [
   AppComponent,
@@ -52,6 +53,7 @@ const importModules = [
   MatIconModule,
   MatListModule,
   MatInputModule,
+
   MatSelectModule,
   MatRadioModule,
   MatCardModule,

@@ -6,3 +6,8 @@ export interface User {
   phone_number: string;
   profile_picture: string;
 }
+
+export interface LoginForm {
+  email: string;
+  password: string;
+}
