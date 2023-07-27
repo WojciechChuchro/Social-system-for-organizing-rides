@@ -1,45 +1,3 @@
-# version: "3"
-
-# services:
-#   phpmyadmin-service:
-#     image: phpmyadmin:latest
-#     container_name: phpmyadmin-container
-#     environment:
-#       - PMA_ARBITRARY=1
-#       - PMA_HOST=mysql-container
-#       - PMA_USER=wojtek
-#       - PMA_PASSWORD=wojtek
-#     ports:
-#       - 8888:80
-
-#   angular-service:
-#     container_name: angular-container
-#     build:
-#       context: ./client
-#       dockerfile: Dockerfile
-#     ports:
-#       - 8080:80
-
-#   symfony-service:
-#     container_name: symfony-container
-#     build:
-#       context: ./server
-#       dockerfile: Dockerfile
-#     ports:
-#       - 8000:8000
-#     depends_on:
-#       - mysql-service
-
-#   mysql-service:
-#     image: mysql:latest
-#     container_name: mysql-container
-#     environment:
-#       - MYSQL_ROOT_PASSWORD=wojtek
-#       - MYSQL_DATABASE=social-system-for-organizing-rides
-#       - MYSQL_USER=wojtek
-#       - MYSQL_PASSWORD=wojtek
-#     ports:
-#       - 3306:3306
 version: "3.8"
 services:
   # Mysql database container
@@ -57,7 +15,7 @@ services:
   # phpmyadmin container
   phpmyadmin:
     image: phpmyadmin
-    container_name: phpmyadmin
+    container_name: phpmyadmin-container
     restart: always
     depends_on:
       - db
@@ -68,10 +26,21 @@ services:
     networks:
       - symfony-network
 
-  # Symfony apache project container
+  # Angular frontend container
+  # angular-service:
+  #   container_name: angular-container
+  #   build:
+  #     context: ./docker/angular
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 4200:80 # Map host port 4200 to container port 80
+  #   networks:
+  #     - symfony-network
+
+  # Symfony Apache project container
   www:
-    build: docker/php
-    container_name: symfony
+    build: ./docker/php # Update the path to the Symfony app
+    container_name: symfony-container
     ports:
       - "8741:80"
     volumes:
