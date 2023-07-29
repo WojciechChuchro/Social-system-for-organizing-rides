@@ -5,19 +5,19 @@ FROM openjdk:11-jdk-slim as build
 WORKDIR /app
  
 # Copy maven executable to the image
-COPY .mvnw .
-COPY server/.mvn .mvn
- 
+COPY mvnw .
+COPY .mvn .mvn
+
 # Copy the pom.xml file
-COPY server/pom.xml .
- 
-# Build all the dependencies in preparation to go offline. 
-# This is a separate step so the dependencies will be cached unless 
+COPY pom.xml .
+
+# Build all the dependencies in preparation to go offline.
+# This is a separate step so the dependencies will be cached unless
 # the pom.xml file has changed.
 RUN ./mvnw dependency:go-offline -B
- 
+
 # Copy the project source
-COPY server/src src
+COPY src src
  
 # Package the application
 RUN ./mvnw package -DskipTests
