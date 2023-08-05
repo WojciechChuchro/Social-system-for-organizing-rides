@@ -1,57 +1,43 @@
-# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
-version: '3.7'
-
-# Define services
+version: "3"
 services:
-  # App backend service
-  app-server:
-    # Configuration for building the docker image for the backend service
-    build:
-      context: ./docker/spring # Use an image built from the specified dockerfile in the `spring-boot-oauth2-social-login` directory.
-      dockerfile: server/Dockerfile
-    ports:
-      - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
-    restart: always
-    depends_on:
-      - db # This service depends on mysql. Start that first.
-    environment: # Pass environment variables to the service
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/demo?useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: javachinna
-      SPRING_DATASOURCE_PASSWORD: javachinna
-    networks: # Networks to join (Services on the same network can communicate with each other using their name)
-      - backend
-      - frontend
 
-  # Frontend Service 
-  app-client:
+  angular-service:
+    image: "angular-image"
+    container_name: "angular-container"
     build:
-      context: ./docker/angular # Use an image built from the specified dockerfile in the `angular-11-social-login` directory.
-      dockerfile: client/Dockerfile
-      args:
-        API_BASE_URL: http://127.0.0.1:8080/
+      context: ./client
+      dockerfile: Dockerfile
     ports:
-      - "8081:80" # Map the exposed port 80 on the container to port 8081 on the host machine
-    restart: always
-    depends_on:
-      - app-server
-    networks:
-      - frontend
+      - "4200:80"
 
-  # Database Service (Mysql)
-  db:
-    image: mysql:8.0
+  express-service:
+    image: "express-image"
+    container_name: "express-container"
+    build:
+      context: ./server
+    volumes:
+      - ./server:/app
+    ports:
+      - "8080:80"
+
+  mysql-service:
+    image: mysql:latest
+    container_name: mysql-container
+    environment:
+      - MYSQL_ROOT_PASSWORD=wojtek
+      - MYSQL_DATABASE=social-system-for-organizing-rides
+      - MYSQL_USER=wojtek
+      - MYSQL_PASSWORD=wojtek
     ports:
       - "3306:3306"
-    restart: always
-    environment:
-      MYSQL_DATABASE: demo
-      MYSQL_USER: javachinna
-      MYSQL_PASSWORD: javachinna
-      MYSQL_ROOT_PASSWORD: root
-    networks:
-      - backend
 
-# Networks to be created to facilitate communication between containers
-networks:
-  backend:
-  frontend: 
+  phpmyadmin-service:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin-container
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql-container
+      - PMA_USER=wojtek
+      - PMA_PASSWORD=wojtek
+    ports:
+      - "8888:80"
