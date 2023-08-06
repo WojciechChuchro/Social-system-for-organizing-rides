@@ -1,5 +1,4 @@
-import { authentication } from "../helpers/index"
-import { getUserByEmail, getUserByUsername } from "../models/users.model"
+import { authentication } from "../helpers"
 import { CustomValidator } from "express-validator"
 
 export const checkUserExistsByEmail = async (email: string) => {
