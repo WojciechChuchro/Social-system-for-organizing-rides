@@ -1,43 +1,61 @@
 version: "3"
 services:
 
-  angular-service:
-    image: "angular-image"
-    container_name: "angular-container"
-    build:
-      context: ./client
-      dockerfile: Dockerfile
+  client-service:
+    #    container_name: client-container
+    #    build:
+    #      context: ./client
+    image: angular/ngcontainer:latest
+    volumes:
+      - ./client:/usr/local/app/client
+    stdin_open: true
+    depends_on:
+      - nginx
     ports:
-      - "4200:80"
+      - "4200:4200"
+    networks:
+      - sena-app
 
-  express-service:
-    image: "express-image"
-    container_name: "express-container"
+  server-service:
+    container_name: server-container
+    #    image: bitnami/express:latest
     build:
       context: ./server
     volumes:
-      - ./server:/app
+      - ./server:/usr/local/app/server
+    depends_on:
+      - mysql-service
+      - nginx
+    networks:
+      - sena-app
     ports:
-      - "8080:80"
+      - "8080:8080"
+
+  nginx:
+    container_name: ${NGINX_CONTAINER_NAME}
+    image: nginx:latest
+    ports:
+      - "3500:80"
+    networks:
+      - sena-app
 
   mysql-service:
     image: mysql:latest
-    container_name: mysql-container
+    container_name: ${MYSQL_CONTAINER_NAME}
     environment:
-      - MYSQL_ROOT_PASSWORD=wojtek
-      - MYSQL_DATABASE=social-system-for-organizing-rides
-      - MYSQL_USER=wojtek
-      - MYSQL_PASSWORD=wojtek
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_DATABASE=${DB_NAME}
     ports:
-      - "3306:3306"
+      - ${MYSQL_PORT}
 
   phpmyadmin-service:
     image: phpmyadmin:latest
-    container_name: phpmyadmin-container
+    container_name: ${PHPMYADMIN_CONTAINER_NAME}
     environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=mysql-container
-      - PMA_USER=wojtek
-      - PMA_PASSWORD=wojtek
+      - PMA_HOST=${MYSQL_CONTAINER_NAME}
+      - PMA_USER=${DB_USER}
     ports:
-      - "8888:80"
+      - ${PHPMYADMIN_PORT}
+networks:
+  sena-app:
+    driver: bridge

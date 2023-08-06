@@ -10,8 +10,9 @@ COPY ./ /usr/local/app/server
 # Install dependencies
 RUN npm install
 
-
+# Build the Express application
 CMD ["npm","run","start"]
 
-# Serve app with nginx server
+# Expose port 8080
+EXPOSE 8080
 
