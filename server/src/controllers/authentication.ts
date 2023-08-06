@@ -1,10 +1,7 @@
 import express from "express"
-import {
-    Result, ValidationError,
-    validationResult,
-} from "express-validator"
+import {Result, ValidationError, validationResult} from "express-validator"
 import Users from "../models/users.model"
-import {random, authentication} from "../helpers"
+import {random, authentication, generateSessionToken} from "../helpers"
 
 export const login = async (req: express.Request, res: express.Response) => {
     try {
@@ -19,8 +16,7 @@ export const login = async (req: express.Request, res: express.Response) => {
             })
         }
         const user = await Users.getUserByEmail(email)
-        // @ts-ignore
-        // console.log(json(user.username))
+
         const expectedHash = authentication(user.salt, password)
         if (await Users.getHashPassword(user.email) !== expectedHash) {
             console.log("wrong password")
@@ -45,8 +41,8 @@ export const login = async (req: express.Request, res: express.Response) => {
         }
 
         const salt = random()
-        const sessionToken = authentication(salt, user.id.toString());
-        await Users.query().findById(user.id).patch({ sessionToken });
+        const sessionToken = generateSessionToken(user.id.toString())
+        await Users.query().findById(user.id).patch({sessionToken});
 
         res.cookie("E-COMMERCE-WEBSITE-AUTH", sessionToken, {
             domain: "localhost",
