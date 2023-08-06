@@ -1,12 +1,14 @@
-import mongoose from "mongoose"
+import {Model} from "objection";
+import knex from "../database/config/database";
+Model.knex(knex)
 
-const UserSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
-  authentication: {
-    password: { type: String, required: true, select: false },
-    salt: { type: String, select: false },
-    sessionToken: { type: String, select: false },
-  },
-})
+class Users extends Model {
+  static get tableName(): string {
+    return "users";
+  }
+
+
+}
+
+export default Users
 

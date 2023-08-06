@@ -18,10 +18,10 @@ app.get('/', (req: Request, res: Response) => {
 
 // Database configuration
 const dbConfig = {
-    host: "localhost",
-    user: "wojtek",
-    password: "wojtek",
-    database: 'social-system-for-organizing-rides',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    // password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
 };
 
 // Create the MySQL database connection
