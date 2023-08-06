@@ -7,7 +7,7 @@ const router = express.Router()
 
 export default (): express.Router => {
   authentication(router)
-  users(router)
-  home(router)
+  // users(router)
+  // home(router)
   return router
 }

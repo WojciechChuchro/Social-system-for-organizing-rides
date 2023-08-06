@@ -1,14 +1,16 @@
-// import express from "express"
-// import {
-//   Result,
-//   ValidationError,
-//   check,
-//   validationResult,
-// } from "express-validator"
-// import {
-//
-// } from "../models/users.model"
-// import { random, authentication } from "../helpers/index"
+import express from "express"
+import {
+  Result,
+  ValidationError,
+  check,
+  validationResult,
+} from "express-validator"
+
+import Users from "../models/users.model";
+import {
+
+} from "../models/users.model"
+import { random, authentication } from "../helpers/index"
 //
 // export const login = async (req: express.Request, res: express.Response) => {
 //   try {
@@ -77,30 +79,28 @@
 //   }
 // }
 //
-// export const register = async (req: express.Request, res: express.Response) => {
-//   try {
-//     const { email, password, username } = req.body
-//     const errors = validationResult(req)
-//
-//     if (!errors.isEmpty()) {
-//       return res.send({
-//         errors: errors.array(),
-//       })
-//     }
-//
-//     const salt = random()
-//     const user = await createUser({
-//       email,
-//       username,
-//       authentication: {
-//         salt,
-//         password: authentication(salt, password),
-//       },
-//     })
-//
-//     return res.status(200).json(user).end()
-//   } catch (error) {
-//     console.log(error)
-//     return res.sendStatus(400)
-//   }
-// }
+
+export const register = async (req: express.Request, res: express.Response) => {
+  try {
+    const { email, password, username } = req.body;
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.send({
+        errors: errors.array(),
+      });
+    }
+
+    const salt = random()
+    const user = await Users.query().insert({
+      email,
+      password: authentication(salt, password),
+      username,
+    });
+
+    return res.status(200).json(user).end();
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(400);
+  }
+};
