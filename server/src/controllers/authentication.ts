@@ -1,106 +1,90 @@
 import express from "express"
 import {
-  Result,
-  ValidationError,
-  check,
-  validationResult,
+    Result, ValidationError,
+    validationResult,
 } from "express-validator"
+import Users from "../models/users.model"
+import {random, authentication} from "../helpers"
 
-import Users from "../models/users.model";
-import {
+export const login = async (req: express.Request, res: express.Response) => {
+    try {
+        const {email, password} = req.body
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            return res.send({
+                username: null,
+                email: null,
+                sessionToken: null,
+                errors: errors.array(),
+            })
+        }
+        const user = await Users.getUserByEmail(email)
+        // @ts-ignore
+        // console.log(json(user.username))
+        const expectedHash = authentication(user.salt, password)
+        if (await Users.getHashPassword(user.email) !== expectedHash) {
+            console.log("wrong password")
+            const errors: Result<ValidationError> = validationResult(req)
 
-} from "../models/users.model"
-import { random, authentication } from "../helpers/index"
-//
-// export const login = async (req: express.Request, res: express.Response) => {
-//   try {
-//     const { email: reqEmail, password } = req.body
-//     const errors = validationResult(req)
-//     if (!errors.isEmpty()) {
-//       return res.send({
-//         username: null,
-//         email: null,
-//         sessionToken: null,
-//         errors: errors.array(),
-//       })
-//     }
-//     const user = await getUserByEmail(reqEmail).select(
-//       "+authentication.salt +authentication.password"
-//     )
-//     const expectedHash = authentication(user.authentication.salt, password)
-//
-//     if (user.authentication.password !== expectedHash) {
-//       const errors: Result<ValidationError> = validationResult(req)
-//
-//       const newError: ValidationError = {
-//         location: "body",
-//         value: "password",
-//         msg: "Wrong data provided.",
-//         type: "field",
-//         path: "password",
-//       }
-//
-//       const updatedErrors: ValidationError[] = errors.array().concat(newError)
-//
-//       return res.send({
-//         username: null,
-//         email: null,
-//         sessionToken: null,
-//         errors: updatedErrors,
-//       })
-//     }
-//
-//     const salt = random()
-//     user.authentication.sessionToken = authentication(salt, user._id.toString())
-//
-//     await user.save()
-//
-//     res.cookie("E-COMMERCE-WEBSITE-AUTH", user.authentication.sessionToken, {
-//       domain: "localhost",
-//       path: "/",
-//     })
-//
-//     const {
-//       username,
-//       authentication: { sessionToken },
-//     } = user
-//
-//     const userObject = {
-//       username,
-//       email: reqEmail,
-//       sessionToken,
-//       errors: errors.array(),
-//     }
-//
-//     return res.status(200).json(userObject).end()
-//   } catch (error) {
-//     console.log(error)
-//     return res.sendStatus(400)
-//   }
-// }
-//
+            const newError: ValidationError = {
+                location: "body",
+                value: "password",
+                msg: "Wrong data provided.",
+                type: "field",
+                path: "password",
+            }
+
+            const updatedErrors: ValidationError[] = errors.array().concat(newError)
+
+            return res.send({
+                username: null,
+                email: null,
+                sessionToken: null,
+                errors: updatedErrors,
+            })
+        }
+
+        const salt = random()
+        const sessionToken = authentication(salt, user.id.toString());
+        await Users.query().findById(user.id).patch({ sessionToken });
+
+        res.cookie("E-COMMERCE-WEBSITE-AUTH", sessionToken, {
+            domain: "localhost",
+            path: "/",
+            httpOnly: true,
+            secure: true,
+        });
+
+
+        return res.status(200).json({'message': "login success"}).end()
+    } catch (error) {
+        console.log(error)
+        return res.sendStatus(400)
+    }
+}
+
 
 export const register = async (req: express.Request, res: express.Response) => {
-  try {
-    const { email, password, username } = req.body;
-    const errors = validationResult(req);
+    try {
+        const {email, password} = req.body;
+        const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-      return res.send({
-        errors: errors.array(),
-      });
+        if (!errors.isEmpty()) {
+            return res.send({
+                errors: errors.array(),
+            });
+        }
+
+        const salt = random()
+        const user = await Users.query().insert({
+            email,
+            password: authentication(salt, password),
+            salt
+        });
+
+        return res.status(200).json(user).end();
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
     }
-
-    const salt = random()
-    const user = await Users.query().insert({
-      email,
-      password: authentication(salt, password),
-      username,
-    });
-
-    return res.status(200).json(user).end();
-  } catch (error) {
-    console.log(error);
-    return res.sendStatus(400);
-  }
 };

@@ -2,13 +2,12 @@ import dotenv from "dotenv";
 import cors from "cors";
 import express, {Request, Response} from "express";
 import mysql from "mysql2";
-import Users from "./models/users.model"
 import router from "./router";
 
 const app = express();
 app.use(express.json());
-app.use(cors()); // Invoking the cors middleware
-dotenv.config(); // Loading environment variables from .env file
+app.use(cors());
+dotenv.config();
 
 app.listen(process.env.PORT || 8081, () => {
     console.log(`Server is running on port ${process.env.PORT || 8081}`);
@@ -34,9 +33,4 @@ connection.connect((err) => {
     }
 });
 
-app.get('/', async(req, res) => {
-    // const users = await Users.query()
-    res.send("users")
-})
-
-app.use("/", router())
+app.use("/api/", router())
