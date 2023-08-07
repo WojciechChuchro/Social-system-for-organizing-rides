@@ -6,14 +6,16 @@ import {decodeJWT} from "../helpers";
 export const getUserByJWT = async (req: Request, res: Response) => {
     try {
 
-        const { jwt } = req.cookies
-        const decodedJwt = decodeJWT(jwt)
+        const { authorization } = req.headers;
+        console.log(authorization)
+        console.log(JSON.stringify(req.cookies))
+        const decodedJwt = decodeJWT(authorization)
 
         if (!decodedJwt) {
             return res.status(401).json({ message: 'Unauthorized: Invalid token' });
         }
 
-        const user = await Users.query().findById(decodedJwt.userId).select('email','name', 'surname', 'phoneNumber',  'profilePicture');;
+        const user = await Users.query().findById(decodedJwt.userId).select('email','name', 'surname', 'phoneNumber',  'profilePicture');
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });

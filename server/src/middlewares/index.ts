@@ -1,6 +1,5 @@
 import express from "express"
 import { get, merge } from "lodash"
-import { getUserBySessionToken } from "../models/users.model"
 
 export const isAuthenticated = async (
   req: express.Request,
@@ -8,7 +7,7 @@ export const isAuthenticated = async (
   next: express.NextFunction
 ) => {
   try {
-    const sessionToken = req.cookies["E-COMMERCE-WEBSITE-AUTH"]
+    const sessionToken = req.cookies["jwt"]
 
     if (!sessionToken) {
       return res.sendStatus(403)
