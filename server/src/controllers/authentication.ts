@@ -44,15 +44,12 @@ export const login = async (req: express.Request, res: express.Response) => {
         const sessionToken = generateSessionToken(user.id.toString())
         await Users.query().findById(user.id).patch({sessionToken});
 
-        res.cookie("E-COMMERCE-WEBSITE-AUTH", sessionToken, {
-            domain: "localhost",
-            path: "/",
-            httpOnly: true,
-            secure: true,
-        });
+        // res.cookie("JsonWebToken", sessionToken, {
+        //     domain: "localhost",
+        //     path: "/",
+        // });
 
-
-        return res.status(200).json({'message': "login success"}).end()
+        return res.status(200).json({'message': "login success", "token": sessionToken}).end()
     } catch (error) {
         console.log(error)
         return res.sendStatus(400)

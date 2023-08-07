@@ -35,14 +35,17 @@ export class LoginComponent {
     this.loading = true;
     this.auth.login(this.loginForm).subscribe({
       next: (data: any) => {
+        console.log(data);
+        if (data.token) {
         this.cookieService.set('JsonWebToken', data.token);
-        this.showAlert('login successful', 'Close', 3000);
+        }
+        this.showAlert(data.message, 'Close', 3000);
         this.loginStatusService.setLoginStatus(true);
         this.loading = false;
       },
       error: (error) => {
         this.loading = false;
-        this.showAlert('login failed', 'Close', 3000);
+        this.showAlert(error.message, 'Close', 3000);
       },
     });
   }
