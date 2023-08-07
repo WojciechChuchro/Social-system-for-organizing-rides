@@ -9,6 +9,6 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(user: LoginForm) {
-    return this.http.post('http://127.0.0.1:8741/api/login_check', user);
+    return this.http.post('http://localhost:8080/api/auth/login', user);
   }
 }

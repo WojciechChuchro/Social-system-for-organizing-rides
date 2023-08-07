@@ -1,11 +1,23 @@
 import {Request, Response} from 'express';
 import Users from "../models/users.model";
+import {decodeJWT} from "../helpers";
 
-export const getUserById = async ( req: Request, res: Response) => {
+
+export const getUserByJWT = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params
-        const user = await Users.query().findById(id);
-    console.log(user)
+
+        const { jwt } = req.cookies
+        const decodedJwt = decodeJWT(jwt)
+
+        if (!decodedJwt) {
+            return res.status(401).json({ message: 'Unauthorized: Invalid token' });
+        }
+
+        const user = await Users.query().findById(decodedJwt.userId).select('email','name', 'surname', 'phoneNumber',  'profilePicture');;
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
         return res.status(200).json(user)
     }

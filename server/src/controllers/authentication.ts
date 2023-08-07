@@ -19,7 +19,6 @@ export const login = async (req: express.Request, res: express.Response) => {
 
         const expectedHash = authentication(user.salt, password)
         if (await Users.getHashPassword(user.email) !== expectedHash) {
-            console.log("wrong password")
             const errors: Result<ValidationError> = validationResult(req)
 
             const newError: ValidationError = {

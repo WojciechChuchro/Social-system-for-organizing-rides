@@ -3,12 +3,13 @@ import cors from "cors";
 import express, {Request, Response} from "express";
 import mysql from "mysql2";
 import router from "./router";
+import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 dotenv.config();
-
+app.use(cookieParser());
 app.listen(process.env.PORT || 8081, () => {
     console.log(`Server is running on port ${process.env.PORT || 8081}`);
 });

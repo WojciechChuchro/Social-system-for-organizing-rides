@@ -1,10 +1,10 @@
 import express from "express"
 
-import {getUserById} from "../controllers/users"
+import {getUserByJWT} from "../controllers/users"
 
 export default (router: express.Router) => {
     // router.get("/users", getAllUsers)
-    router.get("/users/:id", getUserById)
+    router.post("/users", getUserByJWT)
     // router.delete("/users/:id", isAuthenticated, isOwner, deleteUser)
     // router.patch("/users/update", updateUser)
 }
