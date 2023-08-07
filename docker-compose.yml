@@ -11,7 +11,7 @@ services:
     depends_on:
       - nginx
     ports:
-      - "4200:80"
+      - ${CLIENT_PORT}
 
   server-service:
     container_name: ${SERVER_NAME}
@@ -22,13 +22,13 @@ services:
     depends_on:
       - mysql-service
     ports:
-      - "8080:8080"
+      - ${SERVER_PORT}
 
   nginx:
     container_name: ${NGINX_CONTAINER_NAME}
     image: nginx:latest
     ports:
-      - "3500:80"
+      - ${NGINX_PORT}
 
   mysql-service:
     image: mysql:latest
