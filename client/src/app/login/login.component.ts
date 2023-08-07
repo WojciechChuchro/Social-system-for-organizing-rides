@@ -34,12 +34,12 @@ export class LoginComponent {
     console.log(this.loginForm);
     this.loading = true;
     this.auth.login(this.loginForm).subscribe({
-      next: (data: any) => {
-        console.log(data);
-        if (data.token) {
-        this.cookieService.set('JsonWebToken', data.token);
+      next: (response: any) => {
+        console.log(response);
+        if (response.token) {
+        this.cookieService.set('JsonWebToken', response.token);
         }
-        this.showAlert(data.message, 'Close', 3000);
+        this.showAlert(response.message, 'Close', 3000);
         this.loginStatusService.setLoginStatus(true);
         this.loading = false;
       },

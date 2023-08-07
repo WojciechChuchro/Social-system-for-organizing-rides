@@ -1,6 +1,8 @@
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Component, OnInit} from "@angular/core";
 import {CookieService} from "ngx-cookie-service";
+import {profileForm} from "../../types/user";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-profile',
@@ -13,8 +15,14 @@ export class ProfileComponent implements OnInit {
   surname: string | null
   phoneNumber: string | null
   profilePicture: string | null
-
-  constructor(private http: HttpClient, private cookieService: CookieService) {
+  profileForm: profileForm = {
+    email: '',
+    name: '',
+    surname: '',
+    phoneNumber: '',
+    password: '',
+  };
+  constructor(private http: HttpClient, private cookieService: CookieService, private snackBar: MatSnackBar) {
     this.email = null
     this.name =null
     this.surname = null
@@ -28,22 +36,43 @@ export class ProfileComponent implements OnInit {
     this.getDataWithJwtCookie();
   }
 
+  showAlert(message: string, action: string, duration: number) {
 
-  updateProfile(): void {
-
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
   }
-
-  getDataWithJwtCookie(): void {
-    // Get the JWT cookie value from the browser's cookies.
-    const jwtCookie = this.cookieService.get('JsonWebToken');
-    if (!jwtCookie) {
-      console.error('JWT cookie not found.');
-      return;
-    }
-
-    // Set the JWT as an Authorization header in the request.
+  updateProfile(): void {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${jwtCookie}`
+      'Authorization': `Bearer ${this.getJWT()}`
+    });
+
+    console.log(this.profileForm)
+    this.http.patch('http://localhost:8080/api/users/update', this.profileForm, { headers }).subscribe(
+        (response: any) => {
+          this.showAlert(response.message, 'Close', 3000);
+        },
+        (error: any) => {
+          console.log(error);
+          this.showAlert(error.error.message, 'Close', 3000);
+        }
+    );
+  }
+    getJWT(): string {
+    // Get the JWT cookie value from the browser's cookies.
+      const jwtCookie = this.cookieService.get('JsonWebToken');
+      if (!jwtCookie) {
+        console.error('JWT cookie not found.');
+        return 'jwt token not found';
+      }
+
+      // Set the JWT as an Authorization header in the request.
+
+      return jwtCookie
+    }
+  getDataWithJwtCookie(): void {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.getJWT()}`
     });
 
     // Replace 'your-backend-url' with the actual URL of your backend API endpoint.

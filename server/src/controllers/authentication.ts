@@ -1,52 +1,24 @@
 import express from "express"
-import {Result, ValidationError, validationResult} from "express-validator"
 import Users from "../models/users.model"
 import {random, authentication, generateSessionToken} from "../helpers"
 
 export const login = async (req: express.Request, res: express.Response) => {
     try {
         const {email, password} = req.body
-        const errors = validationResult(req)
-        if (!errors.isEmpty()) {
-            return res.send({
-                username: null,
-                email: null,
-                sessionToken: null,
-                errors: errors.array(),
-            })
-        }
         const user = await Users.getUserByEmail(email)
 
-        const expectedHash = authentication(user.salt, password)
-        if (await Users.getHashPassword(user.email) !== expectedHash) {
-            const errors: Result<ValidationError> = validationResult(req)
-
-            const newError: ValidationError = {
-                location: "body",
-                value: "password",
-                msg: "Wrong data provided.",
-                type: "field",
-                path: "password",
-            }
-
-            const updatedErrors: ValidationError[] = errors.array().concat(newError)
-
-            return res.send({
-                username: null,
-                email: null,
-                sessionToken: null,
-                errors: updatedErrors,
-            })
+        if (!user) {
+            return res.status(404).json({message: 'User not found'});
         }
 
-        const salt = random()
+        const expectedHash = authentication(user.salt, password)
+
+        if (await Users.getHashPassword(user.email) !== expectedHash) {
+            return res.status(401).send({message: 'invalid password'})
+        }
+
         const sessionToken = generateSessionToken(user.id.toString())
         await Users.query().findById(user.id).patch({sessionToken});
-
-        // res.cookie("JsonWebToken", sessionToken, {
-        //     domain: "localhost",
-        //     path: "/",
-        // });
 
         return res.status(200).json({'message': "login success", "token": sessionToken}).end()
     } catch (error) {
