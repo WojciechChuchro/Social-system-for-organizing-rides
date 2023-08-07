@@ -8,7 +8,19 @@ import {CookieService} from "ngx-cookie-service";
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  email: string | null
+  name: string | null
+  surname: string | null
+  phoneNumber: string | null
+  profilePicture: string | null
+
+  constructor(private http: HttpClient, private cookieService: CookieService) {
+    this.email = null
+    this.name =null
+    this.surname = null
+    this.phoneNumber = null
+    this.profilePicture = null
+  }
 
   ngOnInit(): void {
     // Call the method here if you want to send the request on component initialization.
@@ -16,6 +28,10 @@ export class ProfileComponent implements OnInit {
     this.getDataWithJwtCookie();
   }
 
+
+  updateProfile(): void {
+
+  }
 
   getDataWithJwtCookie(): void {
     // Get the JWT cookie value from the browser's cookies.
@@ -33,8 +49,11 @@ export class ProfileComponent implements OnInit {
     // Replace 'your-backend-url' with the actual URL of your backend API endpoint.
     this.http.get('http://localhost:8080/api/users', { headers }).subscribe(
         (response: any) => {
-          // Handle the successful response here.
-          console.log('Response:', response);
+          this.email = response.email
+          this.name = response.name
+          this.surname = response.surname
+          this.phoneNumber = response.phoneNumber
+          this.profilePicture = response.profilePicture
         },
         (error: any) => {
           // Handle the error here.
