@@ -2,6 +2,8 @@ import {Knex} from "knex";
 import { faker } from '@faker-js/faker';
 
 export async function seed(knex: Knex): Promise<void> {
+    await knex("country").del();
+
     const country = [];
     const numberOfCountry = 10;
 
