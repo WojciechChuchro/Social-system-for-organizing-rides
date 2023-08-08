@@ -23,7 +23,6 @@ export const generateSessionToken = (userId: string): string => {
 }
 
 export const decodeJWT = (token: string): DecodedToken | null => {
-    token = deleteUntilFirstSpace(token);
     try {
         return jwt.verify(token, process.env.SECRET_KEY) as DecodedToken;
     } catch (error) {
@@ -32,16 +31,4 @@ export const decodeJWT = (token: string): DecodedToken | null => {
     }
 }
 
-function deleteUntilFirstSpace(inputString: string) {
-    // Find the index of the first space in the string
-    const firstSpaceIndex = inputString.indexOf(' ');
-
-    if (firstSpaceIndex !== -1) {
-        // Extract the substring after the first space and return it
-        return inputString.substring(firstSpaceIndex + 1);
-    }
-
-    // If no space is found, return the original string
-    return inputString;
-}
 

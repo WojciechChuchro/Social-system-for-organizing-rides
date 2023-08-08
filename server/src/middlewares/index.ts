@@ -1,36 +1,31 @@
-import express from "express"
-import { get, merge } from "lodash"
+import {Request, Response,NextFunction} from "express"
+import { get } from "lodash"
+import {decodeJWT} from "../helpers";
 
-export const isAuthenticated = async (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) => {
-  try {
-    const sessionToken = req.cookies["jwt"]
 
-    if (!sessionToken) {
-      return res.sendStatus(403)
-    }
+export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
+  const { authorization } = req.headers;
 
-    const existingUser = await getUserBySessionToken(sessionToken)
-
-    if (!existingUser) {
-      return res.sendStatus(403)
-    }
-
-    merge(req, { identity: existingUser })
-
-    return next()
-  } catch (error) {
-    console.log(error)
-    return res.sendStatus(400)
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Unauthorized: Missing token' });
   }
-}
+
+  const token = authorization.split(' ')[1];
+
+  const decodedJwt = decodeJWT(token);
+
+  if (!decodedJwt) {
+    return res.status(401).json({ message: 'Unauthorized: Invalid token' });
+  }
+
+  res.locals.jwt = decodedJwt;
+
+  next();
+};
 export const isOwner = async (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
+  req: Request,
+  res: Response,
+  next: NextFunction
 ) => {
   try {
     const { id } = req.params
