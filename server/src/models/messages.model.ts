@@ -4,26 +4,32 @@ import Users from "./users.model";
 
 Model.knex(knex)
 
-class Reviews extends Model {
+class Messages extends Model {
     id!: number;
-    comment!: string;
-    rating!: string;
+    userRideId!: number;
     userId!: number;
+    text!: string;
+    sendTime: string;
+    wasRead: number;
+    profilePicture: string;
+
 
     static get reviews() {
         return {
-            required: ['rating'],
+            required: ['text'],
             properties: {
                 id: {type: 'integer'},
-                comment: {type: 'string'},
-                rating: {type: 'integer'},
-                userId: { type: 'integer' },
+                userRideId: {type: 'integer'},
+                userId: {type: 'integer'},
+                text: {type: 'string'},
+                wasRead: {type: 'integer'},
+                profilePicture: { type: 'string' },
             }
         };
     }
 
     static get tableName(): string {
-        return "reviews";
+        return "messages";
     }
     static get relationMappings() {
         return {
@@ -31,7 +37,7 @@ class Reviews extends Model {
                 relation: Model.BelongsToOneRelation,
                 modelClass: Users,
                 join: {
-                    from: 'reviews.userId',
+                    from: 'messages.userId',
                     to: 'users.id',
                 },
             },
@@ -39,5 +45,5 @@ class Reviews extends Model {
     }
 }
 
-export default Reviews
+export default Messages
 

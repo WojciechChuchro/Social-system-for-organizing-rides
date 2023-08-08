@@ -6,7 +6,7 @@ export async function up(knex: Knex): Promise<void> {
         table.increments('id').primary();
         table.string('comment')
         table.string('rating').notNullable();
-        table.integer("user_id").unsigned().references("id").inTable("users");
+        table.integer("userId").unsigned().references("id").inTable("users").onDelete('CASCADE');
     });
 }
 

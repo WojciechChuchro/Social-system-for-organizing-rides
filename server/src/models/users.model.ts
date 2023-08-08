@@ -1,6 +1,7 @@
 import {Model} from "objection";
 import knex from "../database/config/database";
 import Reviews from "./reviews.model";
+import Messages from "./messages.model";
 
 Model.knex(knex)
 
@@ -39,12 +40,23 @@ class Users extends Model {
                 modelClass: Reviews,
                 join: {
                     from: 'users.id',
-                    to: 'reviews.user_id'
+                    to: 'reviews.userId'
                 },
                 cascadeDelete: true,
             },
+            messages: {
+                relation: Model.HasManyRelation,
+                modelClass: Messages,
+                join: {
+                    from: 'user.id',
+                    to: 'messages.userId'
+                }
+            }
         };
     }
+
+
+
     static get tableName(): string {
         return "users";
     }

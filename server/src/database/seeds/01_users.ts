@@ -17,7 +17,6 @@ export async function seed(knex: Knex): Promise<void> {
             sessionToken: faker.number.int().toString(),
         });
     }
-    await knex('reviews').del();
     await knex("users").del();
     await knex("users").insert(users);
 }

@@ -12,7 +12,7 @@ export async function seed(knex: Knex): Promise<void> {
         reviews.push({
             comment: faker.lorem.sentence(10),
             rating: faker.number.int(1),
-            user_id: existingUserIds[faker.number.int({min: 0, max: 10})],
+            userId: existingUserIds[faker.number.int({min: 0, max: 10})],
         });
     }
 
