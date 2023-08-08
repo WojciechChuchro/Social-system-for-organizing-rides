@@ -2,16 +2,16 @@
   <div class="flex-center-column-container p-1">
     <h2>Driver Rating: 4</h2>
       <mat-form-field>
-          <input matInput type="text" placeholder={{name}} [(ngModel)]="profileForm.name" />
+          <input matInput type="text" [placeholder]="name || 'name'" [(ngModel)]="profileForm.name" />
       </mat-form-field>
       <mat-form-field>
-          <input matInput type="text" placeholder={{surname}} [(ngModel)]="profileForm.surname" />
+          <input matInput type="text" [placeholder]="surname || 'surname'"  [(ngModel)]="profileForm.surname" />
       </mat-form-field>
       <mat-form-field>
-          <input matInput type="text" placeholder={{phoneNumber}} [(ngModel)]="profileForm.phoneNumber" />
+          <input matInput type="text" [placeholder]="phoneNumber || 'phoneNumber'"  [(ngModel)]="profileForm.phoneNumber" />
       </mat-form-field>
       <mat-form-field>
-          <input matInput type="email" placeholder={{email}} [(ngModel)]="profileForm.email" />
+          <input matInput type="email" [placeholder]="email || 'email'"  [(ngModel)]="profileForm.email" />
       </mat-form-field>
       <mat-form-field>
           <input matInput type="password" placeholder="Password" [(ngModel)]="profileForm.password" />
