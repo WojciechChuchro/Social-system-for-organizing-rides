@@ -1,0 +1,46 @@
+import {Model} from "objection";
+import knex from "../database/config/database";
+import Users from "./users.model";
+
+Model.knex(knex)
+
+class Notifications
+    extends Model {
+    id!: number;
+    userId!: number;
+    message!: string;
+    wasRead: number;
+
+
+    static get reviews() {
+        return {
+            required: ['message', 'wasRead'],
+            properties: {
+                id: {type: 'integer'},
+                userId: {type: 'integer'},
+                message: {type: 'string'},
+                wasRead: {type: 'integer'},
+            }
+        };
+    }
+
+    static get tableName(): string {
+        return "notifications";
+    }
+    static get relationMappings() {
+        return {
+            user: {
+                relation: Model.BelongsToOneRelation,
+                modelClass: Users,
+                join: {
+                    from: 'notifications.userId',
+                    to: 'users.id',
+                },
+            },
+        };
+    }
+}
+
+export default Notifications
+
+
