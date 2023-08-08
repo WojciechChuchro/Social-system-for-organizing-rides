@@ -7,7 +7,7 @@ export const updateUserByJWT = async (req: Request, res: Response) => {
     try {
         const {email, name, surname, phoneNumber, password} = req.body
 
-        const decodedJwt = req.decodedJwt;
+        const decodedJwt = res.locals.jwt;
 
         const user = await Users.query().findById(decodedJwt.userId).select('email', 'name', 'surname', 'phoneNumber', 'profilePicture', 'salt');
 
@@ -44,7 +44,6 @@ export const getUserByJWT = async (req: Request, res: Response) => {
     try {
 
         const decodedJwt = res.locals.jwt;
-        console.log('jwt deco',decodedJwt);
         const user = await Users.query().findById(decodedJwt.userId).select('email', 'name', 'surname', 'phoneNumber', 'profilePicture');
 
         if (!user) {
