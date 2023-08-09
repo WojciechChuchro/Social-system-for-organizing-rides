@@ -55,8 +55,6 @@ class Users extends Model {
         };
     }
 
-
-
     static get tableName(): string {
         return "users";
     }
