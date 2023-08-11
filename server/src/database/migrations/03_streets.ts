@@ -1,21 +1,21 @@
-import { Knex } from "knex";
-
+import {Knex} from "knex";
 
 export async function up(knex: Knex): Promise<void> {
-    return knex.schema.createTable('street', (table: Knex.TableBuilder) => {
+    return knex.schema.createTable('streets', (table: Knex.TableBuilder) => {
         table.increments('id').primary();
-        table.string('streetName')
+
         table.integer("cityId")
             .unsigned()
             .references("id")
-            .inTable("city")
+            .inTable("cities")
             .onUpdate('CASCADE')
             .onDelete('CASCADE');
+
+        table.string('streetName')
     });
 }
 
-
 export async function down(knex: Knex): Promise<void> {
-    return knex.schema.dropTable('street');
+    return knex.schema.dropTable('streets');
 }
 
