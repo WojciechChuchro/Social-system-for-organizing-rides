@@ -1,6 +1,7 @@
 import {Model} from "objection";
-import knex from "../database/config/database";
+import knex from "../config/database";
 import Users from "./users.model";
+import UserRides from "../models/userRides.model";
 
 Model.knex(knex)
 
@@ -9,21 +10,19 @@ class Messages extends Model {
     userRideId!: number;
     userId!: number;
     text!: string;
-    sendTime: string;
-    wasRead: number;
-    profilePicture: string;
+    sendTime!: string;
+    wasRead!: number;
 
 
-    static get reviews() {
+    static get messages() {
         return {
-            required: ['text'],
+            required: ['id', 'userRideId', 'userId', 'text', 'sendTime', 'wasRead'],
             properties: {
                 id: {type: 'integer'},
                 userRideId: {type: 'integer'},
                 userId: {type: 'integer'},
                 text: {type: 'string'},
                 wasRead: {type: 'integer'},
-                profilePicture: { type: 'string' },
             }
         };
     }
@@ -41,6 +40,14 @@ class Messages extends Model {
                     to: 'users.id',
                 },
             },
+            userRide: {
+                relation: Model.BelongsToOneRelation,
+                modelClass: UserRides,
+                join: {
+                    from: 'messages.userRideId',
+                    to: 'userRides.id'
+                }
+            }
         };
     }
 }
