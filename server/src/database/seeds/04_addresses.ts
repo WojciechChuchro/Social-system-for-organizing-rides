@@ -2,15 +2,15 @@ import {Knex} from "knex";
 import { faker } from '@faker-js/faker';
 
 export async function seed(knex: Knex): Promise<void> {
-    await knex("address").del();
+    await knex("addresses").del();
 
-    const address = [];
+    const addresses = [];
     const numberOfStreets = 10;
 
-    const existingStreetsIds = await knex("street").pluck("id");
+    const existingStreetsIds = await knex("streets").pluck("id");
 
     for (let i = 0; i < numberOfStreets; i++) {
-        address.push({
+        addresses.push({
             zipCode: faker.location.zipCode(),
             houseNumber: faker.location.buildingNumber(),
             gpsX: faker.number.int({min: 0, max:10}),
@@ -19,5 +19,5 @@ export async function seed(knex: Knex): Promise<void> {
         });
     }
 
-    await knex("address").insert(address);
+    await knex("addresses").insert(addresses);
 }

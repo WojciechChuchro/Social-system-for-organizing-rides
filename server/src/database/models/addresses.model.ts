@@ -1,43 +1,47 @@
 import {Model} from "objection";
-import knex from "../database/config/database";
-import StreetModel from "./street.model";
+import knex from "../config/database";
+import StreetModel from "./streets.model";
 
 Model.knex(knex)
 
-export default class Address extends Model {
-    id: number;
-    streetId: number;
-    zipCode: string;
+class Addresses extends Model {
+    id!: number;
+    streetId!: number;
+    zipCode!: string;
     houseNumber: string;
     gpsX: number;
     gpsY: number;
-    static get reviews() {
+
+    static get addresses() {
         return {
-            required: ['cityName'],
+            required: ['id', 'streetId', 'zipCode'],
             properties: {
                 id: {type: 'integer'},
                 streetId: {type: 'integer'},
-                zipCode: {type: 'string'},
                 houseNumber: {type: 'string'},
+                zipCode: {type: 'string'},
                 gpsX: {type: 'number'},
                 gpsY: {type: 'number'},
             }
         };
     }
+
     static get relationMappings() {
         return {
             street: {
                 relation: Model.BelongsToOneRelation,
                 modelClass: StreetModel,
                 join: {
-                    from: 'street.StreetId',
-                    to: 'address.id',
+                    from: 'addresses.StreetId',
+                    to: 'streets.id',
                 },
             },
         };
     }
 
     static get tableName(): string {
-        return "city";
+        return "addresses";
     }
 }
+
+export default Addresses
