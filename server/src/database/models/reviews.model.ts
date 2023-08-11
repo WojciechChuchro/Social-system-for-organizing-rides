@@ -1,5 +1,5 @@
 import {Model} from "objection";
-import knex from "../database/config/database";
+import knex from "../config/database";
 import Users from "./users.model";
 
 Model.knex(knex)
@@ -12,7 +12,7 @@ class Reviews extends Model {
 
     static get reviews() {
         return {
-            required: ['rating'],
+            required: ['id', 'comment', 'rating', 'userId'],
             properties: {
                 id: {type: 'integer'},
                 comment: {type: 'string'},
