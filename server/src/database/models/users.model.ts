@@ -1,5 +1,5 @@
 import {Model} from "objection";
-import knex from "../database/config/database";
+import knex from "../config/database";
 import Reviews from "./reviews.model";
 import Messages from "./messages.model";
 
@@ -19,7 +19,7 @@ class Users extends Model {
 
     static get UserSchema() {
         return {
-            required: ['email', 'password'],
+            required: ['id', 'email', 'name', 'surname', 'phoneNumber', 'profilePicture', 'password', 'sessionToken', 'salt'],
             properties: {
                 id: {type: 'integer'},
                 email: {type: 'string'},
@@ -42,13 +42,12 @@ class Users extends Model {
                     from: 'users.id',
                     to: 'reviews.userId'
                 },
-                cascadeDelete: true,
             },
             messages: {
                 relation: Model.HasManyRelation,
                 modelClass: Messages,
                 join: {
-                    from: 'user.id',
+                    from: 'users.id',
                     to: 'messages.userId'
                 }
             }
