@@ -9,8 +9,6 @@ export async function seed(knex: Knex): Promise<void> {
 
     const existingUserIds = await knex("users").pluck("id");
 
-    console.log('table: ', existingUserIds)
-
     for (let i = 0; i < numberOfMessages; i++) {
         notifications.push({
             userId: existingUserIds[faker.number.int({min: 0, max: 9})],

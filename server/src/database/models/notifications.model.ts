@@ -1,5 +1,5 @@
 import {Model} from "objection";
-import knex from "../database/config/database";
+import knex from "../config/database";
 import Users from "./users.model";
 
 Model.knex(knex)
@@ -9,12 +9,12 @@ class Notifications
     id!: number;
     userId!: number;
     message!: string;
-    wasRead: number;
+    wasRead!: number;
 
 
     static get reviews() {
         return {
-            required: ['message', 'wasRead'],
+            required: ['id', 'userId', 'message', 'wasRead'],
             properties: {
                 id: {type: 'integer'},
                 userId: {type: 'integer'},
