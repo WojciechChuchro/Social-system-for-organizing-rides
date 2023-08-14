@@ -15,6 +15,7 @@ import { MaterialModule } from './material/material.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HeaderComponent } from './header/header.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,11 +27,10 @@ import { MatCardModule } from '@angular/material/card';
 import { RegistrationComponent } from './registration/registration.component';
 import { LoginComponent } from './login/login.component';
 import {
-  MatProgressSpinner,
   MatProgressSpinnerModule,
 } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { MatNativeDateModule } from '@angular/material/core';
 const declarationComponents = [
   AppComponent,
   AboutusComponent,
@@ -65,17 +65,19 @@ const importModules = [
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [declarationComponents],
-  imports: [
-    importModules,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatRadioModule,
-    MatCardModule,
-    MatSnackBarModule,
-    ReactiveFormsModule,
-    MatProgressSpinnerModule,
-  ],
+    imports: [
+        importModules,
+        MatInputModule,
+        MatButtonModule,
+        MatSelectModule,
+        MatRadioModule,
+        MatCardModule,
+      MatNativeDateModule,
+        MatSnackBarModule,
+        ReactiveFormsModule,
+        MatProgressSpinnerModule,
+        MatDatepickerModule,
+    ],
   providers: [],
   bootstrap: [AppComponent],
 })

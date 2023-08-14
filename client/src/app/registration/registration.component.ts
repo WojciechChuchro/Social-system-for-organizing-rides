@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {AuthService} from "../shared/auth/auth.service";
+import {RegisterForm} from "../../types/user";
 
 @Component({
   selector: 'app-registration',
@@ -6,27 +9,44 @@ import { Component } from '@angular/core';
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent {
-  email: string = '';
-  name: string = '';
-  surname: string = '';
-  phone_number: string = '';
-  password: string = '';
+  registerForm: RegisterForm = {
+    email: '',
+    name: '',
+    surname: '',
+    phoneNumber: '',
+    password: '',
+  }
   repeatPassword: string = '';
+
+  loading: boolean = false;
+
+  constructor(private snackBar: MatSnackBar, private auth: AuthService) {
+
+  }
+
+  showAlert(message: string, action: string, duration: number) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    });
+  }
 
   handleRegister() {
     // Validate if passwords match
-    if (this.password !== this.repeatPassword) {
-      console.log("Passwords don't match.");
+    if (this.registerForm.password !== this.repeatPassword) {
+      this.showAlert("Passwords don't match.", 'Close', 3000);
       return;
     }
 
-    // Implement your registration logic here
-    console.log('Registration data:', {
-      email: this.email,
-      name: this.name,
-      surname: this.surname,
-      phone_number: this.phone_number,
-      password: this.password,
+    this.loading = true;
+    this.auth.register(this.registerForm).subscribe({
+      next: (response: any) => {
+        this.showAlert(response.message, 'Close', 3000);
+        this.loading = false;
+      },
+      error: (error) => {
+        this.loading = false;
+        this.showAlert(error.message, 'Close', 3000);
+      },
     });
   }
 }

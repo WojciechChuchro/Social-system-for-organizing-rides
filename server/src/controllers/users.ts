@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import Users from "../models/users.model";
+import Users from "../database/models/users.model";
 import {authentication} from "../helpers";
 
 

@@ -1,5 +1,5 @@
 import express from "express"
-import Users from "../models/users.model"
+import Users from "../database/models/users.model"
 import {random, authentication, generateSessionToken} from "../helpers"
 
 export const login = async (req: express.Request, res: express.Response) => {
@@ -30,7 +30,7 @@ export const login = async (req: express.Request, res: express.Response) => {
 
 export const register = async (req: express.Request, res: express.Response) => {
     try {
-        const {email, password} = req.body;
+        const {email, password, name, surname, phoneNumber} = req.body;
 
         const user = await Users.getUserByEmail(email)
 
@@ -40,6 +40,9 @@ export const register = async (req: express.Request, res: express.Response) => {
 
         const salt = random()
         await Users.query().insert({
+            name,
+            surname,
+            phoneNumber,
             email,
             password: authentication(salt, password),
             salt

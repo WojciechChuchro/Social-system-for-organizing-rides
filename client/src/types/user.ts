@@ -12,6 +12,14 @@ export interface LoginForm {
   password: string;
 }
 
+export interface RegisterForm {
+  email: string;
+  name: string;
+  surname: string;
+  phoneNumber: string;
+  password: string;
+}
+
 export interface profileForm  {
   email?: string;
   name?: string;

@@ -3,21 +3,21 @@
     <mat-card-title>Registration</mat-card-title>
   </mat-card-header>
   <mat-form-field>
-    <input matInput [(ngModel)]="email" placeholder="Email" required />
+    <input matInput [(ngModel)]="registerForm.email" placeholder="Email" required />
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [(ngModel)]="name" placeholder="Name" required />
+    <input matInput [(ngModel)]="registerForm.name" placeholder="Name" required />
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [(ngModel)]="surname" placeholder="Surname" required />
+    <input matInput [(ngModel)]="registerForm.surname" placeholder="Surname" required />
   </mat-form-field>
 
   <mat-form-field>
     <input
       matInput
-      [(ngModel)]="phone_number"
+      [(ngModel)]="registerForm.phoneNumber"
       placeholder="Phone Number"
       required
     />
@@ -27,7 +27,7 @@
     <input
       matInput
       type="password"
-      [(ngModel)]="password"
+      [(ngModel)]="registerForm.password"
       placeholder="Password"
       required
     />
