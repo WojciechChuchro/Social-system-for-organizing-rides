@@ -56,3 +56,19 @@ export const getUserByJWT = async (req: Request, res: Response) => {
         return res.sendStatus(400)
     }
 }
+
+export const getUsersByIds = async (req: Request, res: Response) => {
+    try {
+        const userIds = req.body; // Assuming you're sending an array of user IDs in the request body
+
+        // Fetch users by user IDs
+        const users = await Users.query()
+            .findByIds(userIds)
+            .select('email', 'name', 'surname', 'phoneNumber', 'profilePicture');
+
+        return res.status(200).json(users);
+    } catch (err) {
+        console.log(err);
+        return res.sendStatus(400);
+    }
+};
