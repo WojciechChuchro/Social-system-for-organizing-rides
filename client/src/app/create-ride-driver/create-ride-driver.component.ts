@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-create-ride-driver',
@@ -6,8 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./create-ride-driver.component.scss'],
 })
 export class CreateRideDriverComponent {
-  starting_point: string = '';
-  destination: string = '';
+  starting_point!: Date;
   departure_time: string = '';
   arrival_time: string = '';
   price: number | null = null;
@@ -15,11 +14,14 @@ export class CreateRideDriverComponent {
   registration_number: string = '';
   number_of_seats: number | null = null;
 
+  onStartingPointSelected(event: any): void {
+    this.starting_point = event.value;
+  }
+
+  // Function to handle destination date selection
   handleCreateRide() {
-    // Implement your create ride logic here
     console.log('Ride data:', {
       starting_point: this.starting_point,
-      destination: this.destination,
       departure_time: this.departure_time,
       arrival_time: this.arrival_time,
       price: this.price,

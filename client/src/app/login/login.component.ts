@@ -31,11 +31,9 @@ export class LoginComponent {
   }
 
   handleLogin() {
-    console.log(this.loginForm);
     this.loading = true;
     this.auth.login(this.loginForm).subscribe({
       next: (response: any) => {
-        console.log(response);
         if (response.token) {
         this.cookieService.set('JsonWebToken', response.token);
         }

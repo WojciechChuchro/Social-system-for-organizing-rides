@@ -4,22 +4,14 @@
   </mat-card-header>
   <div class="flex-center-column-container">
     <mat-form-field>
-      <input
-        matInput
-        placeholder="starting point"
-        [(ngModel)]="starting_point"
-        required
-      />
+      <mat-label>Choose a starting point</mat-label>
+      <input matInput [matDatepicker]="startingPicker" [(ngModel)]="starting_point" (dateChange)="onStartingPointSelected($event)">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="startingPicker"></mat-datepicker-toggle>
+      <mat-datepicker #startingPicker></mat-datepicker>
     </mat-form-field>
 
-    <mat-form-field>
-      <input
-        matInput
-        placeholder="Destination"
-        [(ngModel)]="destination"
-        required
-      />
-    </mat-form-field>
+
 
     <mat-form-field>
       <input

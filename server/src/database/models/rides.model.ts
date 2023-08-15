@@ -6,7 +6,7 @@ import Addresses from "./addresses.model";
 
 Model.knex(knex)
 
-class rides extends Model {
+class Rides extends Model {
     id!: number;
     driverId!: number;
     modelId!: number;
@@ -42,8 +42,8 @@ class rides extends Model {
 
     static get relationMappings() {
         return {
-            user: {
-                relation: Model.HasManyRelation,
+            driver: {
+                relation: Model.BelongsToOneRelation,
                 modelClass: Users,
                 join: {
                     from: 'rides.driverId',
@@ -58,7 +58,7 @@ class rides extends Model {
                     to: 'models.id',
                 },
             },
-            startAddress: {  // Corrected relation name
+            startAddress: {
                 relation: Model.HasManyRelation,
                 modelClass: Addresses,
                 join: {
@@ -66,7 +66,7 @@ class rides extends Model {
                     to: 'addresses.id',
                 },
             },
-            destinationAddress: {  // Corrected relation name
+            destinationAddress: {
                 relation: Model.HasManyRelation,
                 modelClass: Addresses,
                 join: {
@@ -78,5 +78,5 @@ class rides extends Model {
     }
 }
 
-export default rides
+export default Rides
 

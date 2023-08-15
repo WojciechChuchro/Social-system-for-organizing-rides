@@ -24,11 +24,4 @@ export class LoginService {
         },
       });
   }
-  llogin(login: string, password: string) {
-    const requestBody = {
-      login: login,
-      password: password,
-    };
-    const response = new HttpResponse();
-  }
 }

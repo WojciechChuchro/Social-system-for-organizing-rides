@@ -21,7 +21,6 @@ export class HeaderComponent {
 
   ngOnInit() {
     this.isLoggedIn$ = this.loginStatusService.loginStatus$;
-    console.log(this.isLoggedIn$);
     const jwt = this.cookieService.get('JsonWebToken');
     if (jwt) {
       this.loginStatusService.setLoginStatus(true);
