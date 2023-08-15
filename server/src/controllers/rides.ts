@@ -2,6 +2,15 @@ import { Request, Response } from 'express';
 import Users from '../database/models/users.model';
 import Rides from '../database/models/rides.model';
 
+export const getAllRides = async (req: Request, res: Response) => {
+    try {
+        const allRides = await Rides.query();
+        return res.status(200).json({ rides: allRides });
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
 export const createRide = async (req: Request, res: Response) => {
     const { userId } = res.locals.jwt;
 

@@ -9,13 +9,11 @@ export async function seed(knex: Knex): Promise<void> {
 
 
     const existingUsersIds = await knex("users").pluck("id");
-    const existingModelsIds = await knex("models").pluck("id");
     const existingAddressesIds = await knex("addresses").pluck("id");
 
     for (let i = 0; i < numberOfRides; i++) {
         rides.push({
             driverId: existingUsersIds[faker.number.int({min: 0, max: 9})],
-            modelId: existingModelsIds[faker.number.int({min: 0, max: 9})],
             destinationAddressId: existingAddressesIds[faker.number.int({min: 0, max: 9})],
             startAddressId: existingAddressesIds[faker.number.int({min: 0, max: 9})],
             earliestDepartureTime: '2020-01-01 10:10:10',

@@ -2,11 +2,13 @@ import {Model} from "objection";
 import knex from "../config/database";
 import Reviews from "./reviews.model";
 import Messages from "./messages.model";
+import Models from "./models.model";
 
 Model.knex(knex)
 
 class Users extends Model {
     id!: number;
+    modelId!: number;
     email!: string;
     name!: string;
     surname!: string;
@@ -19,9 +21,10 @@ class Users extends Model {
 
     static get UserSchema() {
         return {
-            required: ['id', 'email', 'name', 'surname', 'phoneNumber', 'profilePicture', 'password', 'sessionToken', 'salt'],
+            required: ['id','modelId', 'email', 'name', 'surname', 'phoneNumber', 'profilePicture', 'password', 'sessionToken', 'salt'],
             properties: {
                 id: {type: 'integer'},
+                modelId: {type: 'integer'},
                 email: {type: 'string'},
                 name: {type: 'string'},
                 surname: {type: 'string'},
@@ -33,6 +36,7 @@ class Users extends Model {
             }
         };
     }
+
     static get relationMappings() {
         return {
             reviews: {
@@ -50,7 +54,16 @@ class Users extends Model {
                     from: 'users.id',
                     to: 'messages.userId'
                 }
-            }
+            },
+            model: {
+                relation: Model.BelongsToOneRelation,
+                modelClass: Models,
+                join: {
+                    from: 'users.modelId',
+                    to: 'models.id',
+                },
+            },
+
         };
     }
 

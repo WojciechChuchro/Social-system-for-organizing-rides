@@ -3,7 +3,6 @@ import {Knex} from "knex";
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('rides', (table: Knex.TableBuilder) => {
         table.increments('id').primary();
-
         table.integer("driverId")
             .unsigned()
             .notNullable()
@@ -25,13 +24,7 @@ export async function up(knex: Knex): Promise<void> {
             .inTable("addresses")
             .onUpdate('CASCADE')
             .onDelete('CASCADE');
-        table.integer("modelId")
-            .unsigned()
-            .notNullable()
-            .references("id")
-            .inTable("models")
-            .onUpdate('CASCADE')
-            .onDelete('CASCADE');
+
 
         table.string('earliestDepartureTime');
         table.string('latestDepartureTime');
