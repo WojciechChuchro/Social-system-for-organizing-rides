@@ -20,13 +20,15 @@ class rides extends Model {
 
     static get rides() {
         return {
-            required: ['id', 'driverId', 'modelId', 'startAddressId', 'seatsNumber', 'pricePerPerson', 'registrationNumber'],
+            required: ['id', 'driverId', 'earliestDepartureTime', 'latestDepartureTime', 'modelId', 'startAddressId', 'seatsNumber', 'pricePerPerson', 'registrationNumber'],
             properties: {
                 id: {type: 'integer'},
                 driverId: {type: 'integer'},
                 modelId: {type: 'integer'},
-                startAddressId: {type: 'string'},
-                destinationAddressId: {type: 'string'},
+                startAddressId: {type: 'integer'},
+                destinationAddressId: {type: 'integer'},
+                earliestDepartureTime: {type: 'string'},
+                latestDepartureTime: {type: 'string'},
                 registrationNumber: {type: 'string'},
                 seatsNumber: {type: 'integer'},
                 pricePerPerson: {type: 'float'},
@@ -56,19 +58,19 @@ class rides extends Model {
                     to: 'models.id',
                 },
             },
-            startAddressId: {
+            startAddress: {  // Corrected relation name
                 relation: Model.HasManyRelation,
                 modelClass: Addresses,
                 join: {
-                    from: 'rides.addressId',
+                    from: 'rides.startAddressId',
                     to: 'addresses.id',
                 },
             },
-            destinationAddressId: {
+            destinationAddress: {  // Corrected relation name
                 relation: Model.HasManyRelation,
                 modelClass: Addresses,
                 join: {
-                    from: 'rides.addressId',
+                    from: 'rides.destinationAddressId',
                     to: 'addresses.id',
                 },
             },

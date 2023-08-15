@@ -1,5 +1,4 @@
 import {Request, Response, NextFunction} from "express"
-import {get} from "lodash"
 import {decodeJWT} from "../helpers";
 
 
@@ -19,6 +18,5 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
     }
 
     res.locals.jwt = decodedJwt;
-
     next();
 };

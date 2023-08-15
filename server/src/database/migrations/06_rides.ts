@@ -6,24 +6,28 @@ export async function up(knex: Knex): Promise<void> {
 
         table.integer("driverId")
             .unsigned()
+            .notNullable()
             .references("id")
             .inTable("users")
             .onUpdate('CASCADE')
             .onDelete('CASCADE');
         table.integer("startAddressId")
             .unsigned()
+            .notNullable()
             .references("id")
             .inTable("addresses")
             .onUpdate('CASCADE')
             .onDelete('CASCADE');
         table.integer("destinationAddressId")
             .unsigned()
+            .notNullable()
             .references("id")
             .inTable("addresses")
             .onUpdate('CASCADE')
             .onDelete('CASCADE');
         table.integer("modelId")
             .unsigned()
+            .notNullable()
             .references("id")
             .inTable("models")
             .onUpdate('CASCADE')
