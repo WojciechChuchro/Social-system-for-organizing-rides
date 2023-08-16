@@ -36,7 +36,7 @@ class Streets extends Model {
                 modelClass: Addresses,
                 join: {
                     from: 'streets.id',
-                    to: 'addresses.streetsiD'
+                    to: 'addresses.streetId'
                 }
             }
         };
