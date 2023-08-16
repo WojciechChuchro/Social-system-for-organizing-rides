@@ -78,9 +78,29 @@ class Rides extends Model {
     }
 }
 
-export const getRidesWithEveryChildrenTable = async () => {
+export const getRidesWithEveryChildrenTable = async (id: number) => {
+    console.log(id)
     const ridesWithDrivers = await Rides.query()
-        .select('users.name as driverName', 'users.email as driverEmail', 'models.modelName as driverModelName', 'brands.brandName as driverBrandName', 'startAddresses.zipCode as startZipCode', 'startAddresses.houseNumber as startHouseNumber', 'startStreets.streetName as startStreetName', 'startCities.cityName as startCityName', 'startCountries.countryName as startCountryName', 'destinationAddresses.zipCode as destinationZipCode', 'destinationAddresses.houseNumber as destinationHouseNumber', 'destinationStreets.streetName as destinationStreetName', 'destinationCities.cityName as destinationCityName', 'destinationCountries.countryName as destinationCountryName', 'rides.earliestDepartureTime', 'rides.latestDepartureTime', 'rides.pricePerPerson', 'rides.seatsNumber', 'rides.registrationNumber')
+        .select('users.name as driverName',
+            'users.email as driverEmail',
+            'models.modelName as driverModelName',
+            'brands.brandName as driverBrandName',
+            'startAddresses.zipCode as startZipCode',
+            'startAddresses.houseNumber as startHouseNumber',
+            'startStreets.streetName as startStreetName',
+            'startCities.cityName as startCityName',
+            'startCountries.countryName as startCountryName',
+            'destinationAddresses.zipCode as destinationZipCode',
+            'destinationAddresses.houseNumber as destinationHouseNumber',
+            'destinationStreets.streetName as destinationStreetName',
+            'destinationCities.cityName as destinationCityName',
+            'destinationCountries.countryName as destinationCountryName',
+            'rides.id',
+            'rides.earliestDepartureTime',
+            'rides.latestDepartureTime',
+            'rides.pricePerPerson',
+            'rides.seatsNumber',
+            'rides.registrationNumber')
         .join('users', 'rides.driverId', 'users.id')
         .join('models', 'users.modelId', 'models.id')
         .join('brands', 'models.brandId', 'brands.id')
@@ -92,6 +112,7 @@ export const getRidesWithEveryChildrenTable = async () => {
         .join('streets as destinationStreets', 'destinationAddresses.streetId', 'destinationStreets.id')
         .join('cities as destinationCities', 'destinationStreets.cityId', 'destinationCities.id')
         .join('countries as destinationCountries', 'destinationCities.countryId', 'destinationCountries.id')
+        .where('rides.id', id)
         .whereNotNull('rides.driverId')
         .whereNotNull('rides.startAddressId')
         .whereNotNull('rides.destinationAddressId')
@@ -102,7 +123,7 @@ export const getRidesWithEveryChildrenTable = async () => {
         .whereNotNull('startCities.id')
         .whereNotNull('destinationCities.id')
         .whereNotNull('startCountries.id')
-        .whereNotNull('destinationCountries.id');
+        .whereNotNull('destinationCountries.id')
     return ridesWithDrivers
 }
 
