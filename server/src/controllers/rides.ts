@@ -1,6 +1,10 @@
 import {Request, Response} from 'express';
 import Users from '../database/models/users.model';
 import Rides from '../database/models/rides.model';
+import {AddressIds, createStartAndDestinationAddress} from "../database/models/addresses.model";
+import {CountryIds, createStartAndDestinationCountry} from "../database/models/countries.model";
+import {CityIds, createStartAndDestinationCity} from "../database/models/cities.model";
+import {createStartAndDestinationStreet, StreetIds} from "../database/models/streets.model";
 
 export const getAllRides = async (req: Request, res: Response) => {
     try {
@@ -15,27 +19,7 @@ export const getAllRides = async (req: Request, res: Response) => {
 export const getRidesWithDrivers = async (req: Request, res: Response) => {
     try {
         const ridesWithDrivers = await Rides.query()
-            .select(
-                'users.name as driverName',
-                'users.email as driverEmail',
-                'models.modelName as driverModelName',
-                'brands.brandName as driverBrandName',
-                'startAddresses.zipCode as startZipCode',
-                'startAddresses.houseNumber as startHouseNumber',
-                'startStreets.streetName as startStreetName',
-                'startCities.cityName as startCityName',
-                'startCountries.countryName as startCountryName',
-                'destinationAddresses.zipCode as destinationZipCode',
-                'destinationAddresses.houseNumber as destinationHouseNumber',
-                'destinationStreets.streetName as destinationStreetName',
-                'destinationCities.cityName as destinationCityName',
-                'destinationCountries.countryName as destinationCountryName',
-                'rides.earliestDepartureTime',
-                'rides.latestDepartureTime',
-                'rides.pricePerPerson',
-                'rides.seatsNumber',
-                'rides.registrationNumber'
-            )
+            .select('users.name as driverName', 'users.email as driverEmail', 'models.modelName as driverModelName', 'brands.brandName as driverBrandName', 'startAddresses.zipCode as startZipCode', 'startAddresses.houseNumber as startHouseNumber', 'startStreets.streetName as startStreetName', 'startCities.cityName as startCityName', 'startCountries.countryName as startCountryName', 'destinationAddresses.zipCode as destinationZipCode', 'destinationAddresses.houseNumber as destinationHouseNumber', 'destinationStreets.streetName as destinationStreetName', 'destinationCities.cityName as destinationCityName', 'destinationCountries.countryName as destinationCountryName', 'rides.earliestDepartureTime', 'rides.latestDepartureTime', 'rides.pricePerPerson', 'rides.seatsNumber', 'rides.registrationNumber')
             .join('users', 'rides.driverId', 'users.id')
             .join('models', 'users.modelId', 'models.id')
             .join('brands', 'models.brandId', 'brands.id')
@@ -84,6 +68,16 @@ export const createRide = async (req: Request, res: Response) => {
             registrationNumber,
             seatsNumber,
             pricePerPerson,
+            startZipCode,
+            startHouseNumber,
+            destinationZipCode,
+            destinationHouseNumber,
+            startCityName,
+            destinationCityName,
+            startCountryName,
+            destinationCountryName,
+            startStreetName,
+            destinationStreetName
         } = req.body;
 
         const parsedModelId = parseInt(modelId);
@@ -93,18 +87,30 @@ export const createRide = async (req: Request, res: Response) => {
         if (isNaN(parsedModelId) || isNaN(parsedSeatsNumber) || isNaN(parsedPricePerPerson)) {
             return res.status(400).json({message: 'Invalid data format'});
         }
+        const countryIds: CountryIds = await createStartAndDestinationCountry(startCountryName, destinationCountryName);
+
+        const cityIds: CityIds = await createStartAndDestinationCity(startCityName, destinationCityName, countryIds.startCountryId, // Provide the appropriate IDs here
+            countryIds.destinationCountryId // Provide the appropriate IDs here
+        );
+
+        const streetIds: StreetIds = await createStartAndDestinationStreet(startStreetName, destinationStreetName, cityIds.startCityId, // Provide the appropriate IDs here
+            cityIds.destinationCityId // Provide the appropriate IDs here
+        );
+        const addressIds: AddressIds = await createStartAndDestinationAddress(startZipCode, startHouseNumber, destinationZipCode, destinationHouseNumber, streetIds.startStreetId, // Provide the appropriate IDs here
+            streetIds.destinationStreetId // Provide the appropriate IDs here
+        );
+
 
         const newRide = {
             driverId: userId,
-            startAddressId: parseInt(res.locals.startAddressId),
-            destinationAddressId: parseInt(res.locals.destinationAddressId),
-            modelId: parsedModelId,
+            startAddressId: addressIds.startAddressId,
+            destinationAddressId: addressIds.destinationAddressId,
             earliestDepartureTime,
             latestDepartureTime,
             pricePerPerson: parsedPricePerPerson,
             seatsNumber: parsedSeatsNumber,
             registrationNumber,
-        }
+        };
 
         const insertedRide = await Rides.query().insert(newRide);
 

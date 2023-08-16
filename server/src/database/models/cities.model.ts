@@ -44,4 +44,48 @@ class Cities extends Model {
         return "cities";
     }
 }
+
+export interface CityIds {
+    startCityId: number;
+    destinationCityId: number;
+}
+
+export const createStartAndDestinationCity = async (
+    startCityName: string,
+    destinationCityName: string,
+    startCountryId: number,
+    destinationCountryId: number
+): Promise<CityIds> => {
+    const cityIds: CityIds = {
+        startCityId: -1,
+        destinationCityId: -1
+    };
+
+    try {
+        // Process start city
+        const existingStartCity = await Cities.query().findOne({ cityName: startCityName });
+
+        if (!existingStartCity) {
+            const newStartCity = await Cities.query().insert({ cityName: startCityName, countryId: startCountryId });
+            cityIds.startCityId = newStartCity.id;
+        } else {
+            cityIds.startCityId = existingStartCity.id;
+        }
+
+        // Process destination city
+        const existingDestCity = await Cities.query().findOne({ cityName: destinationCityName });
+
+        if (!existingDestCity) {
+            const newDestCity = await Cities.query().insert({ cityName: destinationCityName, countryId: destinationCountryId });
+            cityIds.destinationCityId = newDestCity.id;
+        } else {
+            cityIds.destinationCityId = existingDestCity.id;
+        }
+
+        return cityIds;
+    } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Cannot create a city');
+    }
+};
 export default Cities

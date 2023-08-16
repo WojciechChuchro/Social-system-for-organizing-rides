@@ -7,6 +7,7 @@ Model.knex(knex)
 class Countries extends Model {
     id!: number;
     countryName!: string;
+
     static get countries() {
         return {
             required: ['id', 'countryName'],
@@ -29,8 +30,51 @@ class Countries extends Model {
             },
         };
     }
+
     static get tableName(): string {
         return "countries";
     }
 }
+
+export interface CountryIds {
+    startCountryId: number;
+    destinationCountryId: number;
+}
+
+export const createStartAndDestinationCountry = async (
+    startCountryName: string,
+    destinationCountryName: string
+): Promise<CountryIds> => {
+    const countryIds: CountryIds = {
+        startCountryId: -1,
+        destinationCountryId: -1
+    };
+
+    try {
+        // Process start country
+        const existingStartCountry = await Countries.query().findOne({countryName: startCountryName});
+
+        if (!existingStartCountry) {
+            const newStartCountry = await Countries.query().insert({countryName: startCountryName});
+            countryIds.startCountryId = newStartCountry.id;
+        } else {
+            countryIds.startCountryId = existingStartCountry.id;
+        }
+
+        // Process destination country
+        const existingDestCountry = await Countries.query().findOne({countryName: destinationCountryName});
+
+        if (!existingDestCountry) {
+            const newDestCountry = await Countries.query().insert({countryName: destinationCountryName});
+            countryIds.destinationCountryId = newDestCountry.id;
+        } else {
+            countryIds.destinationCountryId = existingDestCountry.id;
+        }
+
+        return countryIds;
+    } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Cannot create a country');
+    }
+};
 export default Countries

@@ -1,6 +1,6 @@
 import express from "express"
 import Users from "../database/models/users.model"
-import {random, authentication, generateSessionToken} from "../helpers"
+import {authentication, generateSessionToken, random} from "../helpers"
 
 export const login = async (req: express.Request, res: express.Response) => {
     try {
@@ -45,7 +45,8 @@ export const register = async (req: express.Request, res: express.Response) => {
             phoneNumber,
             email,
             password: authentication(salt, password),
-            salt
+            salt,
+            modelId: 5,
         });
 
 

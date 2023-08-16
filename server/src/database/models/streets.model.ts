@@ -9,6 +9,7 @@ class Streets extends Model {
     id!: number;
     cityId!: number;
     streetName!: string;
+
     static get Streets() {
         return {
             required: ['id', 'cityId', 'streetName'],
@@ -19,6 +20,7 @@ class Streets extends Model {
             }
         };
     }
+
     static get relationMappings() {
         return {
             city: {
@@ -45,4 +47,50 @@ class Streets extends Model {
     }
 }
 
+export interface StreetIds {
+    startStreetId: number;
+    destinationStreetId: number;
+}
+
+export const createStartAndDestinationStreet = async (
+    startStreetName: string,
+    destinationStreetName: string,
+    startCityId: number,
+    destinationCityId: number
+): Promise<StreetIds> => {
+    const streetIds: StreetIds = {
+        startStreetId: -1,
+        destinationStreetId: -1
+    };
+
+    try {
+        // Process start street
+        const existingStartStreet = await Streets.query().findOne({streetName: startStreetName});
+
+        if (!existingStartStreet) {
+            const newStartStreet = await Streets.query().insert({streetName: startStreetName, cityId: startCityId});
+            streetIds.startStreetId = newStartStreet.id;
+        } else {
+            streetIds.startStreetId = existingStartStreet.id;
+        }
+
+        // Process destination street
+        const existingDestStreet = await Streets.query().findOne({streetName: destinationStreetName});
+
+        if (!existingDestStreet) {
+            const newDestStreet = await Streets.query().insert({
+                streetName: destinationStreetName,
+                cityId: destinationCityId
+            });
+            streetIds.destinationStreetId = newDestStreet.id;
+        } else {
+            streetIds.destinationStreetId = existingDestStreet.id;
+        }
+
+        return streetIds;
+    } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Cannot create a street');
+    }
+};
 export default Streets
