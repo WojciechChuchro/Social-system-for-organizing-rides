@@ -78,7 +78,7 @@ export class ProfileComponent implements OnInit {
 			'Authorization': `Bearer ${this.getJWT()}`
 		})
 
-		this.http.get<User>('http://localhost:8080/api/users', {headers}).subscribe(
+		this.http.get<User>('http://localhost:8080/api/user', {headers}).subscribe(
 			(response: User) => {
 				this.email = response.email
 				this.name = response.name
