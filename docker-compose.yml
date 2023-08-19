@@ -2,7 +2,7 @@ version: "3"
 services:
 
   client-service:
-    container_name: ${CLIENT_NAME}
+    container_name: ${CLIENT_CONTAINER_NAME}
     build:
       context: ./client
     volumes:
@@ -14,7 +14,7 @@ services:
       - ${CLIENT_PORT}
 
   server-service:
-    container_name: ${SERVER_NAME}
+    container_name: ${CLIENT_CONTAINER_NAME}
     build:
       context: ./server
     volumes:
