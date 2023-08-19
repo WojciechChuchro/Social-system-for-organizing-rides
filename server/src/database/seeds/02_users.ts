@@ -1,9 +1,7 @@
 import {Knex} from 'knex'
-import { faker } from '@faker-js/faker'
+import {faker} from '@faker-js/faker'
 
 export async function seed(knex: Knex): Promise<void> {
-	await knex('users').del()
-
 	const users = []
 	const numberOfUsers = 10
 
