@@ -1,11 +1,16 @@
 export interface User {
-  id_user: number;
+  id: number;
+  modelId: number;
+  email: string;
   name: string;
-  login: string;
+  surname: string;
+  phoneNumber: string;
+  profilePicture: string;
   password: string;
-  phone_number: string;
-  profile_picture: string;
+  sessionToken: string;
+  salt: string;
 }
+
 
 export interface LoginForm {
   email: string;
@@ -20,6 +25,9 @@ export interface RegisterForm {
   password: string;
 }
 
+export interface MessageResponseOnly {
+  message: string
+}
 export interface profileForm  {
   email?: string;
   name?: string;

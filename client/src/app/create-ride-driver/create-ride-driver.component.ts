@@ -1,4 +1,5 @@
 import {Component} from '@angular/core'
+import {MatDatepickerInputEvent} from '@angular/material/datepicker'
 
 @Component({
 	selector: 'app-create-ride-driver',
@@ -6,7 +7,7 @@ import {Component} from '@angular/core'
 	styleUrls: ['./create-ride-driver.component.scss'],
 })
 export class CreateRideDriverComponent {
-	starting_point!: Date
+	starting_point!: Date | null
 	departure_time: string = ''
 	arrival_time: string = ''
 	price: number | null = null
@@ -14,7 +15,7 @@ export class CreateRideDriverComponent {
 	registration_number: string = ''
 	number_of_seats: number | null = null
 
-	onStartingPointSelected(event: any): void {
+	onStartingPointSelected(event: MatDatepickerInputEvent<Date>): void {
 		this.starting_point = event.value
 	}
 

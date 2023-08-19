@@ -1,9 +1,15 @@
-import { Component } from '@angular/core'
-import { AuthService } from '../shared/auth/auth.service'
-import { LoginForm } from 'src/types/user'
-import { CookieService } from 'ngx-cookie-service'
-import { MatSnackBar } from '@angular/material/snack-bar'
-import { LoginStatusService } from '../shared/login-status.service'
+import {Component} from '@angular/core'
+import {AuthService} from '../shared/auth/auth.service'
+import {LoginForm} from 'src/types/user'
+import {CookieService} from 'ngx-cookie-service'
+import {MatSnackBar} from '@angular/material/snack-bar'
+import {LoginStatusService} from '../shared/login-status.service'
+
+
+export interface JsonWebTokenInterface {
+	token: string
+}
+
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
@@ -18,11 +24,12 @@ export class LoginComponent {
 	loading: boolean = false
 
 	constructor(
-    private auth: AuthService,
-    private cookieService: CookieService,
-    private snackBar: MatSnackBar,
-    private loginStatusService: LoginStatusService
-	) {}
+		private auth: AuthService,
+		private cookieService: CookieService,
+		private snackBar: MatSnackBar,
+		private loginStatusService: LoginStatusService
+	) {
+	}
 
 	showAlert(message: string, action: string, duration: number) {
 		this.snackBar.open(message, action, {
@@ -30,14 +37,16 @@ export class LoginComponent {
 		})
 	}
 
+
 	handleLogin() {
 		this.loading = true
 		this.auth.login(this.loginForm).subscribe({
-			next: (response: any) => {
+			next: (response) => {
 				if (response.token) {
 					this.cookieService.set('JsonWebToken', response.token)
 				}
-				this.showAlert(response.message, 'Close', 3000)
+				// If the response doesn't include the message anymore, you can remove this line or adjust accordingly
+				// this.showAlert(response.message, 'Close', 3000);
 				this.loginStatusService.setLoginStatus(true)
 				this.loading = false
 			},

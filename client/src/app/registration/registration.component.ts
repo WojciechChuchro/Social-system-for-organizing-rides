@@ -39,7 +39,7 @@ export class RegistrationComponent {
 
 		this.loading = true
 		this.auth.register(this.registerForm).subscribe({
-			next: (response: any) => {
+			next: (response) => {
 				this.showAlert(response.message, 'Close', 3000)
 				this.loading = false
 			},

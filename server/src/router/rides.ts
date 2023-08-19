@@ -1,6 +1,6 @@
 import express from 'express'
 import {authenticateJWT} from '../middlewares'
-import {createRide, getAllRides, getRidesWithDrivers} from '../controllers/rides'
+import {createRide, getRidesWithDrivers} from '../controllers/rides'
 
 export default (router: express.Router) => {
 	router.get('/rides', getRidesWithDrivers)

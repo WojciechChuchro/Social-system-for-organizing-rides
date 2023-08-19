@@ -1,6 +1,5 @@
 import {Model} from 'objection'
 import knex from '../config/database'
-import Users from './users.model'
 import LookingForDrivers from './lookingForDrivers.model'
 
 Model.knex(knex)

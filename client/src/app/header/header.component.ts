@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, inject } from '@angular/core'
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'
 import { Observable, of } from 'rxjs'
-import { map, shareReplay, tap } from 'rxjs/operators'
+import { map, shareReplay } from 'rxjs/operators'
 import { CookieService } from 'ngx-cookie-service'
 import { LoginStatusService } from '../shared/login-status.service'
 

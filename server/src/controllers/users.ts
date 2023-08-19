@@ -62,11 +62,11 @@ export const getUsersByIds = async (req: Request, res: Response) => {
 		const userIds = req.body // Assuming you're sending an array of user IDs in the request body
 
 		// Fetch users by user IDs
-		const users = await Users.query()
+		const user = await Users.query()
 			.findByIds(userIds)
 			.select('email', 'name', 'surname', 'phoneNumber', 'profilePicture')
 
-		return res.status(200).json(users)
+		return res.status(200).json(user)
 	} catch (err) {
 		console.log(err)
 		return res.sendStatus(400)

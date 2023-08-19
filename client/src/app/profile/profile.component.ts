@@ -1,7 +1,7 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http'
 import {Component, OnInit} from '@angular/core'
 import {CookieService} from 'ngx-cookie-service'
-import {profileForm} from '../../types/user'
+import {MessageResponseOnly, profileForm, User} from '../../types/user'
 import {MatSnackBar} from '@angular/material/snack-bar'
 
 @Component({
@@ -22,9 +22,10 @@ export class ProfileComponent implements OnInit {
 		phoneNumber: '',
 		password: '',
 	}
+
 	constructor(private http: HttpClient, private cookieService: CookieService, private snackBar: MatSnackBar) {
 		this.email = null
-		this.name =null
+		this.name = null
 		this.surname = null
 		this.phoneNumber = null
 		this.profilePicture = null
@@ -42,22 +43,23 @@ export class ProfileComponent implements OnInit {
 			duration: duration,
 		})
 	}
+
 	updateProfile(): void {
 		const headers = new HttpHeaders({
 			'Authorization': `Bearer ${this.getJWT()}`
 		})
 
-		console.log(this.profileForm)
-		this.http.patch('http://localhost:8080/api/users/update', this.profileForm, { headers }).subscribe(
-			(response: any) => {
+		this.http.patch<MessageResponseOnly>('http://localhost:8080/api/users/update', this.profileForm, {headers}).subscribe(
+			(response: MessageResponseOnly) => {
 				this.showAlert(response.message, 'Close', 3000)
 			},
-			(error: any) => {
+			(error) => {
 				console.log(error)
 				this.showAlert(error.error.message, 'Close', 3000)
 			}
 		)
 	}
+
 	getJWT(): string {
 		// Get the JWT cookie value from the browser's cookies.
 		const jwtCookie = this.cookieService.get('JsonWebToken')
@@ -70,24 +72,24 @@ export class ProfileComponent implements OnInit {
 
 		return jwtCookie
 	}
+
 	getDataWithJwtCookie(): void {
 		const headers = new HttpHeaders({
 			'Authorization': `Bearer ${this.getJWT()}`
 		})
 
-		// Replace 'your-backend-url' with the actual URL of your backend API endpoint.
-		this.http.get('http://localhost:8080/api/users', { headers }).subscribe(
-			(response: any) => {
+		this.http.get<User>('http://localhost:8080/api/users', {headers}).subscribe(
+			(response: User) => {
 				this.email = response.email
 				this.name = response.name
 				this.surname = response.surname
 				this.phoneNumber = response.phoneNumber
 				this.profilePicture = response.profilePicture
 			},
-			(error: any) => {
-				// Handle the error here.
+			(error) => {
 				console.error('Error:', error)
 			}
 		)
 	}
+
 }

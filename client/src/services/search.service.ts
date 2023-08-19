@@ -11,12 +11,12 @@ export class SearchService {
 	}
 
 	getAllRides(): Observable<RidesResponse> {
-		return this.http.get<RidesResponse>('http://localhost:8080/api/rides');
+		return this.http.get<RidesResponse>('http://localhost:8080/api/rides')
 	}
 
 
 	getUsers(userIds: number[]): Observable<UsersResponse> {
-		return this.http.post<UsersResponse>('http://localhost:8080/api/users', userIds);
+		return this.http.post<UsersResponse>('http://localhost:8080/api/users', userIds)
 	}
 
 }
