@@ -26,6 +26,26 @@ export interface Ride {
 	registrationNumber: string;
 }
 
+export interface RidesResponse {
+	rides: Ride[];
+}
+
+interface Users {
+	id: number;
+	modelId: number;
+	email: string;
+	name: string;
+	surname: string;
+	phoneNumber: string;
+	profilePicture: string;
+	password: string;
+	sessionToken: string;
+	salt: string;
+}
+export interface UsersResponse {
+	users: Users[]
+}
+
 @Component({
 	selector: 'app-search',
 	templateUrl: './search.component.html',
@@ -77,7 +97,7 @@ export class SearchComponent implements OnInit {
 
 	fetchRides() {
 		this.search.getAllRides().subscribe({
-			next: (response: any) => {
+			next: (response: RidesResponse) => {
 				this.rides = response.rides.map((ride: Ride) => {
 					// Format the date strings in each ride object
 					ride.earliestDepartureTime = this.formatDate(ride.earliestDepartureTime)
@@ -94,14 +114,14 @@ export class SearchComponent implements OnInit {
 
 	fetchUsers() {
 		this.search.getUsers(this.userIds).subscribe({
-			next: (userResponse: any) => {
+			next: (userResponse) => {
 				// Handle the user response here
 				this.loading = false
 				console.log('Users response:', userResponse)
 			},
-			error: (userError: any) => {
+			error: (error) => {
 				this.loading = false
-				console.error('Error fetching users:', userError)
+				console.error('Error fetching users:', error)
 			}
 		})
 	}
