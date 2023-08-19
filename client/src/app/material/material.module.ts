@@ -1,25 +1,25 @@
-import { NgModule } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { NgModule } from '@angular/core'
+import { MatButtonModule } from '@angular/material/button'
+import { MatIconModule } from '@angular/material/icon'
+import { MatToolbarModule } from '@angular/material/toolbar'
+import { MatInputModule } from '@angular/material/input'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatSidenavModule } from '@angular/material/sidenav'
+import { MatListModule } from '@angular/material/list'
+import { MatProgressSpinner } from '@angular/material/progress-spinner'
 const material = [
-  MatButtonModule,
-  MatToolbarModule,
-  MatIconModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatToolbarModule,
-  MatSidenavModule,
+	MatButtonModule,
+	MatToolbarModule,
+	MatIconModule,
+	MatFormFieldModule,
+	MatInputModule,
+	MatToolbarModule,
+	MatSidenavModule,
 
-  MatListModule,
-];
+	MatListModule,
+]
 @NgModule({
-  exports: [material],
-  imports: [material],
+	exports: [material],
+	imports: [material],
 })
 export class MaterialModule {}

@@ -1,4 +1,4 @@
-<mat-card *ngFor="let ride of rides">
+<mat-card *ngFor="let ride of rides" (click)="onRideClick(ride.id)">
   <mat-card-header>
     <mat-card-title>
       <p>{{ ride.startCityName }} ---> {{ ride.destinationCityName }}</p>

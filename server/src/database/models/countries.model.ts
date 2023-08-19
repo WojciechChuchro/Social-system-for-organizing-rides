@@ -1,39 +1,39 @@
-import {Model} from "objection";
-import knex from "../config/database";
-import Cities from "./cities.model";
+import {Model} from 'objection'
+import knex from '../config/database'
+import Cities from './cities.model'
 
 Model.knex(knex)
 
 class Countries extends Model {
-    id!: number;
-    countryName!: string;
+	id!: number
+	countryName!: string
 
-    static get countries() {
-        return {
-            required: ['id', 'countryName'],
-            properties: {
-                id: {type: 'integer'},
-                countryName: {type: 'string'},
-            }
-        };
-    }
+	static get countries() {
+		return {
+			required: ['id', 'countryName'],
+			properties: {
+				id: {type: 'integer'},
+				countryName: {type: 'string'},
+			}
+		}
+	}
 
-    static get relationMappings() {
-        return {
-            cities: {
-                relation: Model.HasManyRelation,
-                modelClass: Cities,
-                join: {
-                    from: 'countries.id',
-                    to: 'cities.id'
-                },
-            },
-        };
-    }
+	static get relationMappings() {
+		return {
+			cities: {
+				relation: Model.HasManyRelation,
+				modelClass: Cities,
+				join: {
+					from: 'countries.id',
+					to: 'cities.id'
+				},
+			},
+		}
+	}
 
-    static get tableName(): string {
-        return "countries";
-    }
+	static get tableName(): string {
+		return 'countries'
+	}
 }
 
 export interface CountryIds {
@@ -42,39 +42,39 @@ export interface CountryIds {
 }
 
 export const createStartAndDestinationCountry = async (
-    startCountryName: string,
-    destinationCountryName: string
+	startCountryName: string,
+	destinationCountryName: string
 ): Promise<CountryIds> => {
-    const countryIds: CountryIds = {
-        startCountryId: -1,
-        destinationCountryId: -1
-    };
+	const countryIds: CountryIds = {
+		startCountryId: -1,
+		destinationCountryId: -1
+	}
 
-    try {
-        // Process start country
-        const existingStartCountry = await Countries.query().findOne({countryName: startCountryName});
+	try {
+		// Process start country
+		const existingStartCountry = await Countries.query().findOne({countryName: startCountryName})
 
-        if (!existingStartCountry) {
-            const newStartCountry = await Countries.query().insert({countryName: startCountryName});
-            countryIds.startCountryId = newStartCountry.id;
-        } else {
-            countryIds.startCountryId = existingStartCountry.id;
-        }
+		if (!existingStartCountry) {
+			const newStartCountry = await Countries.query().insert({countryName: startCountryName})
+			countryIds.startCountryId = newStartCountry.id
+		} else {
+			countryIds.startCountryId = existingStartCountry.id
+		}
 
-        // Process destination country
-        const existingDestCountry = await Countries.query().findOne({countryName: destinationCountryName});
+		// Process destination country
+		const existingDestCountry = await Countries.query().findOne({countryName: destinationCountryName})
 
-        if (!existingDestCountry) {
-            const newDestCountry = await Countries.query().insert({countryName: destinationCountryName});
-            countryIds.destinationCountryId = newDestCountry.id;
-        } else {
-            countryIds.destinationCountryId = existingDestCountry.id;
-        }
+		if (!existingDestCountry) {
+			const newDestCountry = await Countries.query().insert({countryName: destinationCountryName})
+			countryIds.destinationCountryId = newDestCountry.id
+		} else {
+			countryIds.destinationCountryId = existingDestCountry.id
+		}
 
-        return countryIds;
-    } catch (error) {
-        console.error('Error:', error);
-        throw new Error('Cannot create a country');
-    }
-};
+		return countryIds
+	} catch (error) {
+		console.error('Error:', error)
+		throw new Error('Cannot create a country')
+	}
+}
 export default Countries
