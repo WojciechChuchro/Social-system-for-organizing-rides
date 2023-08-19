@@ -11,7 +11,13 @@ export interface User {
   salt: string;
 }
 
-
+export interface Reviews {
+  comment: string
+  rating: string
+}
+export interface UserWithReviews extends User {
+  reviews: Reviews[];
+}
 export interface LoginForm {
   email: string;
   password: string;
