@@ -17,15 +17,14 @@ export const getAllRides = async (req: Request, res: Response) => {
 }
 
 export const getRidesWithDrivers = async (req: Request, res: Response) => {
-	const {id} = req.params
 
 	try {
-		const ridesData = await getRidesWithEveryChildrenTable(parseInt(id)) // Call the data function with the id
+		const ridesData = await getRidesWithEveryChildrenTable() // Call the data function with the id
 		console.log(ridesData)
-		return res.status(200).json({ rides: ridesData })
+		return res.status(200).json({rides: ridesData})
 	} catch (error) {
 		console.error('Error:', error)
-		return res.status(500).json({ message: 'Internal server error' })
+		return res.status(500).json({message: 'Internal server error'})
 	}
 }
 

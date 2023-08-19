@@ -78,7 +78,7 @@ class Rides extends Model {
 	}
 }
 
-export const getRidesWithEveryChildrenTable = async (id: number) => {
+export const getRidesWithEveryChildrenTable = async () => {
 	return (await Rides.query()
 		.select('users.name as driverName',
 			'users.email as driverEmail',
@@ -111,7 +111,6 @@ export const getRidesWithEveryChildrenTable = async (id: number) => {
 		.join('streets as destinationStreets', 'destinationAddresses.streetId', 'destinationStreets.id')
 		.join('cities as destinationCities', 'destinationStreets.cityId', 'destinationCities.id')
 		.join('countries as destinationCountries', 'destinationCities.countryId', 'destinationCountries.id')
-		.where('rides.id', id)
 		.whereNotNull('rides.driverId')
 		.whereNotNull('rides.startAddressId')
 		.whereNotNull('rides.destinationAddressId')

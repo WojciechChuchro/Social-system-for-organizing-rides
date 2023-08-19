@@ -1,28 +1,29 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core'
 import {SearchService} from '../../services/search.service'
 import {Router} from '@angular/router'
+import {RideSharingService} from '../../services/ride-sharing.service'
 
-interface Ride {
-  id: number;
-  driverName: string;
-  driverEmail: string;
-  driverModelName: string;
-  driverBrandName: string;
-  startZipCode: string;
-  startHouseNumber: string;
-  startStreetName: string;
-  startCityName: string;
-  startCountryName: string;
-  destinationZipCode: string;
-  destinationHouseNumber: string;
-  destinationStreetName: string;
-  destinationCityName: string;
-  destinationCountryName: string;
-  earliestDepartureTime: string;
-  latestDepartureTime: string;
-  pricePerPerson: number;
-  seatsNumber: number;
-  registrationNumber: string;
+export interface Ride {
+	id: number;
+	driverName: string;
+	driverEmail: string;
+	driverModelName: string;
+	driverBrandName: string;
+	startZipCode: string;
+	startHouseNumber: string;
+	startStreetName: string;
+	startCityName: string;
+	startCountryName: string;
+	destinationZipCode: string;
+	destinationHouseNumber: string;
+	destinationStreetName: string;
+	destinationCityName: string;
+	destinationCountryName: string;
+	earliestDepartureTime: string;
+	latestDepartureTime: string;
+	pricePerPerson: number;
+	seatsNumber: number;
+	registrationNumber: string;
 }
 
 @Component({
@@ -37,9 +38,10 @@ export class SearchComponent implements OnInit {
 	loading: boolean = false
 
 	constructor(
-    private router: Router,
-    private search: SearchService,
-    private cdRef: ChangeDetectorRef
+		private router: Router,
+		private search: SearchService,
+		private cdRef: ChangeDetectorRef,
+	private rideSharingService: RideSharingService
 	) {
 	}
 
@@ -50,10 +52,14 @@ export class SearchComponent implements OnInit {
 	}
 
 	onRideClick(rideId: number) {
-		// You can use the rideId to perform actions related to the clicked ride
-		this.router.navigate(['ride', rideId])
-		// Call other functions or perform actions based on the ride ID
+		const ride: Ride | undefined = this.rides.find(r => r.id === rideId)
+		if (!ride) {
+			return
+		}
+		this.rideSharingService.changeRide(ride)
+		this.router.navigate(['/ride-detail', ride.id])
 	}
+
 
 	formatDate(inputDate: string): string {
 		const date = new Date(inputDate)

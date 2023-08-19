@@ -11,9 +11,9 @@ import {CreateRidePassengerComponent} from './create-ride-passenger/create-ride-
 import {RideDetailComponent} from './ride-detail/ride-detail.component'
 
 const routes: Routes = [
-	{path: 'ride/:id', component: RideDetailComponent},
+	{path: 'ride-detail/:id', component: RideDetailComponent},
 	{
-		path: 'aboutUs',
+		path: 'about-us',
 		component: AboutusComponent,
 	},
 	{
@@ -21,15 +21,15 @@ const routes: Routes = [
 		component: SearchComponent,
 	},
 	{
-		path: 'createRide',
+		path: 'create-ride',
 		component: CreateRideComponent,
 	},
 	{
-		path: 'createRideDriver',
+		path: 'create-ride-driver',
 		component: CreateRideDriverComponent,
 	},
 	{
-		path: 'createRidePassenger',
+		path: 'create-ride-passenger',
 		component: CreateRidePassengerComponent,
 	},
 	{

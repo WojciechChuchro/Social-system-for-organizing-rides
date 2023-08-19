@@ -9,10 +9,10 @@
     >
         <mat-toolbar>Menu</mat-toolbar>
         <mat-nav-list>
-            <a routerLink="aboutUs" mat-list-item>About us</a>
+            <a routerLink="about-us" mat-list-item>About us</a>
             <a routerLink="search" mat-list-item>Search</a>
-            <a *ngIf="isLoggedIn$ | async" routerLink="createRide" mat-list-item>Create Ride</a>
-            <a *ngIf="isLoggedIn$ | async" routerLink="yourRides" mat-list-item>Your Rides</a>
+            <a *ngIf="isLoggedIn$ | async" routerLink="create-ride" mat-list-item>Create Ride</a>
+            <a *ngIf="isLoggedIn$ | async" routerLink="your-rides" mat-list-item>Your Rides</a>
             <a *ngIf="isLoggedIn$ | async" routerLink="messages" mat-list-item>Messages</a>
             <a *ngIf="isLoggedIn$ | async" routerLink="profile" mat-list-item>Profile</a>
             <a *ngIf="!(isLoggedIn$ | async)" routerLink="login" mat-list-item>Login</a>
