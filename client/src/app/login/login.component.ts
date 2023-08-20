@@ -1,9 +1,9 @@
 import {Component} from '@angular/core'
 import {AuthService} from '../../services/auth.service'
 import {LoginForm} from 'src/types/user'
-import {CookieService} from 'ngx-cookie-service'
 import {MatSnackBar} from '@angular/material/snack-bar'
 import {LoginStatusService} from '../../services/login-status.service'
+import {Router} from '@angular/router'
 
 
 @Component({
@@ -20,8 +20,8 @@ export class LoginComponent {
   loading: boolean = false
 
   constructor(
+    private router: Router,
     private auth: AuthService,
-    private cookieService: CookieService,
     private snackBar: MatSnackBar,
     private loginStatusService: LoginStatusService
   ) {
@@ -38,13 +38,10 @@ export class LoginComponent {
     this.loading = true
     this.auth.login(this.loginForm).subscribe({
       next: (response) => {
-        // if (response.token) {
-        // 	this.cookieService.set('JsonWebToken', response.token)
-        // }
-        // If the response doesn't include the message anymore, you can remove this line or adjust accordingly
         this.showAlert(response.message, 'Close', 3000)
         this.loginStatusService.setLoginStatus(true)
         this.loading = false
+        this.router.navigate(['/about-us'])
       },
       error: (error) => {
         this.loading = false
