@@ -16,7 +16,6 @@ export class AuthenticationService {
   validateToken(): Observable<boolean> {
     return this.http.get<TokenValidationResponse>(this.validateEndpoint, {withCredentials: true}).pipe(
       map(response => {
-        console.log('Token validation response:', response)
         return response.isValid
       })
     )
