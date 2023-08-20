@@ -101,4 +101,16 @@ export const validateJWT = (req: Request, res: Response): Response | void => {
   }
 }
 
+export const logout = async (req: express.Request, res: express.Response): Promise<express.Response> => {
+  // Invalidate the JWT by setting the cookie expiration to a past date.
+  res.cookie('JsonWebToken', '', {expires: new Date(0), httpOnly: true, secure: true})
+
+  // Optionally, if you're using a session-based approach, you can destroy the session.
+  // if (req.session) req.session.destroy(err => {/* handle error if needed */});
+
+  // Send a success response
+  return res.status(200).json({message: 'Logged out successfully'})
+}
+
+
 

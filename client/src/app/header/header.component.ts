@@ -4,6 +4,9 @@ import {Observable, of} from 'rxjs'
 import {map, shareReplay} from 'rxjs/operators'
 import {CookieService} from 'ngx-cookie-service'
 import {LoginStatusService} from '../shared/login-status.service'
+import {HttpClient} from '@angular/common/http'
+import {Router} from '@angular/router'
+import {AuthService} from '../shared/auth/auth.service'
 
 @Component({
   selector: 'app-header',
@@ -20,10 +23,12 @@ export class HeaderComponent implements OnInit {
       shareReplay()
     )
 
-  constructor(
-		private cookieService: CookieService,
-		private cdRef: ChangeDetectorRef,
-		private loginStatusService: LoginStatusService
+  constructor(private http: HttpClient,
+    private cookieService: CookieService,
+    private cdRef: ChangeDetectorRef,
+    private loginStatusService: LoginStatusService,
+    private authService: AuthService,  // add this
+    private router: Router  // add this
   ) {
   }
 
@@ -37,8 +42,13 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(): void {
-    this.cookieService.delete('JsonWebToken')
-    this.loginStatusService.setLoginStatus(false) // Set isLoggedIn to false after logout
-    this.cdRef.detectChanges()
+    this.authService.logout().subscribe(() => {
+      this.loginStatusService.setLoginStatus(false) // Set isLoggedIn to false after logout
+      this.router.navigate(['/login']) // redirect user to login page or some other page after logout
+    }, error => {
+      console.error('Error during logout:', error)
+    })
   }
+
+
 }
