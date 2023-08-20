@@ -1,4 +1,4 @@
-export interface User {
+export interface Users {
   id: number;
   modelId: number;
   email: string;
@@ -15,7 +15,7 @@ export interface Reviews {
   comment: string
   rating: string
 }
-export interface UserWithReviews extends User {
+export interface UserWithReviews extends Users {
   reviews: Reviews[];
 }
 export interface LoginForm {

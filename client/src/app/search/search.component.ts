@@ -2,49 +2,11 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core'
 import {SearchService} from '../../services/search.service'
 import {Router} from '@angular/router'
 import {RideSharingService} from '../../services/ride-sharing.service'
+import {Ride} from '../../types/ride'
+import {RidesResponse} from '../../types/response'
 
-export interface Ride {
-	id: number;
-	driverName: string;
-	driverEmail: string;
-	driverModelName: string;
-	driverBrandName: string;
-	startZipCode: string;
-	startHouseNumber: string;
-	startStreetName: string;
-	startCityName: string;
-	startCountryName: string;
-	destinationZipCode: string;
-	destinationHouseNumber: string;
-	destinationStreetName: string;
-	destinationCityName: string;
-	destinationCountryName: string;
-	earliestDepartureTime: string;
-	latestDepartureTime: string;
-	pricePerPerson: number;
-	seatsNumber: number;
-	registrationNumber: string;
-}
 
-export interface RidesResponse {
-	rides: Ride[];
-}
 
-interface Users {
-	id: number;
-	modelId: number;
-	email: string;
-	name: string;
-	surname: string;
-	phoneNumber: string;
-	profilePicture: string;
-	password: string;
-	sessionToken: string;
-	salt: string;
-}
-export interface UsersResponse {
-	users: Users[]
-}
 
 @Component({
   selector: 'app-search',

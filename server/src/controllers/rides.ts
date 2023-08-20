@@ -1,10 +1,11 @@
 import {Request, Response} from 'express'
 import Users from '../database/models/users.model'
 import Rides, {getRidesWithEveryChildrenTable} from '../database/models/rides.model'
-import {AddressIds, createStartAndDestinationAddress} from '../database/models/addresses.model'
-import {CountryIds, createStartAndDestinationCountry} from '../database/models/countries.model'
-import {CityIds, createStartAndDestinationCity} from '../database/models/cities.model'
-import {createStartAndDestinationStreet, StreetIds} from '../database/models/streets.model'
+import { createStartAndDestinationAddress} from '../database/models/addresses.model'
+import { createStartAndDestinationCountry} from '../database/models/countries.model'
+import { createStartAndDestinationCity} from '../database/models/cities.model'
+import {createStartAndDestinationStreet} from '../database/models/streets.model'
+import {AddressIds, CityIds, CountryIds, StreetIds} from '../types/model'
 
 export const getAllRides = async (req: Request, res: Response) => {
   try {

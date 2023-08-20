@@ -1,6 +1,7 @@
 import {Model} from 'objection'
 import knex from '../config/database'
 import StreetModel from './streets.model'
+import {AddressIds} from '../../types/model'
 
 Model.knex(knex)
 
@@ -42,11 +43,6 @@ class Addresses extends Model {
   static get tableName(): string {
     return 'addresses'
   }
-}
-
-export interface AddressIds {
-    startAddressId: number;
-    destinationAddressId: number;
 }
 
 export const createStartAndDestinationAddress = async (

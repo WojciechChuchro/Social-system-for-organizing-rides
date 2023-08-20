@@ -1,14 +1,10 @@
 import {Component} from '@angular/core'
-import {AuthService} from '../shared/auth/auth.service'
+import {AuthService} from '../../services/auth.service'
 import {LoginForm} from 'src/types/user'
 import {CookieService} from 'ngx-cookie-service'
 import {MatSnackBar} from '@angular/material/snack-bar'
-import {LoginStatusService} from '../shared/login-status.service'
+import {LoginStatusService} from '../../services/login-status.service'
 
-
-export interface JsonWebTokenInterface {
-  token: string
-}
 
 @Component({
   selector: 'app-login',

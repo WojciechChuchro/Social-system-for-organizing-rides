@@ -68,10 +68,6 @@ export const register = async (req: express.Request, res: express.Response) => {
   }
 }
 
-// Assuming you have a type or interface for the JWT payload (e.g., `JwtPayload`).
-// If not, you can replace JwtPayload with any, or better, define an appropriate type.
-// import { JwtPayload } from 'your_jwt_payload_type_path';
-
 export const validateJWT = (req: Request, res: Response): Response | void => {
   const {JsonWebToken} = req.cookies
 

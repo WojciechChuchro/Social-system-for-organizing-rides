@@ -1,6 +1,7 @@
 import {Model} from 'objection'
 import knex from '../config/database'
 import Cities from './cities.model'
+import {CountryIds} from '../../types/model'
 
 Model.knex(knex)
 
@@ -36,10 +37,7 @@ class Countries extends Model {
   }
 }
 
-export interface CountryIds {
-    startCountryId: number;
-    destinationCountryId: number;
-}
+
 
 export const createStartAndDestinationCountry = async (
   startCountryName: string,

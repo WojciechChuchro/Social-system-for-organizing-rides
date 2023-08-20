@@ -1,6 +1,6 @@
 import {Component} from '@angular/core'
 import {MatSnackBar} from '@angular/material/snack-bar'
-import {AuthService} from '../shared/auth/auth.service'
+import {AuthService} from '../../services/auth.service'
 import {RegisterForm} from '../../types/user'
 
 @Component({
