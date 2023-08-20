@@ -1,15 +1,14 @@
-import {Request, Response, NextFunction} from 'express'
+import {NextFunction, Request, Response} from 'express'
 import {decodeJWT} from '../helpers'
 
 
 export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
-	const {authorization} = req.headers
+	const {JsonWebToken} = req.cookies
 
-	if (!authorization || !authorization.startsWith('Bearer ')) {
+	if (!JsonWebToken) {
 		return res.status(401).json({message: 'Unauthorized: Missing token'})
 	}
-
-	const token = authorization.split(' ')[1]
+	const token = Array.isArray(JsonWebToken) ? JsonWebToken[0] : JsonWebToken  // Take the first one if it's an array
 
 	const decodedJwt = decodeJWT(token)
 

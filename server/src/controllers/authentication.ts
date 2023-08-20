@@ -20,7 +20,18 @@ export const login = async (req: express.Request, res: express.Response) => {
 		const sessionToken = generateSessionToken(user.id.toString())
 		await Users.query().findById(user.id).patch({sessionToken})
 
-		return res.status(200).json({'message': 'login success', 'token': sessionToken}).end()
+		// Set the cookie
+		res.cookie('JsonWebToken', sessionToken, {
+			httpOnly: true,
+			secure: false,  // secure: true only in production, assuming you're not using HTTPS in development
+			sameSite: 'none',  // 'lax' or 'strict' depending on your needs
+			domain: 'localhost',
+			maxAge: 24 * 60 * 60 * 1000,
+			path: '/' // makes it available for the entire domain
+		})
+
+
+		return res.status(200).json({'message': 'login success'}).end()
 	} catch (error) {
 		console.log(error)
 		return res.sendStatus(400)

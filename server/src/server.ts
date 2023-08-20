@@ -5,10 +5,16 @@ import mysql from 'mysql2'
 import router from './router'
 import cookieParser from 'cookie-parser'
 
+const corsOptions = {
+	origin: 'http://localhost:4200',  // Your Angular's localhost or domain
+	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+	credentials: true,  // This is essential
+	allowedHeaders: ['Content-Type', 'Authorization', 'JsonWebToken']
+}
 const app = express()
 dotenv.config()
 app.use(express.json())
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(cookieParser())
 app.listen(process.env.PORT || 8081, () => {
 	console.log(`Server is running on port ${process.env.PORT || 8081}`)
