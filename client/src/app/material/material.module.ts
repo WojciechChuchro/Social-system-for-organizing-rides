@@ -7,18 +7,18 @@ import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatListModule } from '@angular/material/list'
 const material = [
-	MatButtonModule,
-	MatToolbarModule,
-	MatIconModule,
-	MatFormFieldModule,
-	MatInputModule,
-	MatToolbarModule,
-	MatSidenavModule,
+  MatButtonModule,
+  MatToolbarModule,
+  MatIconModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatToolbarModule,
+  MatSidenavModule,
 
-	MatListModule,
+  MatListModule,
 ]
 @NgModule({
-	exports: [material],
-	imports: [material],
+  exports: [material],
+  imports: [material],
 })
 export class MaterialModule {}

@@ -10,31 +10,31 @@ import { MatSelectModule } from '@angular/material/select'
 import { RegistrationComponent } from './registration.component'
 
 describe('RegistrationComponent', () => {
-	let component: RegistrationComponent
-	let fixture: ComponentFixture<RegistrationComponent>
+  let component: RegistrationComponent
+  let fixture: ComponentFixture<RegistrationComponent>
 
-	beforeEach(waitForAsync(() => {
-		TestBed.configureTestingModule({
-			declarations: [RegistrationComponent],
-			imports: [
-				NoopAnimationsModule,
-				ReactiveFormsModule,
-				MatButtonModule,
-				MatCardModule,
-				MatInputModule,
-				MatRadioModule,
-				MatSelectModule,
-			]
-		}).compileComponents()
-	}))
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [RegistrationComponent],
+      imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatInputModule,
+        MatRadioModule,
+        MatSelectModule,
+      ]
+    }).compileComponents()
+  }))
 
-	beforeEach(() => {
-		fixture = TestBed.createComponent(RegistrationComponent)
-		component = fixture.componentInstance
-		fixture.detectChanges()
-	})
+  beforeEach(() => {
+    fixture = TestBed.createComponent(RegistrationComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
-	it('should compile', () => {
-		expect(component).toBeTruthy()
-	})
+  it('should compile', () => {
+    expect(component).toBeTruthy()
+  })
 })

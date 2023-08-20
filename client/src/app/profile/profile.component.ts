@@ -45,7 +45,7 @@ export class ProfileComponent implements OnInit {
     this.getDataWithJwtCookie()
   }
 
-  showAlert(message: string, action: string, duration: number) {
+  showAlert(message: string, action: string, duration: number): void {
 
     this.snackBar.open(message, action, {
       duration: duration,

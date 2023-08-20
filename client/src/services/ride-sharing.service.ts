@@ -3,16 +3,16 @@ import {BehaviorSubject} from 'rxjs'
 import {Ride} from '../app/search/search.component'
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
 export class RideSharingService {
-	private rideSource = new BehaviorSubject<Ride | undefined>(undefined)
-	currentRide = this.rideSource.asObservable()
+  private rideSource = new BehaviorSubject<Ride | undefined>(undefined)
+  currentRide = this.rideSource.asObservable()
 
-	constructor() {
-	}
+  constructor() {
+  }
 
-	changeRide(ride: Ride | undefined) {
-		this.rideSource.next(ride)
-	}
+  changeRide(ride: Ride | undefined): void {
+    this.rideSource.next(ride)
+  }
 }

@@ -11,44 +11,44 @@ import {CreateRidePassengerComponent} from './create-ride-passenger/create-ride-
 import {RideDetailComponent} from './ride-detail/ride-detail.component'
 
 const routes: Routes = [
-	{path: 'ride-detail/:id', component: RideDetailComponent},
-	{
-		path: 'about-us',
-		component: AboutusComponent,
-	},
-	{
-		path: 'search',
-		component: SearchComponent,
-	},
-	{
-		path: 'create-ride',
-		component: CreateRideComponent,
-	},
-	{
-		path: 'create-ride-driver',
-		component: CreateRideDriverComponent,
-	},
-	{
-		path: 'create-ride-passenger',
-		component: CreateRidePassengerComponent,
-	},
-	{
-		path: 'profile',
-		component: ProfileComponent,
-	},
-	{
-		path: 'login',
-		component: LoginComponent,
-	},
-	{
-		path: 'registration',
-		component: RegistrationComponent,
-	},
+  {path: 'ride-detail/:id', component: RideDetailComponent},
+  {
+    path: 'about-us',
+    component: AboutusComponent,
+  },
+  {
+    path: 'search',
+    component: SearchComponent,
+  },
+  {
+    path: 'create-ride',
+    component: CreateRideComponent,
+  },
+  {
+    path: 'create-ride-driver',
+    component: CreateRideDriverComponent,
+  },
+  {
+    path: 'create-ride-passenger',
+    component: CreateRidePassengerComponent,
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
+  {
+    path: 'registration',
+    component: RegistrationComponent,
+  },
 ]
 
 @NgModule({
-	imports: [RouterModule.forRoot(routes)],
-	exports: [RouterModule],
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
 })
 export class AppRoutingModule {
 }

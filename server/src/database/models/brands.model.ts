@@ -5,32 +5,32 @@ import Models from './models.model'
 Model.knex(knex)
 
 class Brands extends Model {
-	id!: number
-	brandName: string
-	static get models() {
-		return {
-			required: ['id'],
-			properties: {
-				id: {type: 'integer'},
-				brandName: {type: 'string'},
-			}
-		}
-	}
+  id!: number
+  brandName: string
+  static get models() {
+    return {
+      required: ['id'],
+      properties: {
+        id: {type: 'integer'},
+        brandName: {type: 'string'},
+      }
+    }
+  }
 
-	static get relationMappings() {
-		return {
-			model: {
-				relation: Model.HasManyRelation,
-				modelClass: Models,
-				join: {
-					from: 'brands.id',
-					to: 'models.brandId'
-				},
-			},
-		}
-	}
-	static get tableName(): string {
-		return 'brands'
-	}
+  static get relationMappings() {
+    return {
+      model: {
+        relation: Model.HasManyRelation,
+        modelClass: Models,
+        join: {
+          from: 'brands.id',
+          to: 'models.brandId'
+        },
+      },
+    }
+  }
+  static get tableName(): string {
+    return 'brands'
+  }
 }
 export default Brands

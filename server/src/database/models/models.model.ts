@@ -4,37 +4,37 @@ import knex from '../config/database'
 Model.knex(knex)
 
 class Models extends Model {
-	id: number
-	brandId: number
-	modelName!: string
+  id: number
+  brandId: number
+  modelName!: string
 
-	static get models() {
-		return {
-			required: ['id', 'brandId'],
-			properties: {
-				id: {type: 'integer'},
-				BrandId: {type: 'integer'},
-				modelName: {type: 'string'},
-			}
-		}
-	}
+  static get models() {
+    return {
+      required: ['id', 'brandId'],
+      properties: {
+        id: {type: 'integer'},
+        BrandId: {type: 'integer'},
+        modelName: {type: 'string'},
+      }
+    }
+  }
 
-	static get relationMappings() {
-		return {
-			brands: {
-				relation: Model.HasOneRelation,
-				modelClass: Models,
-				join: {
-					from: 'models.brandId',
-					to: 'brands.id'
-				},
-			},
-		}
-	}
+  static get relationMappings() {
+    return {
+      brands: {
+        relation: Model.HasOneRelation,
+        modelClass: Models,
+        join: {
+          from: 'models.brandId',
+          to: 'brands.id'
+        },
+      },
+    }
+  }
 
-	static get tableName(): string {
-		return 'models'
-	}
+  static get tableName(): string {
+    return 'models'
+  }
 }
 
 export default Models

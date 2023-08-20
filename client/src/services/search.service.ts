@@ -4,19 +4,19 @@ import {Observable} from 'rxjs'
 import {RidesResponse, UsersResponse} from '../app/search/search.component'
 
 @Injectable({
-	providedIn: 'root',
+  providedIn: 'root',
 })
 export class SearchService {
-	constructor(private http: HttpClient) {
-	}
+  constructor(private http: HttpClient) {
+  }
 
-	getAllRides(): Observable<RidesResponse> {
-		return this.http.get<RidesResponse>('http://localhost:8080/api/rides')
-	}
+  getAllRides(): Observable<RidesResponse> {
+    return this.http.get<RidesResponse>('http://localhost:8080/api/rides')
+  }
 
 
-	getUsers(userIds: number[]): Observable<UsersResponse> {
-		return this.http.post<UsersResponse>('http://localhost:8080/api/users', userIds)
-	}
+  getUsers(userIds: number[]): Observable<UsersResponse> {
+    return this.http.post<UsersResponse>('http://localhost:8080/api/users', userIds)
+  }
 
 }

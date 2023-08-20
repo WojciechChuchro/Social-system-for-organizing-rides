@@ -31,14 +31,14 @@ export class LoginComponent {
   ) {
   }
 
-  showAlert(message: string, action: string, duration: number) {
+  showAlert(message: string, action: string, duration: number): void {
     this.snackBar.open(message, action, {
       duration: duration,
     })
   }
 
 
-  handleLogin() {
+  handleLogin(): void {
     this.loading = true
     this.auth.login(this.loginForm).subscribe({
       next: (response) => {
@@ -57,7 +57,7 @@ export class LoginComponent {
     })
   }
 
-  togglePasswordVisibility() {
+  togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword
   }
 }
