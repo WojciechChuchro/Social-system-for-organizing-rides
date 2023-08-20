@@ -78,6 +78,19 @@ class Rides extends Model {
   }
 }
 
+export async function getRidesByUserId(userId: number): Promise<Rides[]> {
+  try {
+    return await Rides.query()
+      .where('driverId', userId)
+      .withGraphFetched('[driver, model, startAddress, destinationAddress]')
+      .orderBy('earliestDepartureTime')
+  } catch (error) {
+    console.error('Error fetching rides:', error)
+    throw error
+  }
+}
+
+
 export const getRidesWithEveryChildrenTable = async () => {
   return (await Rides.query()
     .select('users.name as driverName',

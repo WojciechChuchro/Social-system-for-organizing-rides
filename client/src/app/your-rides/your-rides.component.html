@@ -1,1 +1,24 @@
-<p>your-rides works!</p>
+<mat-card *ngIf="rides.length === 0">
+    <mat-card-content>
+        No rides found.
+    </mat-card-content>
+</mat-card>
+
+<mat-card *ngFor="let ride of rides">
+    <mat-card-content>
+        <mat-list>
+            <h3><strong>Departure Date:</strong></h3>
+            <mat-list-item>
+                <p>{{ ride.earliestDepartureDate }} - {{ ride.latestDepartureDate }}</p>
+            </mat-list-item>
+            <h3><strong>Departure Time:</strong></h3>
+            <mat-list-item>
+                <p>{{ ride.earliestDepartureTime }} - {{ ride.latestDepartureTime }}</p>
+            </mat-list-item>
+            <h3><strong>Ride Duration:</strong></h3>
+            <mat-list-item>
+                <p>Ride will take: {{ ride.duration }}</p>
+            </mat-list-item>
+        </mat-list>
+    </mat-card-content>
+</mat-card>

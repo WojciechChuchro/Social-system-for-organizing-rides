@@ -27,7 +27,7 @@ import {RegistrationComponent} from './registration/registration.component'
 import {LoginComponent} from './login/login.component'
 import {MatProgressSpinnerModule,} from '@angular/material/progress-spinner'
 import {MatSnackBarModule} from '@angular/material/snack-bar'
-import {MatNativeDateModule} from '@angular/material/core'
+import {MatLineModule, MatNativeDateModule} from '@angular/material/core'
 import {RideDetailComponent} from './ride-detail/ride-detail.component'
 import {MessagesComponent} from './messages/messages.component'
 import {YourRidesComponent} from './your-rides/your-rides.component'
@@ -79,6 +79,7 @@ const importModules = [
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     MatDatepickerModule,
+    MatLineModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

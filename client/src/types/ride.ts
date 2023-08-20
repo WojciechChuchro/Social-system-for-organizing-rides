@@ -1,4 +1,6 @@
 export interface Ride {
+  latestDepartureDate: string
+  earliestDepartureDate: string
   id: number;
   driverName: string;
   driverEmail: string;
@@ -16,8 +18,10 @@ export interface Ride {
   destinationCountryName: string;
   earliestDepartureTime: string;
   latestDepartureTime: string;
+  earliestDepartureHour: string;
+  latestDepartureHour: string;
   pricePerPerson: number;
   seatsNumber: number;
   registrationNumber: string;
+  duration: string;
 }
-
