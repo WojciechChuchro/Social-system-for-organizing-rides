@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core'
 import {HttpClient} from '@angular/common/http'
 import {Observable} from 'rxjs'
-import {RidesResponse, UsersResponse} from '../app/search/search.component'
+import {RidesResponse, UsersResponse} from '../types/response'
 
 @Injectable({
   providedIn: 'root',

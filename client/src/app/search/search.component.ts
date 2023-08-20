@@ -2,8 +2,8 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core'
 import {SearchService} from '../../services/search.service'
 import {Router} from '@angular/router'
 import {RideSharingService} from '../../services/ride-sharing.service'
-import {Ride} from '../../types/ride'
 import {RidesResponse} from '../../types/response'
+import {Ride} from '../../types/ride'
 
 
 

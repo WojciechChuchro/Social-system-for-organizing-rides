@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core'
-import {Ride} from '../search/search.component'
 import {RideSharingService} from '../../services/ride-sharing.service'
+import {Ride} from '../../types/ride'
 
 @Component({
   selector: 'app-ride-detail',

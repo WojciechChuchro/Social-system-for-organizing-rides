@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core'
 import {BehaviorSubject} from 'rxjs'
-import {Ride} from '../app/search/search.component'
+import {Ride} from '../types/ride'
 
 @Injectable({
   providedIn: 'root'
