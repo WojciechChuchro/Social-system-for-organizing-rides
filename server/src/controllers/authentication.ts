@@ -20,7 +20,6 @@ export const login = async (req: express.Request, res: express.Response) => {
 
     const sessionToken = generateSessionToken(user.id.toString())
     await Users.query().findById(user.id).patch({sessionToken})
-    console.log(sessionToken)
     // Set the cookie
     res.cookie('JsonWebToken', sessionToken, {
       httpOnly: true,
