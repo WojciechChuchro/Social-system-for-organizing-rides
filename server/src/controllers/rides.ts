@@ -20,7 +20,6 @@ export const getRidesWithDrivers = async (req: Request, res: Response) => {
 
   try {
     const ridesData = await getRidesWithEveryChildrenTable() // Call the data function with the id
-    console.log(ridesData)
     return res.status(200).json({rides: ridesData})
   } catch (error) {
     console.error('Error:', error)
