@@ -33,13 +33,29 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Existing initialization
+
+
+    // POST request to validate the token
+    this.authService.validateToken().subscribe({
+      next: (isValid) => {
+        if (isValid) {
+          this.loginStatusService.setLoginStatus(true)
+        } else {
+          this.loginStatusService.setLoginStatus(false)
+        }
+      },
+      error: (error) => {
+        console.error('Error during token validation:', error)
+        this.loginStatusService.setLoginStatus(false)
+      }
+    })
+
     this.isLoggedIn$ = this.loginStatusService.loginStatus$
-    // const jwt = this.cookieService.get('JsonWebToken')
-    // if (jwt) {
-    //   this.loginStatusService.setLoginStatus(true)
-    // }
+
     this.cdRef.detectChanges()
   }
+
 
   logout(): void {
     this.authService.logout().subscribe(() => {
