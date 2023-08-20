@@ -29,10 +29,10 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoggedIn$ = this.loginStatusService.loginStatus$
-    const jwt = this.cookieService.get('JsonWebToken')
-    if (jwt) {
-      this.loginStatusService.setLoginStatus(true)
-    }
+    // const jwt = this.cookieService.get('JsonWebToken')
+    // if (jwt) {
+    //   this.loginStatusService.setLoginStatus(true)
+    // }
     this.cdRef.detectChanges()
   }
 

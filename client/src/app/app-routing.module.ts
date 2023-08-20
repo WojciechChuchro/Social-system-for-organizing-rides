@@ -9,42 +9,20 @@ import {CreateRideComponent} from './create-ride/create-ride.component'
 import {CreateRideDriverComponent} from './create-ride-driver/create-ride-driver.component'
 import {CreateRidePassengerComponent} from './create-ride-passenger/create-ride-passenger.component'
 import {RideDetailComponent} from './ride-detail/ride-detail.component'
+import {AuthGuard} from './guards/auth.guard'
 
 const routes: Routes = [
-  {path: 'ride-detail/:id', component: RideDetailComponent},
-  {
-    path: 'about-us',
-    component: AboutusComponent,
-  },
-  {
-    path: 'search',
-    component: SearchComponent,
-  },
-  {
-    path: 'create-ride',
-    component: CreateRideComponent,
-  },
-  {
-    path: 'create-ride-driver',
-    component: CreateRideDriverComponent,
-  },
-  {
-    path: 'create-ride-passenger',
-    component: CreateRidePassengerComponent,
-  },
-  {
-    path: 'profile',
-    component: ProfileComponent,
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-  },
-  {
-    path: 'registration',
-    component: RegistrationComponent,
-  },
+  {path: 'ride-detail/:id', component: RideDetailComponent, canActivate: [AuthGuard]},
+  {path: 'create-ride', component: CreateRideComponent, canActivate: [AuthGuard]},
+  {path: 'create-ride-driver', component: CreateRideDriverComponent, canActivate: [AuthGuard]},
+  {path: 'create-ride-passenger', component: CreateRidePassengerComponent, canActivate: [AuthGuard]},
+  {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
+  {path: 'about-us', component: AboutusComponent},
+  {path: 'search', component: SearchComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'registration', component: RegistrationComponent},
 ]
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

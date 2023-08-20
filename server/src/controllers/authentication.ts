@@ -1,6 +1,7 @@
-import express from 'express'
+import express, {Request, Response} from 'express'
 import Users from '../database/models/users.model'
 import {authentication, generateSessionToken, random} from '../helpers'
+import jwt from 'jsonwebtoken'
 
 export const login = async (req: express.Request, res: express.Response) => {
   try {
@@ -19,14 +20,13 @@ export const login = async (req: express.Request, res: express.Response) => {
 
     const sessionToken = generateSessionToken(user.id.toString())
     await Users.query().findById(user.id).patch({sessionToken})
-
+    console.log(sessionToken)
     // Set the cookie
     res.cookie('JsonWebToken', sessionToken, {
       httpOnly: true,
-      secure: false,  // secure: true only in production, assuming you're not using HTTPS in development
+      secure: true,  // secure: true only in production, assuming you're not using HTTPS in development
       sameSite: 'none',  // 'lax' or 'strict' depending on your needs
       domain: 'localhost',
-      maxAge: 24 * 60 * 60 * 1000,
       path: '/' // makes it available for the entire domain
     })
 
@@ -67,3 +67,38 @@ export const register = async (req: express.Request, res: express.Response) => {
     return res.sendStatus(400)
   }
 }
+
+// Assuming you have a type or interface for the JWT payload (e.g., `JwtPayload`).
+// If not, you can replace JwtPayload with any, or better, define an appropriate type.
+// import { JwtPayload } from 'your_jwt_payload_type_path';
+
+export const validateJWT = (req: Request, res: Response): Response | void => {
+  const {JsonWebToken} = req.cookies
+
+  if (!JsonWebToken) {
+    return res.status(401).json({message: 'Unauthorized: Missing token'})
+  }
+
+  const token: string = Array.isArray(JsonWebToken) ? JsonWebToken[0] : JsonWebToken
+
+  try {
+    // Ensuring process.env.SECRET_KEY is a string. You might want to have a better check for this.
+    jwt.verify(token, process.env.SECRET_KEY as string, (err: jwt.JsonWebTokenError | jwt.NotBeforeError | jwt.TokenExpiredError | null) => {
+      if (err) {
+        // If there's an error during verification, it could mean the token is invalid or expired.
+        return res.status(401).json({message: 'Unauthorized: Invalid token'})
+      }
+
+      return res.status(200).json({message: 'Token is valid', isValid: true})
+    })
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({message: 'Unauthorized: Token has expired'})
+    } else if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({message: 'Unauthorized: Invalid token'})
+    }
+    return res.status(500).json({message: 'Internal Server Error'})
+  }
+}
+
+
