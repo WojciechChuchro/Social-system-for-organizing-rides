@@ -3,6 +3,7 @@ import knex from '../config/database'
 import Reviews from './reviews.model'
 import Messages from './messages.model'
 import Models from './models.model'
+import {authentication} from '../../helpers'
 
 Model.knex(knex)
 
@@ -21,7 +22,7 @@ class Users extends Model {
 
   static get UserSchema() {
     return {
-      required: ['id','modelId', 'email', 'name', 'surname', 'phoneNumber', 'profilePicture', 'password', 'sessionToken', 'salt'],
+      required: ['id', 'modelId', 'email', 'name', 'surname', 'phoneNumber', 'profilePicture', 'password', 'sessionToken', 'salt'],
       properties: {
         id: {type: 'integer'},
         modelId: {type: 'integer'},
@@ -71,6 +72,7 @@ class Users extends Model {
     return 'users'
   }
 
+
   static async getHashPassword(email: string): Promise<string | null> {
     try {
       const user = await Users.query().where('email', email).select('password', 'salt').first()
@@ -97,6 +99,47 @@ class Users extends Model {
     }
   }
 
+  static async updateSessionToken(user: Users, sessionToken: string): Promise<void> {
+    try {
+      await Users.query().findById(user.id).patch({sessionToken})
+    } catch (error) {
+      console.error('Error updating session token:', error)
+      throw error
+    }
+  }
+
+  static async createUser({
+    name,
+    surname,
+    phoneNumber,
+    email,
+    password,
+    salt,
+    modelId,
+  }: {
+    name: string;
+    surname: string;
+    phoneNumber: string;
+    email: string;
+    password: string;
+    salt: string;
+    modelId: number;
+  }): Promise<void> {
+    try {
+      await Users.query().insert({
+        name,
+        surname,
+        phoneNumber,
+        email,
+        password: authentication(salt, password),
+        salt,
+        modelId,
+      })
+    } catch (error) {
+      console.error('Error creating user:', error)
+      throw error
+    }
+  }
 
 }
 

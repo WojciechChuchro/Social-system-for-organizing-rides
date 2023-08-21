@@ -19,7 +19,12 @@ export const login = async (req: express.Request, res: express.Response) => {
     }
 
     const sessionToken = generateSessionToken(user.id.toString())
-    await Users.query().findById(user.id).patch({sessionToken})
+    try {
+      await Users.updateSessionToken(user, sessionToken)
+    } catch (error) {
+      console.error('Error updating session token:', error)
+      return res.status(500).send({message: 'Internal server error'})
+    }
     // Set the cookie
     res.cookie('JsonWebToken', sessionToken, {
       httpOnly: true,
@@ -49,18 +54,22 @@ export const register = async (req: express.Request, res: express.Response) => {
     }
 
     const salt = random()
-    await Users.query().insert({
-      name,
-      surname,
-      phoneNumber,
-      email,
-      password: authentication(salt, password),
-      salt,
-      modelId: 25,
-    })
+    try {
+      await Users.createUser({
+        name,
+        surname,
+        phoneNumber,
+        email,
+        password,
+        salt,
+        modelId: 25,
+      })
 
-
-    return res.status(200).json({'message': 'Register success'}).end()
+      return res.status(200).json({message: 'Register success'})
+    } catch (error) {
+      console.error('Error creating user:', error)
+      return res.status(500).send({message: 'Internal server error'})
+    }
   } catch (error) {
     console.log(error)
     return res.sendStatus(400)
