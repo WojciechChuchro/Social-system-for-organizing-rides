@@ -1,26 +1,28 @@
 import {Model} from 'objection'
 import knex from '../config/database'
 import LookingForDrivers from './lookingForDrivers.model'
+import Statuses from './statuses.model'
+// Import other necessary models, especially if they are related
 
 Model.knex(knex)
 
-class userRides extends Model {
+class UserRides extends Model {
   id!: number
   userId!: number
   rideId!: number
-  lookingForDriverId!: number
+  lookingForDriverId!: number | null
   statusId!: number
 
-
-  static get userRides() {
+  static get jsonSchema() {
     return {
-      required: ['id', 'userId', 'rideId', 'lookingForDriverId', 'statusId'],
+      type: 'object',
+      required: ['userId', 'rideId', 'statusId'], // Removed 'id' from required
       properties: {
         id: {type: 'integer'},
         userId: {type: 'integer'},
         rideId: {type: 'integer'},
         lookingForDriverId: {type: 'integer'},
-        statusId: { type: 'integer' },
+        statusId: {type: 'integer'},
       }
     }
   }
@@ -28,17 +30,18 @@ class userRides extends Model {
   static get tableName(): string {
     return 'userRides'
   }
+
   static get relationMappings() {
     return {
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: userRides,
+        modelClass: UserRides,  // Adjusted model name
         join: {
           from: 'userRides.userId',
           to: 'users.id',
         },
       },
-      lookingForDriverId: {
+      lookingForDriver: {  // Renamed for clarity
         relation: Model.BelongsToOneRelation,
         modelClass: LookingForDrivers,
         join: {
@@ -48,7 +51,7 @@ class userRides extends Model {
       },
       status: {
         relation: Model.BelongsToOneRelation,
-        modelClass: LookingForDrivers,
+        modelClass: Statuses,  // Make sure this model is imported and correct
         join: {
           from: 'userRides.statusId',
           to: 'statuses.id',
@@ -58,5 +61,4 @@ class userRides extends Model {
   }
 }
 
-export default userRides
-
+export default UserRides

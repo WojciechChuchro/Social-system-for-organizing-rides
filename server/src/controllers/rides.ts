@@ -1,11 +1,12 @@
 import {Request, Response} from 'express'
 import Users from '../database/models/users.model'
-import Rides, {getRidesByUserId, getRidesWithEveryChildrenTable} from '../database/models/rides.model'
+import Rides, {getRidesByUserId, getRidesWithEveryChildrenTable,} from '../database/models/rides.model'
 import {createStartAndDestinationAddress} from '../database/models/addresses.model'
 import {createStartAndDestinationCountry} from '../database/models/countries.model'
 import {createStartAndDestinationCity} from '../database/models/cities.model'
 import {createStartAndDestinationStreet} from '../database/models/streets.model'
 import {AddressIds, CityIds, CountryIds, StreetIds} from '../types/model'
+import userRides from '../database/models/userRides.model'
 
 export const getAllRides = async (req: Request, res: Response) => {
   try {
@@ -18,7 +19,6 @@ export const getAllRides = async (req: Request, res: Response) => {
 }
 
 export const getRidesWithDrivers = async (req: Request, res: Response) => {
-
   try {
     const ridesData = await getRidesWithEveryChildrenTable() // Call the data function with the id
     return res.status(200).json({rides: ridesData})
@@ -54,29 +54,46 @@ export const createRide = async (req: Request, res: Response) => {
       startCountryName,
       destinationCountryName,
       startStreetName,
-      destinationStreetName
+      destinationStreetName,
     } = req.body
 
     const parsedModelId = parseInt(modelId)
     const parsedSeatsNumber = parseInt(seatsNumber)
     const parsedPricePerPerson = parseFloat(pricePerPerson)
 
-    if (isNaN(parsedModelId) || isNaN(parsedSeatsNumber) || isNaN(parsedPricePerPerson)) {
+    if (
+      isNaN(parsedModelId) ||
+      isNaN(parsedSeatsNumber) ||
+      isNaN(parsedPricePerPerson)
+    ) {
       return res.status(400).json({message: 'Invalid data format'})
     }
-    const countryIds: CountryIds = await createStartAndDestinationCountry(startCountryName, destinationCountryName)
+    const countryIds: CountryIds = await createStartAndDestinationCountry(
+      startCountryName,
+      destinationCountryName
+    )
 
-    const cityIds: CityIds = await createStartAndDestinationCity(startCityName, destinationCityName, countryIds.startCountryId, // Provide the appropriate IDs here
+    const cityIds: CityIds = await createStartAndDestinationCity(
+      startCityName,
+      destinationCityName,
+      countryIds.startCountryId, // Provide the appropriate IDs here
       countryIds.destinationCountryId // Provide the appropriate IDs here
     )
 
-    const streetIds: StreetIds = await createStartAndDestinationStreet(startStreetName, destinationStreetName, cityIds.startCityId, // Provide the appropriate IDs here
+    const streetIds: StreetIds = await createStartAndDestinationStreet(
+      startStreetName,
+      destinationStreetName,
+      cityIds.startCityId, // Provide the appropriate IDs here
       cityIds.destinationCityId // Provide the appropriate IDs here
     )
-    const addressIds: AddressIds = await createStartAndDestinationAddress(startZipCode, startHouseNumber, destinationZipCode, destinationHouseNumber, streetIds.startStreetId, // Provide the appropriate IDs here
+    const addressIds: AddressIds = await createStartAndDestinationAddress(
+      startZipCode,
+      startHouseNumber,
+      destinationZipCode,
+      destinationHouseNumber,
+      streetIds.startStreetId, // Provide the appropriate IDs here
       streetIds.destinationStreetId // Provide the appropriate IDs here
     )
-
 
     const newRide = {
       driverId: userId,
@@ -91,7 +108,9 @@ export const createRide = async (req: Request, res: Response) => {
 
     const insertedRide = await Rides.query().insert(newRide)
 
-    return res.status(201).json({message: 'Ride created successfully', ride: insertedRide})
+    return res
+      .status(201)
+      .json({message: 'Ride created successfully', ride: insertedRide})
   } catch (error) {
     console.error('Error:', error)
     return res.status(500).json({message: 'Internal server error'})
@@ -118,4 +137,44 @@ export const getRidesByUser = async (req: Request, res: Response) => {
     return res.status(500).json({message: 'Internal server error'})
   }
 }
+
+export const acceptRide = async (req: Request, res: Response) => {
+  const {userId} = res.locals.jwt
+
+  // Parse the user ID and ensure it's a valid number
+  const parsedUserId = parseInt(userId, 10)
+  if (isNaN(parsedUserId)) {
+    return res.status(400).json({message: 'Invalid user ID format'})
+  }
+
+  // You need to get these values, either from request body or some other source
+  const {rideId, statusId} = req.body
+
+  // Parse rideId and statusId
+  const parsedRideId = parseInt(rideId, 10)
+  const parsedStatusId = parseInt(statusId, 10)
+
+  try {
+    const newRideRequest = await userRides.query().insert({
+      userId: parsedUserId,
+      rideId: parsedRideId,
+      statusId: parsedStatusId,
+      lookingForDriverId: null
+    })
+
+    res.status(201).json({message: 'Ride request added successfully!', data: newRideRequest})
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({message: 'Error inserting ride request.'})
+  }
+}
+
+
+
+
+
+
+
+
+
 

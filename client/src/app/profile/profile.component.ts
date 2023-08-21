@@ -1,4 +1,4 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http'
+import {HttpClient} from '@angular/common/http'
 import {Component, OnInit} from '@angular/core'
 import {CookieService} from 'ngx-cookie-service'
 import {MessageResponseOnly, profileForm, Reviews, UserWithReviews} from '../../types/user'
@@ -53,11 +53,8 @@ export class ProfileComponent implements OnInit {
   }
 
   updateProfile(): void {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.getJWT()}`
-    })
 
-    this.http.patch<MessageResponseOnly>('http://localhost:8080/api/users/update', this.profileForm, {headers}).subscribe(
+    this.http.patch<MessageResponseOnly>('http://localhost:8080/api/users/update', this.profileForm, {withCredentials: true}).subscribe(
       (response: MessageResponseOnly) => {
         this.showAlert(response.message, 'Close', 3000)
       },

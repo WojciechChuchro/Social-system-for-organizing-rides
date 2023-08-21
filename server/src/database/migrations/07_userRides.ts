@@ -1,4 +1,5 @@
-import { Knex } from 'knex'
+import {Knex} from 'knex'
+
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('userRides', (table: Knex.TableBuilder) => {
     table.increments('id').primary()
@@ -15,6 +16,7 @@ export async function up(knex: Knex): Promise<void> {
       .inTable('lookingForDrivers')
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
+      .nullable()
     table.integer('rideId')
       .unsigned()
       .references('id')
