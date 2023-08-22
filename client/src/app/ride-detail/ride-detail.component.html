@@ -10,6 +10,6 @@
     <p>Seats Available: {{ ride?.seatsNumber }}</p>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button>Reserve a ride</button>
+    <button (click)="reserveRide()" mat-button>Reserve a ride</button>
   </mat-card-actions>
 </mat-card>

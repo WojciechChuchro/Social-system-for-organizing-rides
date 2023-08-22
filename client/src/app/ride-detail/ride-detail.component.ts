@@ -16,4 +16,18 @@ export class RideDetailComponent implements OnInit {
   ngOnInit(): void {
     this.rideSharingService.currentRide.subscribe(ride => this.ride = ride)
   }
+  reserveRide(): void {
+    if (this.ride) {
+      this.rideSharingService.reserveRide(this.ride.id)
+        .subscribe(response => {
+          // Handle the response as required.
+          console.log(response)
+          alert('Ride reserved successfully!')
+        }, error => {
+          // Handle any errors here.
+          console.error('Error reserving the ride:', error)
+          alert('Error reserving the ride.')
+        })
+    }
+  }
 }
