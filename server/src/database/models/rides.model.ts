@@ -3,6 +3,7 @@ import knex from '../config/database'
 import Users from './users.model'
 import Models from './models.model'
 import Addresses from './addresses.model'
+import UserRides from './userRides.model'
 
 Model.knex(knex)
 
@@ -66,6 +67,15 @@ class Rides extends Model {
           to: 'addresses.id',
         },
       },
+      userRides: {
+        relation: Model.HasManyRelation,
+        modelClass: UserRides,
+        join: {
+          from: 'rides.id',
+          to: 'userRides.rideId',
+        },
+      },
+      
       destinationAddress: {
         relation: Model.HasManyRelation,
         modelClass: Addresses,
@@ -82,7 +92,7 @@ export async function getRidesByUserId(userId: number): Promise<Rides[]> {
   try {
     return await Rides.query()
       .where('driverId', userId)
-      .withGraphFetched('[driver, model, startAddress, destinationAddress]')
+      .withGraphFetched('[driver, model, startAddress, destinationAddress, userRides.[user]]')
       .orderBy('earliestDepartureTime')
   } catch (error) {
     console.error('Error fetching rides:', error)

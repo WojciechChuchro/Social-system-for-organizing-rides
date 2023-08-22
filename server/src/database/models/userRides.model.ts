@@ -1,8 +1,11 @@
-import {Model} from 'objection'
+import { Model } from 'objection'
 import knex from '../config/database'
+import Rides from './rides.model'
 import LookingForDrivers from './lookingForDrivers.model'
 import Statuses from './statuses.model'
-// Import other necessary models, especially if they are related
+import Users from './users.model'
+
+
 
 Model.knex(knex)
 
@@ -16,14 +19,14 @@ class UserRides extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['userId', 'rideId', 'statusId'], // Removed 'id' from required
+      required: ['userId', 'rideId', 'statusId'],
       properties: {
-        id: {type: 'integer'},
-        userId: {type: 'integer'},
-        rideId: {type: 'integer'},
-        lookingForDriverId: {type: 'integer'},
-        statusId: {type: 'integer'},
-      }
+        id: { type: 'integer' },
+        userId: { type: 'integer' },
+        rideId: { type: 'integer' },
+        lookingForDriverId: { type: ['integer', 'null'] },
+        statusId: { type: 'integer' },
+      },
     }
   }
 
@@ -33,15 +36,25 @@ class UserRides extends Model {
 
   static get relationMappings() {
     return {
+      ride: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Rides,
+        join: {
+          from: 'userRides.rideId',
+          to: 'rides.id',
+        },
+      },
+
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: UserRides,  // Adjusted model name
+        modelClass: Users,
         join: {
           from: 'userRides.userId',
           to: 'users.id',
         },
       },
-      lookingForDriver: {  // Renamed for clarity
+
+      lookingForDriver: {
         relation: Model.BelongsToOneRelation,
         modelClass: LookingForDrivers,
         join: {
@@ -49,9 +62,10 @@ class UserRides extends Model {
           to: 'lookingForDrivers.id',
         },
       },
+
       status: {
         relation: Model.BelongsToOneRelation,
-        modelClass: Statuses,  // Make sure this model is imported and correct
+        modelClass: Statuses,
         join: {
           from: 'userRides.statusId',
           to: 'statuses.id',

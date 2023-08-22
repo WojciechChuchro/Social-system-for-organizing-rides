@@ -1,18 +1,17 @@
-import {Component, OnInit} from '@angular/core'
-import {HttpClient} from '@angular/common/http'
-import {Ride} from '../../types/ride'
-import {RidesResponse} from '../../types/response'
+import { Component, OnInit } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
+import { Ride } from '../../types/ride'
+import { RidesResponse } from '../../types/response'
 
 @Component({
   selector: 'app-your-rides',
   templateUrl: './your-rides.component.html',
-  styleUrls: ['./your-rides.component.scss']
+  styleUrls: ['./your-rides.component.scss'],
 })
 export class YourRidesComponent implements OnInit {
   rides: Ride[] = []
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.fetchRides()
@@ -25,7 +24,7 @@ export class YourRidesComponent implements OnInit {
       weekday: 'long',
       day: '2-digit',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
     }
     return date.toLocaleDateString('en-GB', options)
   }
@@ -58,23 +57,48 @@ export class YourRidesComponent implements OnInit {
     return durationStr
   }
 
-
   fetchRides(): void {
-    this.http.get<RidesResponse>('http://localhost:8080/api/get-rides', {withCredentials: true}).subscribe((response: RidesResponse) => {
-      this.rides = response.rides.map((ride: Ride) => {
-        // Format date and time
-        ride.earliestDepartureDate = this.formatDate(ride.earliestDepartureTime)
-        ride.latestDepartureDate = this.formatDate(ride.latestDepartureTime)
-        ride.earliestDepartureTime = this.formatTime(ride.earliestDepartureTime)
-        ride.latestDepartureTime = this.formatTime(ride.latestDepartureTime)
-
-        // Calculate the duration and add it to the ride object
-        ride.duration = this.calculateDuration(ride.earliestDepartureDate + ' ' + ride.earliestDepartureTime,
-          ride.latestDepartureDate + ' ' + ride.latestDepartureTime)
-        return ride
+    this.http
+      .get<RidesResponse>('http://localhost:8080/api/get-rides', {
+        withCredentials: true,
       })
-    })
+      .subscribe((response: RidesResponse) => {
+        console.log(response)
+        this.rides = response.rides.map((ride: Ride) => {
+          // Format date and time
+          ride.earliestDepartureDate = this.formatDate(
+            ride.earliestDepartureTime,
+          )
+          ride.latestDepartureDate = this.formatDate(ride.latestDepartureTime)
+          ride.earliestDepartureTime = this.formatTime(
+            ride.earliestDepartureTime,
+          )
+          ride.latestDepartureTime = this.formatTime(ride.latestDepartureTime)
+
+          // Calculate the duration and add it to the ride object
+          ride.duration = this.calculateDuration(
+            ride.earliestDepartureDate + ' ' + ride.earliestDepartureTime,
+            ride.latestDepartureDate + ' ' + ride.latestDepartureTime,
+          )
+          return ride
+        }
+        
+        )
+        
+        // const rideIds = this.rides.map(ride => ride.id)  // Assuming each ride has an 'id' property
+        // console.log(rideIds)
+        // // Use the extracted IDs in the POST request
+        // this.http
+        //   .post<any>('http://localhost:8080/api/get-passangers', {
+        //     rideIds,
+        //   }, {
+        //     withCredentials: true,
+        //   })
+        //   .subscribe((response: any) => {
+        //     console.log(response)
+        //   })
+      }
+      )
+    
   }
-
-
 }

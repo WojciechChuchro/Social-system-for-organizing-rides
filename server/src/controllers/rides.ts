@@ -7,6 +7,7 @@ import {createStartAndDestinationCity} from '../database/models/cities.model'
 import {createStartAndDestinationStreet} from '../database/models/streets.model'
 import {AddressIds, CityIds, CountryIds, StreetIds} from '../types/model'
 import userRides from '../database/models/userRides.model'
+import Statuses from '../database/models/statuses.model'
 
 export const getAllRides = async (req: Request, res: Response) => {
   try {
@@ -137,7 +138,10 @@ export const getRidesByUser = async (req: Request, res: Response) => {
     return res.status(500).json({message: 'Internal server error'})
   }
 }
-
+interface StatusesInterface {
+  id: number,
+  isAccepted: number
+}
 export const acceptRide = async (req: Request, res: Response) => {
   const {userId} = res.locals.jwt
 
@@ -148,18 +152,30 @@ export const acceptRide = async (req: Request, res: Response) => {
   }
 
   // You need to get these values, either from request body or some other source
-  const {rideId, statusId} = req.body
+  const {rideId} = req.body
 
   // Parse rideId and statusId
   const parsedRideId = parseInt(rideId, 10)
-  const parsedStatusId = parseInt(statusId, 10)
+  
 
   try {
+    const existingReservation = await userRides.query()
+      .where({
+        userId: parsedUserId,
+        rideId: parsedRideId
+      })
+      .first()
+
+    if (existingReservation) {
+      return res.status(409).json({ message: 'You have already reserved this ride!' })
+    }
+    const newStatus: StatusesInterface = await Statuses.query().insertAndFetch({ isAccepted: 0 }) // Assuming false represents a ride not accepted yet
+    
     const newRideRequest = await userRides.query().insert({
       userId: parsedUserId,
       rideId: parsedRideId,
-      statusId: parsedStatusId,
-      lookingForDriverId: null
+      statusId: newStatus.id, 
+      lookingForDriverId: null 
     })
 
     res.status(201).json({message: 'Ride request added successfully!', data: newRideRequest})
@@ -169,7 +185,42 @@ export const acceptRide = async (req: Request, res: Response) => {
   }
 }
 
+export const getPassagers = async (req: Request, res: Response) => {
+  const { userId } = res.locals.jwt
+  console.log(userId)
+  const { rideIds } = req.body  // Now expecting an array of rideIds
 
+  if (!rideIds || rideIds.length === 0) {
+    return res.status(400).json({ message: 'rideIds array is required in the request body.' })
+  }
+
+  try {
+    // Check if all the rides belong to the authenticated driver
+    const rides = await Rides.query().whereIn('id', rideIds)
+
+    console.log(rides)
+    if (rides.length !== rideIds.length) {
+      return res.status(400).json({ message: 'Some provided rideIds are not valid.' })
+    }
+
+    for (const ride of rides) {
+      if (ride.driverId !== parseInt(userId)) {
+        return res.status(403).json({ message: 'You are not authorized to access passengers for all the provided rides.' })
+      }
+    }
+
+    // Fetch the passengers (users) associated with the rides
+    const passengers = await userRides.query()
+      .join('users', 'userRides.userId', 'users.id')
+      .whereIn('userRides.rideId', rideIds)
+      .select('users.*')
+
+    res.status(200).json(passengers)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Error fetching passengers for the rides.' })
+  }
+}
 
 
 

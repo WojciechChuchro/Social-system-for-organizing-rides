@@ -62,7 +62,7 @@ export const register = async (req: express.Request, res: express.Response) => {
         email,
         password,
         salt,
-        modelId: 25,
+        modelId: 1,
       })
 
       return res.status(200).json({message: 'Register success'})
