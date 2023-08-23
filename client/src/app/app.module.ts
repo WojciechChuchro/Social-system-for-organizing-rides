@@ -30,7 +30,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar'
 import {MatLineModule, MatNativeDateModule} from '@angular/material/core'
 import {RideDetailComponent} from './ride-detail/ride-detail.component'
 import {MessagesComponent} from './messages/messages.component'
-import {YourRidesComponent} from './your-rides/your-rides.component'
+import {YourRidesComponent} from './your-rides/your-rides.component';
+import { StylesLibraryComponent } from './styles-library/styles-library.component'
 
 const declarationComponents = [
   AppComponent,
@@ -66,7 +67,7 @@ const importModules = [
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  declarations: [declarationComponents, RideDetailComponent, MessagesComponent, YourRidesComponent],
+  declarations: [declarationComponents, RideDetailComponent, MessagesComponent, YourRidesComponent, StylesLibraryComponent],
   imports: [
     importModules,
     MatInputModule,
