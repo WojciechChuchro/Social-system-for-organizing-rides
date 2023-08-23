@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
-import { Ride } from '../../types/ride'
-import { RidesResponse } from '../../types/response'
+import { Rides, RidesResponse } from '../../types/response'
 
 @Component({
   selector: 'app-your-rides',
@@ -9,7 +8,7 @@ import { RidesResponse } from '../../types/response'
   styleUrls: ['./your-rides.component.scss'],
 })
 export class YourRidesComponent implements OnInit {
-  rides: Ride[] = []
+  rides: Rides[] = []
 
   constructor(private http: HttpClient) {}
 
@@ -64,7 +63,7 @@ export class YourRidesComponent implements OnInit {
       })
       .subscribe((response: RidesResponse) => {
         console.log(response)
-        this.rides = response.rides.map((ride: Ride) => {
+        this.rides = response.rides.map((ride: Rides) => {
           // Format date and time
           ride.earliestDepartureDate = this.formatDate(
             ride.earliestDepartureTime,
@@ -81,24 +80,28 @@ export class YourRidesComponent implements OnInit {
             ride.latestDepartureDate + ' ' + ride.latestDepartureTime,
           )
           return ride
-        }
-        
-        )
-        
-        // const rideIds = this.rides.map(ride => ride.id)  // Assuming each ride has an 'id' property
-        // console.log(rideIds)
-        // // Use the extracted IDs in the POST request
-        // this.http
-        //   .post<any>('http://localhost:8080/api/get-passangers', {
-        //     rideIds,
-        //   }, {
-        //     withCredentials: true,
-        //   })
-        //   .subscribe((response: any) => {
-        //     console.log(response)
-        //   })
-      }
-      )
-    
+        })
+      })
+  }
+  deleteUser(statusId: any): void {
+    this.http
+      .post<any>('http://localhost:8080/api/delete', {statusId: statusId}, {
+        withCredentials: true,
+      })
+      .subscribe((response: any) => {
+        console.log(response)
+      })
+    this.fetchRides()
+  }
+  acceptUser(statusId: any): void {
+    this.http
+      .post<any>('http://localhost:8080/api/accept', {statusId: statusId}, {
+        withCredentials: true,
+      })
+      .subscribe((response: any) => {
+        console.log(response)
+      })
+    this.fetchRides()
   }
 }
+

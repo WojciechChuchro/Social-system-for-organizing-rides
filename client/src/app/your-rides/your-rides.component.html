@@ -6,19 +6,39 @@
 
 <mat-card *ngFor="let ride of rides">
     <mat-card-content>
-        <mat-list>
+        <div class="ride-detail">
             <h3><strong>Departure Date:</strong></h3>
-            <mat-list-item>
-                <p>{{ ride.earliestDepartureDate }} - {{ ride.latestDepartureDate }}</p>
-            </mat-list-item>
+            <p>{{ ride.earliestDepartureDate }} - {{ ride.latestDepartureDate }}</p>
+        </div>
+        <div class="ride-detail">
             <h3><strong>Departure Time:</strong></h3>
-            <mat-list-item>
-                <p>{{ ride.earliestDepartureTime }} - {{ ride.latestDepartureTime }}</p>
-            </mat-list-item>
+            <p>{{ ride.earliestDepartureTime }} - {{ ride.latestDepartureTime }}</p>
+        </div>
+        <div class="ride-detail">
             <h3><strong>Ride Duration:</strong></h3>
-            <mat-list-item>
-                <p>Ride will take: {{ ride.duration }}</p>
-            </mat-list-item>
-        </mat-list>
+            <p>Ride will take: {{ ride.duration }}</p>
+        </div>
+        <div *ngIf="ride.userRides && ride.userRides.length > 0" class="users-in-ride">
+
+            <!-- Section for accepted passengers -->
+            <h4><strong>Passengers Who Drive:</strong></h4>
+            <div *ngFor="let userRide of ride.userRides">
+                <div class="user-detail" *ngIf="userRide.status.isAccepted === 1">
+                    <p>{{ userRide.user.name }} {{ userRide.user.surname }}</p>
+                    <button mat-button color="warn" (click)="deleteUser(userRide.StatusId)">Delete</button>
+
+                </div>
+            </div>
+
+            <!-- Section for waiting passengers -->
+            <h4><strong>Waiting:</strong></h4>
+            <div *ngFor="let userRide of ride.userRides">
+                <div class="user-detail" *ngIf="userRide.status.isAccepted === 0">
+                    <p>{{ userRide.user.name }} {{ userRide.user.surname }}</p>
+                    <button mat-button color="accent" (click)="acceptUser(userRide.StatusId)">Accept</button>
+
+                </div>
+            </div>
+        </div>
     </mat-card-content>
 </mat-card>

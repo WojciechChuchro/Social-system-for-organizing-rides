@@ -67,7 +67,7 @@ class UserRides extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: Statuses,
         join: {
-          from: 'userRides.statusId',
+          from: 'userRides.StatusId',
           to: 'statuses.id',
         },
       },

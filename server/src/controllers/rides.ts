@@ -138,10 +138,12 @@ export const getRidesByUser = async (req: Request, res: Response) => {
     return res.status(500).json({message: 'Internal server error'})
   }
 }
+
 interface StatusesInterface {
   id: number,
   isAccepted: number
 }
+
 export const acceptRide = async (req: Request, res: Response) => {
   const {userId} = res.locals.jwt
 
@@ -156,7 +158,7 @@ export const acceptRide = async (req: Request, res: Response) => {
 
   // Parse rideId and statusId
   const parsedRideId = parseInt(rideId, 10)
-  
+
 
   try {
     const existingReservation = await userRides.query()
@@ -167,15 +169,15 @@ export const acceptRide = async (req: Request, res: Response) => {
       .first()
 
     if (existingReservation) {
-      return res.status(409).json({ message: 'You have already reserved this ride!' })
+      return res.status(409).json({message: 'You have already reserved this ride!'})
     }
-    const newStatus: StatusesInterface = await Statuses.query().insertAndFetch({ isAccepted: 0 }) // Assuming false represents a ride not accepted yet
-    
+    const newStatus: StatusesInterface = await Statuses.query().insertAndFetch({isAccepted: 0}) // Assuming false represents a ride not accepted yet
+
     const newRideRequest = await userRides.query().insert({
       userId: parsedUserId,
       rideId: parsedRideId,
-      statusId: newStatus.id, 
-      lookingForDriverId: null 
+      statusId: newStatus.id,
+      lookingForDriverId: null
     })
 
     res.status(201).json({message: 'Ride request added successfully!', data: newRideRequest})
@@ -184,48 +186,3 @@ export const acceptRide = async (req: Request, res: Response) => {
     res.status(500).json({message: 'Error inserting ride request.'})
   }
 }
-
-export const getPassagers = async (req: Request, res: Response) => {
-  const { userId } = res.locals.jwt
-  console.log(userId)
-  const { rideIds } = req.body  // Now expecting an array of rideIds
-
-  if (!rideIds || rideIds.length === 0) {
-    return res.status(400).json({ message: 'rideIds array is required in the request body.' })
-  }
-
-  try {
-    // Check if all the rides belong to the authenticated driver
-    const rides = await Rides.query().whereIn('id', rideIds)
-
-    console.log(rides)
-    if (rides.length !== rideIds.length) {
-      return res.status(400).json({ message: 'Some provided rideIds are not valid.' })
-    }
-
-    for (const ride of rides) {
-      if (ride.driverId !== parseInt(userId)) {
-        return res.status(403).json({ message: 'You are not authorized to access passengers for all the provided rides.' })
-      }
-    }
-
-    // Fetch the passengers (users) associated with the rides
-    const passengers = await userRides.query()
-      .join('users', 'userRides.userId', 'users.id')
-      .whereIn('userRides.rideId', rideIds)
-      .select('users.*')
-
-    res.status(200).json(passengers)
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'Error fetching passengers for the rides.' })
-  }
-}
-
-
-
-
-
-
-
-

@@ -92,7 +92,7 @@ export async function getRidesByUserId(userId: number): Promise<Rides[]> {
   try {
     return await Rides.query()
       .where('driverId', userId)
-      .withGraphFetched('[driver, model, startAddress, destinationAddress, userRides.[user]]')
+      .withGraphFetched('[driver, model, startAddress, destinationAddress, userRides.[user, status]]')
       .orderBy('earliestDepartureTime')
   } catch (error) {
     console.error('Error fetching rides:', error)
