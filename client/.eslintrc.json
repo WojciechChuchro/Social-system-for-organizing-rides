@@ -45,7 +45,7 @@
     "@typescript-eslint/no-explicit-any": ["error"],
     "space-before-blocks": ["error", "always"],
     "no-var": ["error"],
-    "prefer-const": ["error"],
-    "prettier/prettier": "error"
+    "prefer-const": ["error"]
+//    "prettier/prettier": "error"
   }
 }
