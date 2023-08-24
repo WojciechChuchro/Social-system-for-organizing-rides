@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core'
 import {SearchService} from '../../services/search.service'
 import {Router} from '@angular/router'
-import {RideSharingService} from '../../services/ride-sharing.service'
+import {RideService} from '../../services/ride.service'
 import {RidesResponse} from '../../types/response'
 import {Ride} from '../../types/ride'
 
@@ -23,7 +23,7 @@ export class SearchComponent implements OnInit {
 		private router: Router,
 		private search: SearchService,
 		private cdRef: ChangeDetectorRef,
-	private rideSharingService: RideSharingService
+	private rideSharingService: RideService
   ) {
   }
 

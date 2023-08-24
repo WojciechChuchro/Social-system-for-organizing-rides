@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
-import { Rides, RidesResponse } from '../../types/response'
+import {Component, OnInit} from '@angular/core'
+import {HttpClient} from '@angular/common/http'
+import {Rides} from '../../types/response'
+import {RideService} from '../../services/ride.service'
+import {MessageResponseOnly} from '../../types/user'
+import {MatSnackBar} from '@angular/material/snack-bar'
 
 @Component({
   selector: 'app-your-rides',
@@ -10,98 +13,36 @@ import { Rides, RidesResponse } from '../../types/response'
 export class YourRidesComponent implements OnInit {
   rides: Rides[] = []
 
-  constructor(private http: HttpClient) {}
+  showAlert(message: string, action: string, duration: number): void {
+    this.snackBar.open(message, action, {
+      duration: duration,
+    })
+  }
+  constructor(private http: HttpClient, private rideService: RideService, private snackBar: MatSnackBar,) {
+  }
 
   ngOnInit(): void {
-    this.fetchRides()
+    this.fetchAllRides()
   }
 
-  formatDate(dateTime: string): string {
-    const datePart = dateTime.split(' ')[0] // Get the date part
-    const date = new Date(datePart)
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    }
-    return date.toLocaleDateString('en-GB', options)
+  fetchAllRides(): void {
+    this.rideService.fetchRides().subscribe((rides: Rides[]) => {
+      this.rides = rides
+    })
   }
 
-  formatTime(dateTime: string): string {
-    const timePart = dateTime.split(' ')[1] // Get the time part
-    return timePart.slice(0, 5) // Remove seconds
+  deleteUser(statusId: number): void {
+    this.rideService.deleteUser(statusId).subscribe((response: MessageResponseOnly) => {
+      this.showAlert(response.message, 'Close', 3000)
+      this.fetchAllRides()
+    })
   }
 
-  calculateDuration(startTime: string, endTime: string): string {
-    const start = new Date(startTime)
-    const end = new Date(endTime)
-    const difference = end.getTime() - start.getTime()
-    const totalMinutes = Math.round(difference / (1000 * 60))
-    const hours = Math.floor(totalMinutes / 60)
-    const minutes = totalMinutes % 60
-
-    let durationStr = ''
-    if (hours > 0) {
-      durationStr += `${hours} ${hours > 1 ? 'hours' : 'hour'}`
-    }
-
-    if (minutes > 0) {
-      if (durationStr) {
-        durationStr += ' '
-      }
-      durationStr += `${minutes} ${minutes > 1 ? 'minutes' : 'minute'}`
-    }
-
-    return durationStr
-  }
-
-  fetchRides(): void {
-    this.http
-      .get<RidesResponse>('http://localhost:8080/api/get-rides', {
-        withCredentials: true,
-      })
-      .subscribe((response: RidesResponse) => {
-        console.log(response)
-        this.rides = response.rides.map((ride: Rides) => {
-          // Format date and time
-          ride.earliestDepartureDate = this.formatDate(
-            ride.earliestDepartureTime,
-          )
-          ride.latestDepartureDate = this.formatDate(ride.latestDepartureTime)
-          ride.earliestDepartureTime = this.formatTime(
-            ride.earliestDepartureTime,
-          )
-          ride.latestDepartureTime = this.formatTime(ride.latestDepartureTime)
-
-          // Calculate the duration and add it to the ride object
-          ride.duration = this.calculateDuration(
-            ride.earliestDepartureDate + ' ' + ride.earliestDepartureTime,
-            ride.latestDepartureDate + ' ' + ride.latestDepartureTime,
-          )
-          return ride
-        })
-      })
-  }
-  deleteUser(statusId: any): void {
-    this.http
-      .post<any>('http://localhost:8080/api/delete', {statusId: statusId}, {
-        withCredentials: true,
-      })
-      .subscribe((response: any) => {
-        console.log(response)
-      })
-    this.fetchRides()
-  }
-  acceptUser(statusId: any): void {
-    this.http
-      .post<any>('http://localhost:8080/api/accept', {statusId: statusId}, {
-        withCredentials: true,
-      })
-      .subscribe((response: any) => {
-        console.log(response)
-      })
-    this.fetchRides()
+  acceptUser(statusId: number): void {
+    this.rideService.acceptUser(statusId).subscribe((response: MessageResponseOnly) => {
+      this.showAlert(response.message, 'Close', 3000)
+      this.fetchAllRides()
+    })
   }
 }
 

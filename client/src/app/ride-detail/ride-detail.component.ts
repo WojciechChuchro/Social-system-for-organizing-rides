@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core'
-import {RideSharingService} from '../../services/ride-sharing.service'
+import {RideService} from '../../services/ride.service'
 import {Ride} from '../../types/ride'
 
 @Component({
@@ -10,7 +10,7 @@ import {Ride} from '../../types/ride'
 export class RideDetailComponent implements OnInit {
   ride: Ride | undefined
 
-  constructor(private rideSharingService: RideSharingService) {
+  constructor(private rideSharingService: RideService) {
   }
 
   ngOnInit(): void {
