@@ -13,6 +13,15 @@
 }
 
 .btn-primary {
+  margin-right: $base-margin * 0.3;
+  cursor: pointer;
   color: $primary;
-  background-color: $secoundary;
+  background-color: $secondary;
+  border: solid 1px;
+  border-radius: 10px;
+  font-size: large;
+  &:hover {
+    //działa no way
+    background-color: $hover-color;
+  }
 }

@@ -1,0 +1,22 @@
+@import "./variables";
+.card {
+  background-color: $primary;
+  color: $secondary;
+  display: block;
+  padding: $base-padding;
+  margin: $base-margin;
+  border-radius: 25px;
+  border: 2px solid $primary;
+  .card-title {
+    margin-bottom: $base-margin * 0.2;
+    font-size: x-large;
+  }
+
+  .card-body {
+    margin-bottom: $base-margin * 0.2;
+    font-size: large;
+
+    padding-top: $base-padding * 0.5;
+    padding-bottom: $base-padding * 0.5;
+  }
+}
