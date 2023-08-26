@@ -3,18 +3,18 @@ services:
 
   client-service:
     container_name: ${CLIENT_CONTAINER_NAME}
+    image: ${CLIENT_IMAGE_NAME}
     build:
       context: ./client
     volumes:
       - ./client:/usr/local/app/client
     stdin_open: true
-    depends_on:
-      - nginx
     ports:
       - ${CLIENT_PORT}
 
   server-service:
     container_name: ${CLIENT_CONTAINER_NAME}
+    image: ${SERVER_IMAGE_NAME}
     build:
       context: ./server
     volumes:
@@ -23,12 +23,6 @@ services:
       - mysql-service
     ports:
       - ${SERVER_PORT}
-
-  nginx:
-    container_name: ${NGINX_CONTAINER_NAME}
-    image: nginx:latest
-    ports:
-      - ${NGINX_PORT}
 
   mysql-service:
     image: mysql:latest
