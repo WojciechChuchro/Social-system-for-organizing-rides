@@ -30,7 +30,6 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true
     this.fetchRides()
-
   }
 
   onRideClick(rideId: number): void {
@@ -73,23 +72,4 @@ export class SearchComponent implements OnInit {
       }
     })
   }
-
-  fetchUsers(): void {
-    this.search.getUsers(this.userIds).subscribe({
-      next: (userResponse) => {
-        // Handle the user response here
-        this.loading = false
-        console.log('Users response:', userResponse)
-      },
-      error: (error) => {
-        this.loading = false
-        console.error('Error fetching users:', error)
-      }
-    })
-  }
-
-
-  // handleSearch() {
-  //
-  // }
 }

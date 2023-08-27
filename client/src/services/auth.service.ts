@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core'
 import {HttpClient} from '@angular/common/http'
 import {LoginForm, MessageResponseOnly, RegisterForm, UserWithReviews} from 'src/types/user'
-import {Observable} from 'rxjs'
+import {BehaviorSubject, Observable} from 'rxjs'
 import {TokenValidationResponse} from '../types/response'
 import {map} from 'rxjs/operators'
 
@@ -10,6 +10,13 @@ import {map} from 'rxjs/operators'
 })
 export class AuthService {
   constructor(private http: HttpClient) {
+  }
+
+  private loginStatusSubject = new BehaviorSubject<boolean>(false)
+  loginStatus$ = this.loginStatusSubject.asObservable()
+
+  setLoginStatus(isLoggedIn: boolean): void {
+    this.loginStatusSubject.next(isLoggedIn)
   }
 
   validateToken(): Observable<boolean> {

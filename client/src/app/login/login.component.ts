@@ -2,7 +2,6 @@ import {Component} from '@angular/core'
 import {AuthService} from '../../services/auth.service'
 import {LoginForm} from 'src/types/user'
 import {MatSnackBar} from '@angular/material/snack-bar'
-import {LoginStatusService} from '../../services/login-status.service'
 import {Router} from '@angular/router'
 
 
@@ -21,9 +20,9 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    private auth: AuthService,
+    private authService: AuthService,
     private snackBar: MatSnackBar,
-    private loginStatusService: LoginStatusService
+
   ) {
   }
 
@@ -36,10 +35,10 @@ export class LoginComponent {
 
   handleLogin(): void {
     this.loading = true
-    this.auth.login(this.loginForm).subscribe({
+    this.authService.login(this.loginForm).subscribe({
       next: (response) => {
         this.showAlert(response.message, 'Close', 3000)
-        this.loginStatusService.setLoginStatus(true)
+        this.authService.setLoginStatus(true)
         this.loading = false
         this.router.navigate(['/about-us'])
       },

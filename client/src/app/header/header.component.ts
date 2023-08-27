@@ -3,7 +3,6 @@ import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout'
 import {Observable, of} from 'rxjs'
 import {map, shareReplay} from 'rxjs/operators'
 import {CookieService} from 'ngx-cookie-service'
-import {LoginStatusService} from '../../services/login-status.service'
 import {HttpClient} from '@angular/common/http'
 import {Router} from '@angular/router'
 import {AuthService} from '../../services/auth.service'
@@ -26,7 +25,6 @@ export class HeaderComponent implements OnInit {
   constructor(private http: HttpClient,
     private cookieService: CookieService,
     private cdRef: ChangeDetectorRef,
-    private loginStatusService: LoginStatusService,
     private authService: AuthService,  // add this
     private router: Router  // add this
   ) {
@@ -40,18 +38,18 @@ export class HeaderComponent implements OnInit {
     this.authService.validateToken().subscribe({
       next: (isValid) => {
         if (isValid) {
-          this.loginStatusService.setLoginStatus(true)
+          this.authService.setLoginStatus(true)
         } else {
-          this.loginStatusService.setLoginStatus(false)
+          this.authService.setLoginStatus(false)
         }
       },
       error: (error) => {
         console.error('Error during token validation:', error)
-        this.loginStatusService.setLoginStatus(false)
+        this.authService.setLoginStatus(false)
       }
     })
 
-    this.isLoggedIn$ = this.loginStatusService.loginStatus$
+    this.isLoggedIn$ = this.authService.loginStatus$
 
     this.cdRef.detectChanges()
   }
@@ -59,7 +57,7 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     this.authService.logout().subscribe(() => {
-      this.loginStatusService.setLoginStatus(false) // Set isLoggedIn to false after logout
+      this.authService.setLoginStatus(false) // Set isLoggedIn to false after logout
       this.router.navigate(['/login']) // redirect user to login page or some other page after logout
     }, error => {
       console.error('Error during logout:', error)
