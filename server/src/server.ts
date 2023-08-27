@@ -4,6 +4,7 @@ import express from 'express'
 import mysql from 'mysql2'
 import router from './router'
 import cookieParser from 'cookie-parser'
+import {Server} from 'socket.io'
 
 const corsOptions = {
   origin: 'http://localhost:4200',  // Your Angular's localhost or domain
@@ -16,9 +17,30 @@ dotenv.config()
 app.use(express.json())
 app.use(cors(corsOptions))
 app.use(cookieParser())
-app.listen(process.env.PORT || 8081, () => {
+const httpServer = app.listen(process.env.PORT || 8081, () => {
   console.log(`Server is running on port ${process.env.PORT || 8081}`)
 })
+
+// const io = new Server(httpServer, {
+//   cors: {
+//     origin: 'http://localhost:4200',
+//     methods: ['GET', 'POST'],
+//     credentials: true
+//   }
+// })
+//
+// io.on('connection', (socket) => {
+//   console.log('New client connected')
+//
+//   // Handle custom events or whatever you need
+//   socket.on('my-event', (data) => {
+//     console.log('my-event triggered:', data)
+//   })
+//
+//   socket.on('disconnect', () => {
+//     console.log('Client disconnected')
+//   })
+// })
 
 // Database configuration
 const dbConfig = {
