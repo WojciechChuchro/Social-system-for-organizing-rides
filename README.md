@@ -1,4 +1,4 @@
-# RideMate: Social System for Organizing Rides
+# Ride Mate: Social System for Organizing Rides
 
 ## About
 
