@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core'
 import {HttpClient} from '@angular/common/http'
-import {LoginForm, MessageResponseOnly, RegisterForm} from 'src/types/user'
+import {LoginForm, MessageResponseOnly, RegisterForm, UserWithReviews} from 'src/types/user'
 import {Observable} from 'rxjs'
 import {TokenValidationResponse} from '../types/response'
 import {map} from 'rxjs/operators'
@@ -30,5 +30,9 @@ export class AuthService {
 
   logout(): Observable<MessageResponseOnly> {
     return this.http.post<MessageResponseOnly>('http://localhost:8080/api/auth/logout', {}, {withCredentials: true})
+  }
+
+  getDataWithJwtCookie(): Observable<UserWithReviews> {
+    return this.http.get<UserWithReviews>('http://localhost:8080/api/user', {withCredentials: true})
   }
 }

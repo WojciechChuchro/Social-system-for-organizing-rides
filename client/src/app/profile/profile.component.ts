@@ -3,6 +3,8 @@ import {Component, OnInit} from '@angular/core'
 import {CookieService} from 'ngx-cookie-service'
 import {MessageResponseOnly, profileForm, Reviews, UserWithReviews} from '../../types/user'
 import {MatSnackBar} from '@angular/material/snack-bar'
+import {AuthService} from '../../services/auth.service'
+import {UtilityService} from '../../services/utility.service'
 
 @Component({
   selector: 'app-profile',
@@ -26,7 +28,8 @@ export class ProfileComponent implements OnInit {
     password: '',
   }
 
-  constructor(private http: HttpClient, private cookieService: CookieService, private snackBar: MatSnackBar) {
+  constructor(private http: HttpClient,
+    private utilityService: UtilityService, private cookieService: CookieService, private snackBar: MatSnackBar, private authService: AuthService) {
 
   }
 
@@ -40,44 +43,7 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Call the method here if you want to send the request on component initialization.
-    // Otherwise, you can call it from any other method or event in your component.
-    this.getDataWithJwtCookie()
-  }
-
-  showAlert(message: string, action: string, duration: number): void {
-
-    this.snackBar.open(message, action, {
-      duration: duration,
-    })
-  }
-
-  updateProfile(): void {
-
-    this.http.patch<MessageResponseOnly>('http://localhost:8080/api/users/update', this.profileForm, {withCredentials: true}).subscribe(
-      (response: MessageResponseOnly) => {
-        this.showAlert(response.message, 'Close', 3000)
-      },
-      (error) => {
-        console.log(error)
-        this.showAlert(error.error.message, 'Close', 3000)
-      }
-    )
-  }
-
-  getJWT(): string | null {
-    const jwtCookie = this.cookieService.get('JsonWebToken')
-    console.log(jwtCookie)
-    if (!jwtCookie) {
-      console.warn('JWT cookie not found.')
-      return null
-    }
-
-    return jwtCookie
-  }
-
-  getDataWithJwtCookie(): void {
-    this.http.get<UserWithReviews>('http://localhost:8080/api/user', {withCredentials: true}).subscribe(
+    this.authService.getDataWithJwtCookie().subscribe(
       (response: UserWithReviews) => {
         console.log(response)
         this.reviews = response.reviews
@@ -94,5 +60,15 @@ export class ProfileComponent implements OnInit {
     )
   }
 
-
+  updateProfile(): void {
+    this.http.patch<MessageResponseOnly>('http://localhost:8080/api/users/update', this.profileForm, {withCredentials: true}).subscribe(
+      (response: MessageResponseOnly) => {
+        this.utilityService.showAlert(response.message, 'Close', 3000)  // Use the service method
+      },
+      (error) => {
+        console.log(error)
+        this.utilityService.showAlert(error.message, 'Close', 3000)  // Use the service method
+      }
+    )
+  }
 }
