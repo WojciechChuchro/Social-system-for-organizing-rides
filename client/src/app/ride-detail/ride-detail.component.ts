@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core'
 import {RideService} from '../../services/ride.service'
 import {Ride} from '../../types/ride'
+import {UtilityService} from '../../services/utility.service'
 
 @Component({
   selector: 'app-ride-detail',
@@ -10,7 +11,7 @@ import {Ride} from '../../types/ride'
 export class RideDetailComponent implements OnInit {
   ride: Ride | undefined
 
-  constructor(private rideSharingService: RideService) {
+  constructor(private rideSharingService: RideService, private utilityService: UtilityService) {
   }
 
   ngOnInit(): void {
@@ -22,11 +23,11 @@ export class RideDetailComponent implements OnInit {
         .subscribe(response => {
           // Handle the response as required.
           console.log(response)
-          alert('Ride reserved successfully!')
+          this.utilityService.showAlert('Ride reserved successfully!', 'Close', 3000);
         }, error => {
           // Handle any errors here.
           console.error('Error reserving the ride:', error)
-          alert('Error reserving the ride.')
+          this.utilityService.showAlert('Error reserving the ride.', 'Close', 3000);
         })
     }
   }
