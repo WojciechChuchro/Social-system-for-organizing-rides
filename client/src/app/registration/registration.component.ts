@@ -2,6 +2,7 @@ import {Component} from '@angular/core'
 import {MatSnackBar} from '@angular/material/snack-bar'
 import {AuthService} from '../../services/auth.service'
 import {RegisterForm} from '../../types/user'
+import {UtilityService} from '../../services/utility.service'
 
 @Component({
   selector: 'app-registration',
@@ -20,32 +21,25 @@ export class RegistrationComponent {
 
   loading: boolean = false
 
-  constructor(private snackBar: MatSnackBar, private auth: AuthService) {
+  constructor(private snackBar: MatSnackBar, private auth: AuthService, private utilityService: UtilityService) {
 
-  }
-
-  showAlert(message: string, action: string, duration: number): void {
-    this.snackBar.open(message, action, {
-      duration: duration,
-    })
   }
 
   handleRegister(): void {
-    // Validate if passwords match
     if (this.registerForm.password !== this.repeatPassword) {
-      this.showAlert('Passwords don\'t match.', 'Close', 3000)
+      this.utilityService.showAlert('Passwords don\'t match.', 'Close', 3000);
       return
     }
 
     this.loading = true
     this.auth.register(this.registerForm).subscribe({
       next: (response) => {
-        this.showAlert(response.message, 'Close', 3000)
+        this.utilityService.showAlert(response.message, 'Close', 3000);
         this.loading = false
       },
       error: (error) => {
         this.loading = false
-        this.showAlert(error.message, 'Close', 3000)
+        this.utilityService.showAlert(error.message, 'Close', 3000);
       },
     })
   }
