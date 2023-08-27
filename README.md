@@ -1,8 +1,10 @@
-# Social System for Organizing Rides
+# RideMate: Social System for Organizing Rides
 
 ## About
 
-RideMate is a community-driven platform aimed at simplifying the process of organizing rides for various activities such as carpooling to work, attending events, and more. Whether you have a vehicle and are looking to split costs or you're seeking a ride, RideMate connects you with like-minded individuals to make your journey easier, economical, and more sustainable.
+RideMate is a community-driven platform aimed at simplifying the process of organizing rides for various activities such
+as carpooling to work, attending events, and more. Whether you have a vehicle and are looking to split costs or you're seeking a ride,
+RideMate connects you with like-minded individuals to make your journey easier, economical, and more sustainable.
 
 ## Features
 
@@ -21,21 +23,21 @@ RideMate is a community-driven platform aimed at simplifying the process of orga
 
 ### Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
 git clone https://github.com/WojciechChuchro/SocialSystemForOrganizingRides.git
 
-2. Start docker-compose:
+2. **Start docker-compose:**
 docker-compose up -d
 
 ### Database Setup with Migration
 
-1. Execute the migration to create the database schema:
+1. **Execute the migration to create the database schema:**
 npx knex migrate:latest --knexfile knexfile.ts
 
-2. Seed the database with initial data:
+2. **Seed the database with initial data:**
 npx knex seed:run
 
-3. To rollback the database:
+3. **To rollback the database:**
 npx knex migrate:rollback --all
 
 ### Usage
