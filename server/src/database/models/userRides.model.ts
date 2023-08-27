@@ -1,10 +1,9 @@
-import { Model } from 'objection'
+import {Model} from 'objection'
 import knex from '../config/database'
 import Rides from './rides.model'
 import LookingForDrivers from './lookingForDrivers.model'
 import Statuses from './statuses.model'
 import Users from './users.model'
-
 
 
 Model.knex(knex)
@@ -21,11 +20,11 @@ class UserRides extends Model {
       type: 'object',
       required: ['userId', 'rideId', 'statusId'],
       properties: {
-        id: { type: 'integer' },
-        userId: { type: 'integer' },
-        rideId: { type: 'integer' },
-        lookingForDriverId: { type: ['integer', 'null'] },
-        statusId: { type: 'integer' },
+        id: {type: 'integer'},
+        userId: {type: 'integer'},
+        rideId: {type: 'integer'},
+        lookingForDriverId: {type: ['integer', 'null']},
+        statusId: {type: 'integer'},
       },
     }
   }
@@ -72,6 +71,20 @@ class UserRides extends Model {
         },
       },
     }
+  }
+}
+
+export async function getUserRidesByUserId(userId: number): Promise<UserRides[]> {
+  try {
+    return await UserRides.query()
+      .select('userRides.*', 'rides.*')  // select columns from both userRides and rides
+      .join('rides', 'userRides.rideId', 'rides.id')  // join the rides table
+      .where('userRides.userId', userId)  // filter by userId
+      .withGraphFetched('[user, ride, lookingForDriver, status]')  // fetch related records
+      .orderBy('userRides.id')  // sort by userRides id
+  } catch (error) {
+    console.error('Error fetching userRides:', error)
+    throw error
   }
 }
 

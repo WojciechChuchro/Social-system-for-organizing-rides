@@ -91,6 +91,33 @@ export class RideService {
       )
   }
 
+  fetchRidesAsPassenger(): Observable<Rides[]> {
+    return this.http
+      .get<RidesResponse>('http://localhost:8080/api/get-rides-as-passenger', {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response: RidesResponse) => {
+          console.log(response)
+          return response.rides.map((ride: Rides) => {
+            ride.earliestDepartureDate = this.formatDate(
+              ride.earliestDepartureTime
+            )
+            ride.latestDepartureDate = this.formatDate(ride.latestDepartureTime)
+            ride.earliestDepartureTime = this.formatTime(
+              ride.earliestDepartureTime
+            )
+            ride.latestDepartureTime = this.formatTime(ride.latestDepartureTime)
+            ride.duration = this.calculateDuration(
+              ride.earliestDepartureDate + ' ' + ride.earliestDepartureTime,
+              ride.latestDepartureDate + ' ' + ride.latestDepartureTime
+            )
+            return ride
+          })
+        })
+      )
+  }
+
   deleteUser(statusId: number): Observable<MessageResponseOnly> {
     return this.http.post<MessageResponseOnly>('http://localhost:8080/api/delete', {statusId}, {
       withCredentials: true,
@@ -102,4 +129,6 @@ export class RideService {
       withCredentials: true,
     })
   }
+
+
 }

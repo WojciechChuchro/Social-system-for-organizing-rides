@@ -101,6 +101,9 @@ export async function getRidesByUserId(userId: number): Promise<Rides[]> {
 }
 
 
+
+
+
 export const getRidesWithEveryChildrenTable = async () => {
   return (await Rides.query()
     .select('users.name as driverName',

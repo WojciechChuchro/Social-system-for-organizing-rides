@@ -6,7 +6,7 @@ import {createStartAndDestinationCountry} from '../database/models/countries.mod
 import {createStartAndDestinationCity} from '../database/models/cities.model'
 import {createStartAndDestinationStreet} from '../database/models/streets.model'
 import {AddressIds, CityIds, CountryIds, StreetIds} from '../types/model'
-import userRides from '../database/models/userRides.model'
+import userRides, {getUserRidesByUserId} from '../database/models/userRides.model'
 import Statuses from '../database/models/statuses.model'
 
 export const getAllRides = async (req: Request, res: Response) => {
@@ -118,6 +118,25 @@ export const createRide = async (req: Request, res: Response) => {
   }
 }
 
+
+export const GetRidesByUserAsPassenger = async(req: Request, res: Response) => {
+  const {userId} = res.locals.jwt
+  console.log('geouuoueo')
+  if (isNaN(userId)) {
+    return res.status(400).json({ message: 'Invalid user Id format'})
+  }
+  
+  try {
+    const userRides = await getUserRidesByUserId(userId)
+    console.log('usserRides', userRides)
+    
+    return res.status(200).json({userRides: userRides})
+  } catch (error) {
+    console.error('Error', error)
+    return res.status(500).json({message: 'Internal server error'})
+  }
+}
+
 export const getRidesByUser = async (req: Request, res: Response) => {
   const {userId} = res.locals.jwt
   // Ensure userId is a valid number
@@ -126,13 +145,14 @@ export const getRidesByUser = async (req: Request, res: Response) => {
   }
 
   try {
-    const userRides = await getRidesByUserId(userId)
+    const rides = await getRidesByUserId(userId)
+    
 
-    if (userRides.length === 0) {
+    if (rides.length === 0) {
       return res.status(404).json({message: 'No rides found for this user.'})
     }
 
-    return res.status(200).json({rides: userRides})
+    return res.status(200).json({rides: rides})
   } catch (error) {
     console.error('Error:', error)
     return res.status(500).json({message: 'Internal server error'})

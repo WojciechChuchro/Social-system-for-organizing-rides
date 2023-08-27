@@ -12,21 +12,29 @@ import {MatSnackBar} from '@angular/material/snack-bar'
 })
 export class YourRidesComponent implements OnInit {
   rides: Rides[] = []
+  ridesPassanger: Rides[] = []
+
+  constructor(private http: HttpClient, private rideService: RideService, private snackBar: MatSnackBar,) {
+  }
 
   showAlert(message: string, action: string, duration: number): void {
     this.snackBar.open(message, action, {
       duration: duration,
     })
   }
-  constructor(private http: HttpClient, private rideService: RideService, private snackBar: MatSnackBar,) {
-  }
 
   ngOnInit(): void {
     this.fetchAllRides()
+    console.log(this.ridesPassanger)
   }
 
   fetchAllRides(): void {
     this.rideService.fetchRides().subscribe((rides: Rides[]) => {
+      this.rides = rides
+    })
+
+    // @ts-ignore
+    this.rideService.fetchRidesAsPassenger().subscribe((rides: Rides[]) => {
       this.rides = rides
     })
   }
