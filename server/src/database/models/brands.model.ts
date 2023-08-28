@@ -5,8 +5,8 @@ import Models from './models.model'
 Model.knex(knex)
 
 class Brands extends Model {
-  // id!: number
-  // brandName: string
+  id!: number
+  brandName: string
   static get models() {
     return {
       required: ['id'],
