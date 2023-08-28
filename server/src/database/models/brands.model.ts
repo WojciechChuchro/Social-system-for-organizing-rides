@@ -12,7 +12,7 @@ class Brands extends Model {
       required: ['id'],
       properties: {
         id: {type: 'integer'},
-        brandName: {type: 'string'},
+        brandName: {type: 'string', length: 15},
       }
     }
   }

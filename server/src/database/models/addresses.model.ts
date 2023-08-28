@@ -9,7 +9,7 @@ class Addresses extends Model {
   id!: number
   streetId!: number
   zipCode!: string
-  houseNumber: string
+  houseNumber: number
   gpsX: number
   gpsY: number
 
@@ -19,10 +19,10 @@ class Addresses extends Model {
       properties: {
         id: {type: 'integer'},
         streetId: {type: 'integer'},
-        houseNumber: {type: 'string'},
+        houseNumber: {type: 'string'}, // zostaje string przez możliwość wystąpienia numerów budynku i lokalu
         zipCode: {type: 'string'},
-        gpsX: {type: 'number'},
-        gpsY: {type: 'number'},
+        gpsX: {type: 'number', length: 9},
+        gpsY: {type: 'number', length: 9},
       }
     }
   }

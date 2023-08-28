@@ -14,7 +14,7 @@ class Countries extends Model {
       required: ['id', 'countryName'],
       properties: {
         id: {type: 'integer'},
-        countryName: {type: 'string'},
+        countryName: {type: 'string', lenght: 20},
       }
     }
   }

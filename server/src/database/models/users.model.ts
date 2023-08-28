@@ -29,7 +29,7 @@ class Users extends Model {
         email: {type: 'string'},
         name: {type: 'string'},
         surname: {type: 'string'},
-        phoneNumber: {type: 'string'},
+        phoneNumber: {type: 'string', lenght: 12},
         profilePicture: {type: 'string'},
         password: {type: 'string'},
         salt: {type: 'string'},

@@ -11,7 +11,7 @@ class Messages extends Model {
   userId!: number
   text!: string
   sendTime!: string
-  wasRead!: number
+  wasRead!: boolean
 
 
   static get messages() {
@@ -21,8 +21,9 @@ class Messages extends Model {
         id: {type: 'integer'},
         userRideId: {type: 'integer'},
         userId: {type: 'integer'},
-        text: {type: 'string'},
-        wasRead: {type: 'integer'},
+        text: {type: 'string', lenght: 500},
+        sendTime: {type: 'date-string'},
+        wasRead: {type: 'boolean'},
       }
     }
   }

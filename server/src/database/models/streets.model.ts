@@ -17,7 +17,7 @@ class Streets extends Model {
       properties: {
         id: {type: 'integer'},
         cityId: {type: 'integer'},
-        cityName: {type: 'string'},
+        streetName: {type: 'string', length: 50},
       }
     }
   }

@@ -6,13 +6,13 @@ Model.knex(knex)
 
 class Statuses extends Model {
   id: number
-  isAccepted: number
+  isAccepted: boolean
   static get statuses() {
     return {
       required: ['isAccepted'],
       properties: {
         id: {type: 'integer'},
-        isAccepted: {type: 'number'},
+        isAccepted: {type: 'boolean'},
       }
     }
   }

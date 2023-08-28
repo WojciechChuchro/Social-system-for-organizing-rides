@@ -14,7 +14,7 @@ class UserRides extends Model {
   userId!: number
   rideId!: number
   lookingForDriverId!: number | null
-  statusId!: number
+  statusId!: boolean
 
   static get jsonSchema() {
     return {
@@ -25,7 +25,7 @@ class UserRides extends Model {
         userId: { type: 'integer' },
         rideId: { type: 'integer' },
         lookingForDriverId: { type: ['integer', 'null'] },
-        statusId: { type: 'integer' },
+        statusId: { type: 'boolean' },
       },
     }
   }

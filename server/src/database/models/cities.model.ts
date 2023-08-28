@@ -16,7 +16,7 @@ class Cities extends Model {
       properties: {
         id: {type: 'integer'},
         countryId: {type: 'integer'},
-        cityName: {type: 'string'},
+        cityName: {type: 'string', length: 58},
       }
     }
   }
