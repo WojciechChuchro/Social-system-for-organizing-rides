@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core'
 import {HttpClient} from '@angular/common/http'
-import {Rides} from '../../types/response'
-import {RideService} from '../../services/ride.service'
+import {Rides, UserRides} from '../../types/response'
+import {RideService, UserRides2} from '../../services/ride.service'
 import {MessageResponseOnly} from '../../types/user'
 import {MatSnackBar} from '@angular/material/snack-bar'
 
@@ -12,7 +12,7 @@ import {MatSnackBar} from '@angular/material/snack-bar'
 })
 export class YourRidesComponent implements OnInit {
   rides: Rides[] = []
-  ridesPassanger: Rides[] = []
+  ridesPassangers: UserRides2[] = []
 
   constructor(private http: HttpClient, private rideService: RideService, private snackBar: MatSnackBar,) {
   }
@@ -25,7 +25,7 @@ export class YourRidesComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAllRides()
-    console.log(this.ridesPassanger)
+    console.log('ridesPassanger',this.ridesPassangers)
   }
 
   fetchAllRides(): void {
@@ -33,9 +33,8 @@ export class YourRidesComponent implements OnInit {
       this.rides = rides
     })
 
-    // @ts-ignore
-    this.rideService.fetchRidesAsPassenger().subscribe((rides: Rides[]) => {
-      this.rides = rides
+    this.rideService.fetchRidesAsPassenger().subscribe((rides: UserRides2[]) => {
+      this.ridesPassangers = rides
     })
   }
 

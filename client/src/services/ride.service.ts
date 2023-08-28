@@ -6,6 +6,71 @@ import {Rides, RidesResponse} from '../types/response'
 import {map} from 'rxjs/operators'
 import {MessageResponseOnly} from '../types/user'
 
+// todo ogarnac typy
+export interface UserRides2 {
+  id: number;
+  userId: number;
+  lookingForDriverId: number;
+  rideId: number;
+  StatusId: number;
+  driverId: number;
+  startAddressId: number;
+  destinationAddressId: number;
+  earliestDepartureTime: string;
+  latestDepartureTime: string;
+  pricePerPerson: number;
+  seatsNumber: number;
+  registrationNumber: string;
+  user: Users;
+  ride: Rides2;
+  lookingForDriver: LookingForDrivers;
+  status: Statuses;
+}
+
+export interface Rides2 {
+  id: number;
+  driverId: number;
+  startAddressId: number;
+  destinationAddressId: number;
+  earliestDepartureTime: string;
+  latestDepartureTime: string;
+  pricePerPerson: number;
+  seatsNumber: number;
+  registrationNumber: string;
+  // These fields are not in the original data but are calculated later
+  earliestDepartureDate?: string;
+  latestDepartureDate?: string;
+  duration?: string;
+}
+
+export interface Users {
+  id: number;
+  modelId: number;
+  email: string;
+  name: string;
+  surname: string;
+  phoneNumber: string;
+  profilePicture: any; // Change 'any' to appropriate type
+  password: string;
+  salt: string;
+  sessionToken: string;
+}
+
+export interface LookingForDrivers {
+  id: number;
+  startAddressId: number;
+  destinationAddressId: number;
+  earliestDepartureTime: string;
+  latestDepartureTime: string;
+  maxPrice: number;
+  numberOfPeople: number;
+}
+
+export interface Statuses {
+  id: number;
+  isAccepted: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -91,28 +156,34 @@ export class RideService {
       )
   }
 
-  fetchRidesAsPassenger(): Observable<Rides[]> {
+  fetchRidesAsPassenger(): Observable<UserRides2[]> {
     return this.http
-      .get<RidesResponse>('http://localhost:8080/api/get-rides-as-passenger', {
+      .get<UserRides2[]>('http://localhost:8080/api/get-rides-as-passenger', {
         withCredentials: true,
       })
       .pipe(
-        map((response: RidesResponse) => {
-          console.log(response)
-          return response.rides.map((ride: Rides) => {
-            ride.earliestDepartureDate = this.formatDate(
-              ride.earliestDepartureTime
+        map((response: any) => {
+          console.log('res:', response, typeof response)
+
+          return response.userRides.map((userRide: UserRides2) => {
+            console.log('ride: ', userRide)
+            userRide.ride.earliestDepartureDate = this.formatDate(
+              userRide.ride.earliestDepartureTime
             )
-            ride.latestDepartureDate = this.formatDate(ride.latestDepartureTime)
-            ride.earliestDepartureTime = this.formatTime(
-              ride.earliestDepartureTime
+            userRide.ride.latestDepartureDate = this.formatDate(
+              userRide.ride.latestDepartureTime
             )
-            ride.latestDepartureTime = this.formatTime(ride.latestDepartureTime)
-            ride.duration = this.calculateDuration(
-              ride.earliestDepartureDate + ' ' + ride.earliestDepartureTime,
-              ride.latestDepartureDate + ' ' + ride.latestDepartureTime
+            userRide.ride.earliestDepartureTime = this.formatTime(
+              userRide.ride.earliestDepartureTime
             )
-            return ride
+            userRide.ride.latestDepartureTime = this.formatTime(
+              userRide.ride.latestDepartureTime
+            )
+            userRide.ride.duration = this.calculateDuration(
+              userRide.ride.earliestDepartureDate + ' ' + userRide.ride.earliestDepartureTime,
+              userRide.ride.latestDepartureDate + ' ' + userRide.ride.latestDepartureTime
+            )
+            return userRide
           })
         })
       )
