@@ -1,29 +1,38 @@
-@mixin btn($bg-color: white) {
+@mixin btn($bg-color: white, $border-color: none) {
   margin-right: $base-margin * 0.3;
+  padding: $small-padding;
   cursor: pointer;
-  border-radius: 10px;
   font-size: large;
   background-color: $bg-color;
+  &.rounded {
+    border-radius: $base-border-radius;
+  }
+  &.bordered {
+    border: solid $border-color;
+  }
 }
 @each $key, $val in $colors {
   .btn-#{$key} {
-    @include btn($val);
+    @include btn($val, $val);
     &:hover {
-      //działa no way
-      background-color: lighten($val, 10%);
+      transition-duration: $transition-duration;
+      background-color: lighten($val, 30%);
     }
   }
   .btn-outlined-#{$key} {
     @include btn();
     border: solid $val;
     &:hover {
+      transition-duration: $transition-duration;
       background-color: $val;
+      color: white;
     }
   }
 }
 
+////////////////////////////////////////////////////////////////OLD VERSION
 .old-btn {
-  border-radius: $border-radius;
+  border-radius: $base-border-radius;
   padding: $base-padding;
   width: $base-width * 6;
 }
