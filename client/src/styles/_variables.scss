@@ -1,14 +1,30 @@
+//Colors
+$primary: #1b4332;
+$secondary: #4bb86d;
+$error: red;
+$info: yellow;
+$description: grey;
+
+$colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "error": $error,
+  "info": $info,
+  "blue": blue,
+  "green": green,
+  "yellow": yellow,
+  "red": red,
+  "orange": orange,
+  "purple": purple,
+  "white": white,
+  "gray": gray,
+  "black": black,
+);
+
 //Genreal
 $border-radius: 1rem;
 $transition-duration: 0.3s;
 $transition-easing: ease-in-out;
-
-//Colors
-$primary: #002b53;
-$secondary: #ffffff;
-$description: #9a9a9a;
-
-$hover-color: darken($secondary, 20%);
 
 //Fonts
 $base-font-size: 1.25rem;

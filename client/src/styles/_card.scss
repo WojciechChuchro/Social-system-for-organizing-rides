@@ -8,15 +8,20 @@
   border-radius: 25px;
   border: 2px solid $primary;
   .card-title {
+    color: #52b788;
     margin-bottom: $base-margin * 0.2;
     font-size: x-large;
   }
 
   .card-body {
+    color: lightgray;
     margin-bottom: $base-margin * 0.2;
     font-size: large;
 
     padding-top: $base-padding * 0.5;
     padding-bottom: $base-padding * 0.5;
   }
+}
+.bcg {
+  background-color: #b7e4c7;
 }

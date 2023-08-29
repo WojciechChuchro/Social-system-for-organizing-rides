@@ -1,27 +1,49 @@
-@import "./variables";
+@mixin btn($bg-color: white) {
+  margin-right: $base-margin * 0.3;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: large;
+  background-color: $bg-color;
+}
+@each $key, $val in $colors {
+  .btn-#{$key} {
+    @include btn($val);
+    &:hover {
+      //działa no way
+      background-color: lighten($val, 10%);
+    }
+  }
+  .btn-outlined-#{$key} {
+    @include btn();
+    border: solid $val;
+    &:hover {
+      background-color: $val;
+    }
+  }
+}
 
-.btn {
+.old-btn {
   border-radius: $border-radius;
   padding: $base-padding;
   width: $base-width * 6;
 }
 
-.btn:hover {
+.old-btn:hover {
   cursor: pointer;
   transition: background-color $transition-duration $transition-easing;
-  background-color: $hover-color;
+  background-color: black;
 }
 
-.btn-primary {
+.old-btn-primary {
   margin-right: $base-margin * 0.3;
   cursor: pointer;
-  color: $primary;
-  background-color: $secondary;
-  border: solid 1px;
+  color: rgb(236, 236, 236);
+  background-color: $primary;
+  border: solid black 3px;
   border-radius: 10px;
   font-size: large;
   &:hover {
     //działa no way
-    background-color: $hover-color;
+    background-color: black;
   }
 }
