@@ -1,14 +1,16 @@
 //Colors
 $primary: #1b4332;
 $secondary: #4bb86d;
-$error: red;
+$success: #4bb86d;
+$fail: #c53232;
 $info: yellow;
 $description: grey;
 
 $colors: (
   "primary": $primary,
   "secondary": $secondary,
-  "error": $error,
+  "success": $success,
+  "fail": $fail,
   "info": $info,
   "blue": blue,
   "green": green,
@@ -22,9 +24,9 @@ $colors: (
 );
 
 //Genreal
-$border-radius: 1rem;
 $transition-duration: 0.3s;
 $transition-easing: ease-in-out;
+$base-border-radius: 10px;
 
 //Fonts
 $base-font-size: 1.25rem;
@@ -32,6 +34,7 @@ $base-font-size: 1.25rem;
 //Spacing
 $base-margin: 1rem;
 $base-padding: 1rem;
+$small-padding: 0.2rem;
 
 //Size
 $base-width: 2rem;

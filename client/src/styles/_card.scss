@@ -5,10 +5,10 @@
   display: block;
   padding: $base-padding;
   margin: $base-margin;
-  border-radius: 25px;
+  border-radius: $base-border-radius;
   border: 2px solid $primary;
   .card-title {
-    color: #52b788;
+    color: $secondary;
     margin-bottom: $base-margin * 0.2;
     font-size: x-large;
   }
