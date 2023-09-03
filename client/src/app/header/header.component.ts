@@ -31,10 +31,6 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Existing initialization
-
-
-    // POST request to validate the token
     this.authService.validateToken().subscribe({
       next: (isValid) => {
         if (isValid) {
@@ -56,11 +52,15 @@ export class HeaderComponent implements OnInit {
 
 
   logout(): void {
-    this.authService.logout().subscribe(() => {
-      this.authService.setLoginStatus(false) // Set isLoggedIn to false after logout
-      this.router.navigate(['/login']) // redirect user to login page or some other page after logout
-    }, error => {
-      console.error('Error during logout:', error)
+    this.authService.logout().subscribe({
+      next: () => {
+        this.authService.setLoginStatus(false) // Set isLoggedIn to false after logout
+        this.router.navigate(['/login']) // Redirect user to login page after logout
+      }
+      ,
+      error: (error) => {
+        console.error('Error during logout:', error)
+      }
     })
   }
 
