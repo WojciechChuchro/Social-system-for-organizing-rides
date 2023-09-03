@@ -4,23 +4,26 @@ import {LoginForm, MessageResponseOnly, RegisterForm, UserWithReviews} from 'src
 import {BehaviorSubject, Observable} from 'rxjs'
 import {TokenValidationResponse} from '../types/response'
 import {map} from 'rxjs/operators'
+import {environment} from '../environments/environment'
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {
-  }
-
+  private apiBaseUrl: string
   private loginStatusSubject = new BehaviorSubject<boolean>(false)
   loginStatus$ = this.loginStatusSubject.asObservable()
+
+  constructor(private http: HttpClient) {
+    this.apiBaseUrl = environment.apiBaseUrl
+  }
 
   setLoginStatus(isLoggedIn: boolean): void {
     this.loginStatusSubject.next(isLoggedIn)
   }
 
   validateToken(): Observable<boolean> {
-    return this.http.get<TokenValidationResponse>('http://localhost:8080/api/auth/validate-jwt', {withCredentials: true}).pipe(
+    return this.http.get<TokenValidationResponse>(`${this.apiBaseUrl}/auth/validate-jwt`, {withCredentials: true}).pipe(
       map(response => {
         return response.isValid
       })
@@ -28,18 +31,18 @@ export class AuthService {
   }
 
   login(user: LoginForm): Observable<MessageResponseOnly> {
-    return this.http.post<MessageResponseOnly>('http://localhost:8080/api/auth/login', user, {withCredentials: true})
+    return this.http.post<MessageResponseOnly>(`${this.apiBaseUrl}/auth/login`, user, {withCredentials: true})
   }
 
   register(user: RegisterForm): Observable<MessageResponseOnly> {
-    return this.http.post<MessageResponseOnly>('http://localhost:8080/api/auth/register', user)
+    return this.http.post<MessageResponseOnly>(`${this.apiBaseUrl}/auth/register`, user)
   }
 
   logout(): Observable<MessageResponseOnly> {
-    return this.http.post<MessageResponseOnly>('http://localhost:8080/api/auth/logout', {}, {withCredentials: true})
+    return this.http.post<MessageResponseOnly>(`'${this.apiBaseUrl}/auth/logout`, {}, {withCredentials: true})
   }
 
   getDataWithJwtCookie(): Observable<UserWithReviews> {
-    return this.http.get<UserWithReviews>('http://localhost:8080/api/user', {withCredentials: true})
+    return this.http.get<UserWithReviews>(`${this.apiBaseUrl}/user`, {withCredentials: true})
   }
 }

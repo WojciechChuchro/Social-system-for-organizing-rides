@@ -5,6 +5,7 @@ import {MessageResponseOnly, profileForm, Reviews, UserWithReviews} from '../../
 import {MatSnackBar} from '@angular/material/snack-bar'
 import {AuthService} from '../../services/auth.service'
 import {UtilityService} from '../../services/utility.service'
+import {environment} from '../../environments/environment'
 
 @Component({
   selector: 'app-profile',
@@ -27,10 +28,11 @@ export class ProfileComponent implements OnInit {
     phoneNumber: '',
     password: '',
   }
+  private apiBaseUrl: string
 
   constructor(private http: HttpClient,
     private utilityService: UtilityService, private cookieService: CookieService, private snackBar: MatSnackBar, private authService: AuthService) {
-
+    this.apiBaseUrl = environment.apiBaseUrl
   }
 
   computeAverageRating(): void {
@@ -61,7 +63,7 @@ export class ProfileComponent implements OnInit {
   }
 
   updateProfile(): void {
-    this.http.patch<MessageResponseOnly>('http://localhost:8080/api/users/update', this.profileForm, {withCredentials: true}).subscribe(
+    this.http.patch<MessageResponseOnly>(`${this.apiBaseUrl}/users/update`, this.profileForm, {withCredentials: true}).subscribe(
       (response: MessageResponseOnly) => {
         this.utilityService.showAlert(response.message, 'Close', 3000)  // Use the service method
       },
