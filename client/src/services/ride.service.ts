@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core'
-import {BehaviorSubject, Observable} from 'rxjs' // <-- Added Observable import here
+import {BehaviorSubject, Observable} from 'rxjs'
 import {Ride} from '../types/ride'
 import {HttpClient} from '@angular/common/http'
 import {Rides, RidesResponse} from '../types/response'
 import {map} from 'rxjs/operators'
 import {MessageResponseOnly} from '../types/user'
+import {environment} from '../environments/environment'
 
 // todo ogarnac typy
 export interface UserRides2 {
@@ -75,11 +76,13 @@ export interface Statuses {
   providedIn: 'root'
 })
 export class RideService {
+  private apiBaseUrl: string
   private rideSource = new BehaviorSubject<Ride | undefined>(undefined)
   currentRide = this.rideSource.asObservable()
 
   constructor(private http: HttpClient) {
-  } // <-- Corrected this line
+    this.apiBaseUrl = environment.apiBaseUrl
+  }
 
   formatDate(dateTime: string): string {
     const datePart = dateTime.split(' ')[0] // Get the date part
@@ -127,12 +130,12 @@ export class RideService {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   reserveRide(rideId: number): Observable<any> {
-    return this.http.post('http://localhost:8080/api/accept-ride', {rideId}, {withCredentials: true}) // Assuming your API only needs the rideId.
+    return this.http.post(`${this.apiBaseUrl}/accept-ride`, {rideId}, {withCredentials: true}) // Assuming your API only needs the rideId.
   }
 
   fetchRides(): Observable<Rides[]> {
     return this.http
-      .get<RidesResponse>('http://localhost:8080/api/get-rides', {
+      .get<RidesResponse>(`${this.apiBaseUrl}/get-rides`, {
         withCredentials: true,
       })
       .pipe(
@@ -158,7 +161,7 @@ export class RideService {
 
   fetchRidesAsPassenger(): Observable<UserRides2[]> {
     return this.http
-      .get<UserRides2[]>('http://localhost:8080/api/get-rides-as-passenger', {
+      .get<UserRides2[]>(`${this.apiBaseUrl}/get-rides-as-passenger`, {
         withCredentials: true,
       })
       .pipe(
@@ -190,13 +193,13 @@ export class RideService {
   }
 
   deleteUser(statusId: number): Observable<MessageResponseOnly> {
-    return this.http.post<MessageResponseOnly>('http://localhost:8080/api/delete', {statusId}, {
+    return this.http.post<MessageResponseOnly>(`${this.apiBaseUrl}/delete`, {statusId}, {
       withCredentials: true,
     })
   }
 
   acceptUser(statusId: number): Observable<MessageResponseOnly> {
-    return this.http.post<MessageResponseOnly>('http://localhost:8080/api/accept', {statusId}, {
+    return this.http.post<MessageResponseOnly>(`${this.apiBaseUrl}/accept`, {statusId}, {
       withCredentials: true,
     })
   }
