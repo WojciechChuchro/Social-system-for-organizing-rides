@@ -1,1 +1,9 @@
-<p>messages works!</p>
+<div>
+    <h2>Chat Messages</h2>
+    <div *ngFor="let msg of messages">
+        {{ msg }}
+    </div>
+
+    <input type="text" [(ngModel)]="message">
+    <button (click)="sendMessage()">Send</button>
+</div>
