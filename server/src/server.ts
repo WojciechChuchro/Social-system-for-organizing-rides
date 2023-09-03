@@ -8,9 +8,9 @@ import {Server} from 'socket.io'
 import {configureSocket} from './socketManager'
 
 const corsOptions = {
-  origin: 'http://localhost:4200',  // Your Angular's localhost or domain
+  origin: 'http://localhost:4200',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,  // This is essential
+  credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization', 'JsonWebToken']
 }
 
