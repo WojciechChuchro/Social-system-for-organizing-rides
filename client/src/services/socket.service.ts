@@ -8,7 +8,7 @@ export class SocketService {
   private socket: Socket
 
   constructor() {
-    this.socket = io('http://localhost:8081', {withCredentials: true})
+    this.socket = io('http://localhost:8080', {withCredentials: true})
   }
 
   emitEvent(eventName: string, data: any): void {
