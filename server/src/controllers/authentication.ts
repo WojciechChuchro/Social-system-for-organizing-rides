@@ -76,32 +76,30 @@ export const register = async (req: express.Request, res: express.Response) => {
   }
 }
 
-export const validateJWT = (req: Request, res: Response): Response | void => {
+export const validateJWT = (
+  req: Request,
+  res: Response,
+): Response | void => {
   const {JsonWebToken} = req.cookies
 
   if (!JsonWebToken) {
-    return res.status(401).json({message: 'Unauthorized: Missing token'})
+    return res.status(401).json({message: 'Unauthorized: Missing token', isValid: false})
   }
 
   const token: string = Array.isArray(JsonWebToken) ? JsonWebToken[0] : JsonWebToken
-
   try {
-    // Ensuring process.env.SECRET_KEY is a string. You might want to have a better check for this.
-    jwt.verify(token, process.env.SECRET_KEY as string, (err: jwt.JsonWebTokenError | jwt.NotBeforeError | jwt.TokenExpiredError | null) => {
-      if (err) {
-        // If there's an error during verification, it could mean the token is invalid or expired.
-        return res.status(401).json({message: 'Unauthorized: Invalid token'})
-      }
-
-      return res.status(200).json({message: 'Token is valid', isValid: true})
-    })
+    jwt.verify(token, process.env.SECRET_KEY as string)
+    return res.status(200).json({message: 'Token is valid', isValid: true})
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      return res.status(401).json({message: 'Unauthorized: Token has expired'})
+      return res.status(401).json({
+        message: 'Unauthorized: Token has expired ', isValid: false
+      })
     } else if (error instanceof jwt.JsonWebTokenError) {
-      return res.status(401).json({message: 'Unauthorized: Invalid token'})
+
+      return res.status(401).json({message: 'Unauthorized: Invalid token', isValid: false})
     }
-    return res.status(500).json({message: 'Internal Server Error'})
+    return res.status(500).json({message: 'Internal Server Error', isValid: false})
   }
 }
 
