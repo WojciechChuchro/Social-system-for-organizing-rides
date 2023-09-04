@@ -21,13 +21,9 @@ export class RideDetailComponent implements OnInit {
     if (this.ride) {
       this.rideSharingService.reserveRide(this.ride.id)
         .subscribe(response => {
-          // Handle the response as required.
-          console.log(response)
-          this.utilityService.showAlert('Ride reserved successfully!', 'Close', 3000);
+          this.utilityService.showAlert(response.message, 'Close', 3000);
         }, error => {
-          // Handle any errors here.
-          console.error('Error reserving the ride:', error)
-          this.utilityService.showAlert('Error reserving the ride.', 'Close', 3000);
+          this.utilityService.showAlert(error.message, 'Close', 3000);
         })
     }
   }
