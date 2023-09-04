@@ -5,7 +5,7 @@ import {HttpClient} from '@angular/common/http'
 import {Rides, RidesResponse} from '../types/response'
 import {map} from 'rxjs/operators'
 import {MessageResponseOnly} from '../types/user'
-import {environment} from '../environments/environment'
+import {environment} from '../environments/environment.development'
 
 // todo ogarnac typy
 export interface UserRides2 {
@@ -128,9 +128,8 @@ export class RideService {
     this.rideSource.next(ride)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  reserveRide(rideId: number): Observable<any> {
-    return this.http.post(`${this.apiBaseUrl}/accept-ride`, {rideId}, {withCredentials: true}) // Assuming your API only needs the rideId.
+  reserveRide(rideId: number): Observable<MessageResponseOnly> {
+    return this.http.post<MessageResponseOnly>(`${this.apiBaseUrl}/accept-ride`, {rideId}, {withCredentials: true})
   }
 
   fetchRides(): Observable<Rides[]> {
@@ -166,8 +165,7 @@ export class RideService {
       })
       .pipe(
         map((response: any) => {
-          console.log('res:', response, typeof response)
-
+          console.log(response)
           return response.userRides.map((userRide: UserRides2) => {
             console.log('ride: ', userRide)
             userRide.ride.earliestDepartureDate = this.formatDate(

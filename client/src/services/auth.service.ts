@@ -4,7 +4,7 @@ import {LoginForm, MessageResponseOnly, RegisterForm, UserWithReviews} from 'src
 import {BehaviorSubject, Observable} from 'rxjs'
 import {TokenValidationResponse} from '../types/response'
 import {map} from 'rxjs/operators'
-import {environment} from '../environments/environment'
+import {environment} from '../environments/environment.development'
 
 @Injectable({
   providedIn: 'root',

@@ -5,8 +5,7 @@ import {MessageResponseOnly, profileForm, Reviews, UserWithReviews} from '../../
 import {MatSnackBar} from '@angular/material/snack-bar'
 import {AuthService} from '../../services/auth.service'
 import {UtilityService} from '../../services/utility.service'
-import {environment} from '../../environments/environment'
-
+import { environment} from '../../environments/environment.development'
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -30,8 +29,7 @@ export class ProfileComponent implements OnInit {
   }
   private apiBaseUrl: string
 
-  constructor(private http: HttpClient,
-    private utilityService: UtilityService, private cookieService: CookieService, private snackBar: MatSnackBar, private authService: AuthService) {
+  constructor(private http: HttpClient, private utilityService: UtilityService, private cookieService: CookieService, private snackBar: MatSnackBar, private authService: AuthService) {
     this.apiBaseUrl = environment.apiBaseUrl
   }
 
