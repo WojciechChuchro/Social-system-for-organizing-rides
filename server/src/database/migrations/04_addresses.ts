@@ -11,10 +11,10 @@ export async function up(knex: Knex): Promise<void> {
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
 
-    table.string('zipCode')
-    table.string('houseNumber')
-    table.float('gpsX')
-    table.float('gpsY')
+    table.string('zipCode', 6)
+    table.string('houseNumber', 7)
+    table.float('gpsX', 9)
+    table.float('gpsY', 9)
 
   })
 }

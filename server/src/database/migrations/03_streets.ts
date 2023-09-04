@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
 
-    table.string('streetName')
+    table.string('streetName',50)
   })
 }
 

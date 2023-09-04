@@ -26,11 +26,11 @@ export async function up(knex: Knex): Promise<void> {
       .onDelete('CASCADE')
 
 
-    table.string('earliestDepartureTime')
-    table.string('latestDepartureTime')
-    table.float('pricePerPerson')
+    table.timestamp('earliestDepartureTime')
+    table.timestamp('latestDepartureTime')
+    table.float('pricePerPerson',2)
     table.integer('seatsNumber')
-    table.string('registrationNumber')
+    table.string('registrationNumber', 8)
 
   })
 }

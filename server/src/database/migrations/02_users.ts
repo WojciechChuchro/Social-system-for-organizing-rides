@@ -11,14 +11,14 @@ export async function up(knex: Knex): Promise<void> {
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
 
-    table.string('email').notNullable().unique()
-    table.string('name')
-    table.string('surname')
-    table.string('phoneNumber')
-    table.string('profilePicture')
-    table.string('password').notNullable()
-    table.string('salt')
-    table.string('sessionToken')
+    table.string('email', 50).notNullable().unique()
+    table.string('name', 20)
+    table.string('surname',30)
+    table.string('phoneNumber', 12)
+    table.string('profilePicture', 100)
+    table.string('password', 255).notNullable()
+    table.string('salt',255)
+    table.string('sessionToken', 16)
   })
 }
 

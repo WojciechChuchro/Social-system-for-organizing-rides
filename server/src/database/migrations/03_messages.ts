@@ -12,10 +12,10 @@ export async function up(knex: Knex): Promise<void> {
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
 
-    table.string('text')
+    table.string('text', 255)
     table.timestamp('sendTime')
     table.tinyint('wasRead')
-    table.string('profilePicture')
+    table.string('profilePicture',100)
     table.integer('userRideId')
   })
 }

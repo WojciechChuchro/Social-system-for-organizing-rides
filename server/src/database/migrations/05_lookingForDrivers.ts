@@ -17,10 +17,10 @@ export async function up(knex: Knex): Promise<void> {
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
 
-    table.string('earliestDepartureTime')
-    table.string('latestDepartureTime')
-    table.float('maxPrice')
-    table.integer('numberOfPeople')
+    table.timestamp('earliestDepartureTime')
+    table.timestamp('latestDepartureTime')
+    table.float('maxPrice',2)
+    table.integer('numberOfPeople',2)
   })
 }
 

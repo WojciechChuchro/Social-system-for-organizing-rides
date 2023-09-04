@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('notifications', (table: Knex.TableBuilder) => {
     table.increments('id')
       .primary()
-    table.string('message')
+    table.string('message', 255)
     table.tinyint('wasRead')
     table.integer('userId')
       .unsigned()

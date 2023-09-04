@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
       .onDelete('CASCADE')
     table.string('comment')
 
-    table.string('rating').notNullable()
+    table.integer('rating',1).notNullable()
   })
 }
 
