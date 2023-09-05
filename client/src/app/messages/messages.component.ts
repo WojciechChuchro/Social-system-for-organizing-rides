@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core'
 import {SocketService} from '../../services/socket.service'
 import {Reviews, UserWithReviews} from '../../types/user'
 import {AuthService} from '../../services/auth.service'
+import {UtilityService} from '../../services/utility.service'
 
 @Component({
   selector: 'app-messages',
@@ -20,30 +21,31 @@ export class MessagesComponent implements OnInit {
   reviews: Reviews[] | null = null
   averageRating: number | null = null
 
-  constructor(private socketService: SocketService, private authService: AuthService) {
+  constructor(private socketService: SocketService, private authService: AuthService, private utilityService: UtilityService) {
   }
 
   ngOnInit(): void {
-    this.authService.getDataWithJwtCookie().subscribe(
-      (response: UserWithReviews) => {
+    this.authService.getDataWithJwtCookie().subscribe({
+      next: (response: UserWithReviews) => {
         this.email = response.email
         this.name = response.name
         this.surname = response.surname
         this.phoneNumber = response.phoneNumber
         this.profilePicture = response.profilePicture
-
-        // Register the user with their email once data is available
         this.socketService.emitEvent('register', this.email)
       },
-      (error) => {
+      error: error => {
         console.error('Error:', error)
+        const errorMessage = error.error.message || 'An unknown error occurred'
+        this.utilityService.showAlert(errorMessage, 'Close', 3000)
       }
-    )
+    })
 
     this.socketService.listenForEvent('newMessage', (data: { sender: string, message: string }) => {
       this.messages.push(data)
     })
   }
+
 
   sendMessage(): void {
     if (!this.email || !this.message) {
