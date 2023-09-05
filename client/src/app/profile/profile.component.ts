@@ -5,7 +5,8 @@ import {MessageResponseOnly, profileForm, Reviews, UserWithReviews} from '../../
 import {MatSnackBar} from '@angular/material/snack-bar'
 import {AuthService} from '../../services/auth.service'
 import {UtilityService} from '../../services/utility.service'
-import { environment} from '../../environments/environment.development'
+import {environment} from '../../environments/environment.development'
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -43,8 +44,8 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.getDataWithJwtCookie().subscribe(
-      (response: UserWithReviews) => {
+    this.authService.getDataWithJwtCookie().subscribe({
+      next: (response: UserWithReviews) => {
         console.log(response)
         this.reviews = response.reviews
         this.email = response.email
@@ -54,21 +55,26 @@ export class ProfileComponent implements OnInit {
         this.profilePicture = response.profilePicture
         this.computeAverageRating()
       },
-      (error) => {
+      error: error => {
         console.error('Error:', error)
+        const errorMessage = error.error.message || 'An unknown error occurred'
+        this.utilityService.showAlert(errorMessage, 'Close', 3000)
       }
-    )
+    })
   }
 
   updateProfile(): void {
-    this.http.patch<MessageResponseOnly>(`${this.apiBaseUrl}/users/update`, this.profileForm, {withCredentials: true}).subscribe(
-      (response: MessageResponseOnly) => {
-        this.utilityService.showAlert(response.message, 'Close', 3000)  // Use the service method
-      },
-      (error) => {
-        console.log(error)
-        this.utilityService.showAlert(error.message, 'Close', 3000)  // Use the service method
-      }
-    )
+    this.http.patch<MessageResponseOnly>(`${this.apiBaseUrl}/users/update`, this.profileForm, {withCredentials: true})
+      .subscribe({
+        next: (response: MessageResponseOnly) => {
+          this.utilityService.showAlert(response.message, 'Close', 3000)  // Use the service method
+        },
+        error: error => {
+          console.log(error)
+          const errorMessage = error.error.message || 'An unknown error occurred'
+          this.utilityService.showAlert(errorMessage, 'Close', 3000)  // Use the service method
+        }
+      })
   }
+
 }
