@@ -19,17 +19,12 @@ dotenv.config()
 app.use(express.json())
 app.use(cors(corsOptions))
 app.use(cookieParser())
+
 const httpServer = app.listen(process.env.PORT || 8081, () => {
   console.log(`Server is running on port ${process.env.PORT || 8081}`)
 })
 
-const io = new Server(httpServer, {
-  cors: {
-    origin: 'http://localhost:4200',
-    methods: ['GET', 'POST'],
-    credentials: true
-  }
-})
+const io = new Server(httpServer, {cors: corsOptions})
 
 configureSocket(io)
 
