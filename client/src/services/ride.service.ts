@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core'
 import {BehaviorSubject, Observable} from 'rxjs'
 // import {Ride, UserRides} from '../types/ride'
 import {HttpClient} from '@angular/common/http'
-import {Rides, RidesResponse, UserRides} from '../types/response'
+import {Rides, RidesResponse, UserRides, UserRidesResponse} from '../types/response'
 import {map} from 'rxjs/operators'
 import {MessageResponseOnly} from '../types/user'
 import {environment} from '../environments/environment.development'
@@ -71,8 +71,7 @@ export class RideService {
     return this.http
       .get<RidesResponse>(`${this.apiBaseUrl}/get-rides`, {withCredentials: true})
       .pipe(
-        map((response: RidesResponse) => {
-          console.log('rides', response)
+        map((response) => {
           return response.rides.map((ride: Rides) => {
             ride.earliestDepartureDate = this.formatDate(
               ride.earliestDepartureTime,
@@ -94,12 +93,11 @@ export class RideService {
 
   fetchRidesAsPassenger(): Observable<UserRides[]> {
     return this.http
-      .get(`${this.apiBaseUrl}/get-rides-as-passenger`, {
+      .get<UserRidesResponse>(`${this.apiBaseUrl}/get-rides-as-passenger`, {
         withCredentials: true,
       })
       .pipe(
-        map((response: any) => {
-          console.log('UserRide: ', response)
+        map((response) => {
           return response.userRides.map((userRide: UserRides) => {
             userRide.ride.earliestDepartureDate = this.formatDate(
               userRide.ride.earliestDepartureTime
