@@ -119,18 +119,17 @@ export const createRide = async (req: Request, res: Response) => {
 }
 
 
-export const GetRidesByUserAsPassenger = async(req: Request, res: Response) => {
+export const GetRidesByUserAsPassenger = async (req: Request, res: Response) => {
   const {userId} = res.locals.jwt
-  console.log('geouuoueo')
+
   if (isNaN(userId)) {
-    return res.status(400).json({ message: 'Invalid user Id format'})
+    return res.status(400).json({message: 'Invalid user Id format'})
   }
-  
+
   try {
     const userRides = await getUserRidesByUserId(userId)
-    console.log('usserRides', userRides)
-    
-    return res.status(200).json({userRides: userRides})
+
+    return res.status(200).json({userRides})
   } catch (error) {
     console.error('Error', error)
     return res.status(500).json({message: 'Internal server error'})
@@ -139,14 +138,14 @@ export const GetRidesByUserAsPassenger = async(req: Request, res: Response) => {
 
 export const getRidesByUser = async (req: Request, res: Response) => {
   const {userId} = res.locals.jwt
-  // Ensure userId is a valid number
+
   if (isNaN(userId)) {
     return res.status(400).json({message: 'Invalid user ID format'})
   }
 
   try {
     const rides = await getRidesByUserId(userId)
-    
+
 
     if (rides.length === 0) {
       return res.status(404).json({message: 'No rides found for this user.'})
@@ -193,14 +192,14 @@ export const acceptRide = async (req: Request, res: Response) => {
     }
     const newStatus: StatusesInterface = await Statuses.query().insertAndFetch({isAccepted: 0}) // Assuming false represents a ride not accepted yet
 
-    const newRideRequest = await userRides.query().insert({
+    await userRides.query().insert({
       userId: parsedUserId,
       rideId: parsedRideId,
       statusId: newStatus.id,
       lookingForDriverId: null
     })
 
-    res.status(201).json({message: 'Ride request added successfully!', data: newRideRequest})
+    res.status(201).json({message: 'Ride request added successfully!'})
   } catch (error) {
     console.error(error)
     res.status(500).json({message: 'Error inserting ride request.'})

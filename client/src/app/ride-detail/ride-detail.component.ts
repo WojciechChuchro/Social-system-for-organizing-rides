@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core'
 import {RideService} from '../../services/ride.service'
-import {Ride} from '../../types/ride'
 import {UtilityService} from '../../services/utility.service'
+import {Rides} from '../../types/response'
 
 @Component({
   selector: 'app-ride-detail',
@@ -9,7 +9,7 @@ import {UtilityService} from '../../services/utility.service'
   styleUrls: ['./ride-detail.component.scss']
 })
 export class RideDetailComponent implements OnInit {
-  ride: Ride | undefined
+  ride: Rides | undefined
 
   constructor(private rideSharingService: RideService, private utilityService: UtilityService) {
   }
@@ -17,13 +17,17 @@ export class RideDetailComponent implements OnInit {
   ngOnInit(): void {
     this.rideSharingService.currentRide.subscribe(ride => this.ride = ride)
   }
+
   reserveRide(): void {
     if (this.ride) {
       this.rideSharingService.reserveRide(this.ride.id)
-        .subscribe(response => {
-          this.utilityService.showAlert(response.message, 'Close', 3000);
-        }, error => {
-          this.utilityService.showAlert(error.message, 'Close', 3000);
+        .subscribe({
+          next: response => {
+            this.utilityService.showAlert(response.message, 'Close', 3000)
+          },
+          error: error => {
+            this.utilityService.showAlert(error.message, 'Close', 3000)
+          }
         })
     }
   }

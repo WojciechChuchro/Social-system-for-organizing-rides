@@ -1,83 +1,18 @@
 import {Injectable} from '@angular/core'
 import {BehaviorSubject, Observable} from 'rxjs'
-import {Ride} from '../types/ride'
+// import {Ride, UserRides} from '../types/ride'
 import {HttpClient} from '@angular/common/http'
-import {Rides, RidesResponse} from '../types/response'
+import {Rides, RidesResponse, UserRides} from '../types/response'
 import {map} from 'rxjs/operators'
 import {MessageResponseOnly} from '../types/user'
 import {environment} from '../environments/environment.development'
-
-// todo ogarnac typy
-export interface UserRides2 {
-  id: number;
-  userId: number;
-  lookingForDriverId: number;
-  rideId: number;
-  StatusId: number;
-  driverId: number;
-  startAddressId: number;
-  destinationAddressId: number;
-  earliestDepartureTime: string;
-  latestDepartureTime: string;
-  pricePerPerson: number;
-  seatsNumber: number;
-  registrationNumber: string;
-  user: Users;
-  ride: Rides2;
-  lookingForDriver: LookingForDrivers;
-  status: Statuses;
-}
-
-export interface Rides2 {
-  id: number;
-  driverId: number;
-  startAddressId: number;
-  destinationAddressId: number;
-  earliestDepartureTime: string;
-  latestDepartureTime: string;
-  pricePerPerson: number;
-  seatsNumber: number;
-  registrationNumber: string;
-  // These fields are not in the original data but are calculated later
-  earliestDepartureDate?: string;
-  latestDepartureDate?: string;
-  duration?: string;
-}
-
-export interface Users {
-  id: number;
-  modelId: number;
-  email: string;
-  name: string;
-  surname: string;
-  phoneNumber: string;
-  profilePicture: any; // Change 'any' to appropriate type
-  password: string;
-  salt: string;
-  sessionToken: string;
-}
-
-export interface LookingForDrivers {
-  id: number;
-  startAddressId: number;
-  destinationAddressId: number;
-  earliestDepartureTime: string;
-  latestDepartureTime: string;
-  maxPrice: number;
-  numberOfPeople: number;
-}
-
-export interface Statuses {
-  id: number;
-  isAccepted: number;
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class RideService {
   private apiBaseUrl: string
-  private rideSource = new BehaviorSubject<Ride | undefined>(undefined)
+  private rideSource = new BehaviorSubject<Rides | undefined>(undefined)
   currentRide = this.rideSource.asObservable()
 
   constructor(private http: HttpClient) {
@@ -124,7 +59,7 @@ export class RideService {
     return durationStr
   }
 
-  changeRide(ride: Ride | undefined): void {
+  changeRide(ride: Rides | undefined): void {
     this.rideSource.next(ride)
   }
 
@@ -134,11 +69,10 @@ export class RideService {
 
   fetchRides(): Observable<Rides[]> {
     return this.http
-      .get<RidesResponse>(`${this.apiBaseUrl}/get-rides`, {
-        withCredentials: true,
-      })
+      .get<RidesResponse>(`${this.apiBaseUrl}/get-rides`, {withCredentials: true})
       .pipe(
         map((response: RidesResponse) => {
+          console.log('rides', response)
           return response.rides.map((ride: Rides) => {
             ride.earliestDepartureDate = this.formatDate(
               ride.earliestDepartureTime,
@@ -158,16 +92,15 @@ export class RideService {
       )
   }
 
-  fetchRidesAsPassenger(): Observable<UserRides2[]> {
+  fetchRidesAsPassenger(): Observable<UserRides[]> {
     return this.http
-      .get<UserRides2[]>(`${this.apiBaseUrl}/get-rides-as-passenger`, {
+      .get(`${this.apiBaseUrl}/get-rides-as-passenger`, {
         withCredentials: true,
       })
       .pipe(
         map((response: any) => {
-          console.log(response)
-          return response.userRides.map((userRide: UserRides2) => {
-            console.log('ride: ', userRide)
+          console.log('UserRide: ', response)
+          return response.userRides.map((userRide: UserRides) => {
             userRide.ride.earliestDepartureDate = this.formatDate(
               userRide.ride.earliestDepartureTime
             )

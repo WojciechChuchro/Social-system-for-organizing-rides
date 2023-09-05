@@ -2,11 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core'
 import {SearchService} from '../../services/search.service'
 import {Router} from '@angular/router'
 import {RideService} from '../../services/ride.service'
-import {RidesResponse} from '../../types/response'
-import {Ride} from '../../types/ride'
-
-
-
+import {Rides, RidesResponse} from '../../types/response'
 
 @Component({
   selector: 'app-search',
@@ -14,7 +10,7 @@ import {Ride} from '../../types/ride'
   styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
-  rides: Ride[] = []
+  rides: Rides[] = []
   userIds: number[] = []
   // searchTerm: string = 'eao';
   loading: boolean = false
@@ -33,7 +29,7 @@ export class SearchComponent implements OnInit {
   }
 
   onRideClick(rideId: number): void {
-    const ride: Ride | undefined = this.rides.find(r => r.id === rideId)
+    const ride: Rides | undefined = this.rides.find(r => r.id === rideId)
     if (!ride) {
       return
     }
@@ -59,7 +55,7 @@ export class SearchComponent implements OnInit {
   fetchRides():void {
     this.search.getAllRides().subscribe({
       next: (response: RidesResponse) => {
-        this.rides = response.rides.map((ride: Ride) => {
+        this.rides = response.rides.map((ride: Rides) => {
           // Format the date strings in each ride object
           ride.earliestDepartureTime = this.formatDate(ride.earliestDepartureTime)
           ride.latestDepartureTime = this.formatDate(ride.latestDepartureTime)
