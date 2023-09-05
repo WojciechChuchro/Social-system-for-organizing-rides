@@ -15,15 +15,7 @@ export class YourRidesComponent implements OnInit {
   rides: Rides[] = []
   ridesPassangers: UserRides[] = []
 
-  constructor(private http: HttpClient, private rideService: RideService, private snackBar: MatSnackBar, private utilityService: UtilityService) {
-  }
-
-  // showAlert(message: string, action: string, duration: number): void {
-  //   this.snackBar.open(message, action, {
-  //     duration: duration,
-  //   })
-  // }
-
+  constructor(private http: HttpClient, private rideService: RideService, private snackBar: MatSnackBar, private utilityService: UtilityService) {}
   ngOnInit(): void {
     this.fetchAllRides()
   }
