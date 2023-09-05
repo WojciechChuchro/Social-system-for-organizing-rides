@@ -81,7 +81,7 @@ export interface User {
   name: string;
   surname: string;
   phoneNumber: string;
-  profilePicture: string; // Change 'any' to appropriate type
+  profilePicture: string;
   password: string;
   salt: string;
   sessionToken: string;
@@ -100,22 +100,12 @@ export interface Status {
   isAccepted: number;
 }
 
-// Your existing interfaces adjusted for the new structure
-// export interface UserRides {
-//   id: number;
-//   userId: number;
-//   rideId: number;
-//   lookingForDriverId?: number | null; // Since it can be null
-//   statusId: number;
-//   user: Users;
-//   status: Status;
-// }
-
-
 export interface RidesResponse {
   rides: Rides[];
 }
-
+export interface UserRidesResponse {
+  userRides: UserRides[];
+}
 export interface UsersResponse {
   users: Users[];
 }
