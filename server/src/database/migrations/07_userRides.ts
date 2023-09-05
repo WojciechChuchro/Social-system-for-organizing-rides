@@ -23,7 +23,7 @@ export async function up(knex: Knex): Promise<void> {
       .inTable('rides')
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
-    table.integer('StatusId')
+    table.integer('statusId')
       .unsigned()
       .references('id')
       .inTable('statuses')
