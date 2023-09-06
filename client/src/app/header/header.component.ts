@@ -6,6 +6,7 @@ import {CookieService} from 'ngx-cookie-service'
 import {HttpClient} from '@angular/common/http'
 import {Router} from '@angular/router'
 import {AuthService} from '../../services/auth.service'
+import {UtilityService} from '../../services/utility.service'
 
 @Component({
   selector: 'app-header',
@@ -25,8 +26,9 @@ export class HeaderComponent implements OnInit {
   constructor(private http: HttpClient,
     private cookieService: CookieService,
     private cdRef: ChangeDetectorRef,
-    private authService: AuthService,  // add this
-    private router: Router  // add this
+    private authService: AuthService,
+    private router: Router,
+    private utilityService: UtilityService
   ) {
   }
 
@@ -40,7 +42,8 @@ export class HeaderComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error during token validation:', error)
+        const errorMessage = error.error.message || 'An unknown error occurred'
+        this.utilityService.showAlert(errorMessage, 'Close', 3000)
         this.authService.setLoginStatus(false)
       }
     })
@@ -59,7 +62,8 @@ export class HeaderComponent implements OnInit {
       }
       ,
       error: (error) => {
-        console.error('Error during logout:', error)
+        const errorMessage = error.error.message || 'An unknown error occurred'
+        this.utilityService.showAlert(errorMessage, 'Close', 3000)
       }
     })
   }
