@@ -2,8 +2,6 @@ import {Knex} from 'knex'
 import { faker } from '@faker-js/faker'
 
 export async function seed(knex: Knex): Promise<void> {
-  await knex('streets').del()
-
   const streets = []
   const numberOfStreets = 10
 
@@ -15,6 +13,7 @@ export async function seed(knex: Knex): Promise<void> {
       cityId: existingCitiesIds[faker.number.int({min: 0, max: 9})],
     })
   }
+
   await knex('streets').del()
   await knex('streets').insert(streets)
 }
