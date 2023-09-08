@@ -5,12 +5,9 @@ export async function seed(knex: Knex): Promise<void> {
   const cities = []
   const numberOfCities = 10
 
-  const existingCountriesIds = await knex('countries').pluck('id')
-
   for (let i = 0; i < numberOfCities; i++) {
     cities.push({
       cityName: faker.location.city(),
-      countryId: existingCountriesIds[faker.number.int({min: 0, max: 9})],
     })
   }
 

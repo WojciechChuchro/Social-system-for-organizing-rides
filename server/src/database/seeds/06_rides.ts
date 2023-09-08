@@ -1,6 +1,6 @@
 import {Knex} from 'knex'
 import {faker} from '@faker-js/faker'
-import {generatePolishCarRegistration, getFormattedDate} from '../fakerHelpers'
+import {getFormattedDate} from '../fakerHelpers'
 
 export async function seed(knex: Knex): Promise<void> {
   const rides = []
@@ -17,7 +17,6 @@ export async function seed(knex: Knex): Promise<void> {
       earliestDepartureTime: getFormattedDate(),
       latestDepartureTime: getFormattedDate(),
       seatsNumber: faker.number.int({min: 1, max: 4}),
-      registrationNumber: generatePolishCarRegistration(),
       pricePerPerson: faker.number.float({min: 0, max: 100}),
     })
   }
