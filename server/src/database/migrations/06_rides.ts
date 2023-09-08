@@ -2,7 +2,7 @@ import {Knex} from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('rides', (table: Knex.TableBuilder) => {
-    table.increments('id').primary()
+    table.increments('id').unsigned().primary().notNullable()
     table.integer('driverId')
       .unsigned()
       .notNullable()
@@ -10,6 +10,7 @@ export async function up(knex: Knex): Promise<void> {
       .inTable('users')
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
+      .notNullable()
     table.integer('startAddressId')
       .unsigned()
       .notNullable()
@@ -17,6 +18,7 @@ export async function up(knex: Knex): Promise<void> {
       .inTable('addresses')
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
+      .notNullable()
     table.integer('destinationAddressId')
       .unsigned()
       .notNullable()
@@ -24,17 +26,14 @@ export async function up(knex: Knex): Promise<void> {
       .inTable('addresses')
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
-
-
-    table.timestamp('earliestDepartureTime')
-    table.timestamp('latestDepartureTime')
-    table.float('pricePerPerson',2)
-    table.integer('seatsNumber')
-    table.string('registrationNumber', 8)
-
+      .notNullable()
+    table.timestamp('earliestDepartureTime').notNullable()
+    table.timestamp('latestDepartureTime').notNullable()
+    table.float('pricePerPerson', 8, 2).notNullable()
+    table.integer('seatsNumber').notNullable()
+    table.string('registrationNumber', 9).notNullable()
   })
 }
-
 export async function down(knex: Knex): Promise<void> {
   return knex.schema.dropTable('rides')
 }
