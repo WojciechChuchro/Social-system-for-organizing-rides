@@ -31,7 +31,6 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamp('latestDepartureTime').notNullable()
     table.float('pricePerPerson', 8, 2).notNullable()
     table.integer('seatsNumber').notNullable()
-    table.string('registrationNumber', 9).notNullable()
   })
 }
 export async function down(knex: Knex): Promise<void> {

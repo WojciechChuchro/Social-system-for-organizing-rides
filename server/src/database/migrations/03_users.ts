@@ -3,10 +3,10 @@ import {Knex} from 'knex'
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('users', (table: Knex.TableBuilder) => {
     table.increments('id').unsigned().primary().notNullable()
-    table.integer('modelId')
+    table.integer('carId')
       .unsigned()
       .references('id')
-      .inTable('models')
+      .inTable('cars')
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
     table.string('email', 50).notNullable().unique()
