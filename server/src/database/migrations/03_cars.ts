@@ -11,6 +11,7 @@ export async function up(knex: Knex): Promise<void> {
       .onDelete('CASCADE')
       .notNullable()
     table.string('registrationNumber', 9).notNullable()
+    table.string('color', 25).notNullable()
   })
 }
 export async function down(knex: Knex): Promise<void> {

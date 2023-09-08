@@ -12,6 +12,7 @@ export async function seed(knex: Knex): Promise<void> {
     cars.push({
       modelId: existingModelsIds[faker.number.int({min: 0, max: 9})],
       registrationNumber: generatePolishCarRegistration(),
+      color: faker.color.human()
     })
   }
 
