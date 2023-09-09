@@ -9,7 +9,7 @@ Model.knex(knex)
 
 class Users extends Model {
   id!: number
-  carId?: number
+  carId?: number | null
   email!: string
   name!: string
   surname!: string
@@ -22,10 +22,10 @@ class Users extends Model {
 
   static get UserSchema() {
     return {
-      required: ['id', 'modelId', 'email', 'name', 'surname', 'phoneNumber', 'profilePicture', 'password', 'sessionToken', 'salt'],
+      required: ['id', 'email', 'name', 'surname', 'phoneNumber', 'profilePicture', 'password', 'sessionToken', 'salt'],
       properties: {
         id: {type: 'integer'},
-        carId: {type: 'integer'},
+        carId: {type: ['integer', 'null']},
         email: {type: 'string', length: 50},
         name: {type: 'string', length: 20},
         surname: {type: 'string', length: 30},
