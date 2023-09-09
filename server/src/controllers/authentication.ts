@@ -2,6 +2,7 @@ import express, {Request, Response} from 'express'
 import Users from '../database/models/users.model'
 import {authentication, generateSessionToken, random} from '../helpers'
 import jwt from 'jsonwebtoken'
+import {NewUser} from '../types/model'
 
 export const login = async (req: express.Request, res: express.Response) => {
   try {
@@ -25,13 +26,13 @@ export const login = async (req: express.Request, res: express.Response) => {
       console.error('Error updating session token:', error)
       return res.status(500).send({message: 'Internal server error'})
     }
-    // Set the cookie
+
     res.cookie('JsonWebToken', sessionToken, {
       httpOnly: true,
-      secure: true,  // secure: true only in production, assuming you're not using HTTPS in development
-      sameSite: 'none',  // 'lax' or 'strict' depending on your needs
+      secure: true,
+      sameSite: 'none',
       domain: 'localhost',
-      path: '/' // makes it available for the entire domain
+      path: '/'
     })
 
 
@@ -41,7 +42,6 @@ export const login = async (req: express.Request, res: express.Response) => {
     return res.sendStatus(400)
   }
 }
-
 
 export const register = async (req: express.Request, res: express.Response) => {
   try {
@@ -54,16 +54,18 @@ export const register = async (req: express.Request, res: express.Response) => {
     }
 
     const salt = random()
+
+    const newUser: NewUser = {
+      name,
+      surname,
+      phoneNumber,
+      email,
+      password,
+      salt,
+    }
+
     try {
-      await Users.createUser({
-        name,
-        surname,
-        phoneNumber,
-        email,
-        password,
-        salt,
-        modelId: 1,
-      })
+      await Users.createUser(newUser)
 
       return res.status(200).json({message: 'Register success'})
     } catch (error) {
@@ -104,13 +106,7 @@ export const validateJWT = (
 }
 
 export const logout = async (req: express.Request, res: express.Response): Promise<express.Response> => {
-  // Invalidate the JWT by setting the cookie expiration to a past date.
   res.cookie('JsonWebToken', '', {expires: new Date(0), httpOnly: true, secure: true})
-
-  // Optionally, if you're using a session-based approach, you can destroy the session.
-  // if (req.session) req.session.destroy(err => {/* handle error if needed */});
-
-  // Send a success response
   return res.status(200).json({message: 'Logged out successfully'})
 }
 
