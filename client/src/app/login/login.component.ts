@@ -1,8 +1,8 @@
 import {Component} from '@angular/core'
 import {AuthService} from '../../services/auth.service'
 import {LoginForm} from 'src/types/user'
-import {MatSnackBar} from '@angular/material/snack-bar'
 import {Router} from '@angular/router'
+import {UtilityService} from '../../services/utility.service'
 
 
 @Component({
@@ -12,8 +12,8 @@ import {Router} from '@angular/router'
 })
 export class LoginComponent {
   loginForm: LoginForm = {
-    email: '', // Initialize with empty string
-    password: '', // Initialize with empty string
+    email: '',
+    password: '',
   }
   hidePassword: boolean = true
   loading: boolean = false
@@ -21,30 +21,23 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private snackBar: MatSnackBar,
-
+    private utilityService: UtilityService,
   ) {
   }
-
-  showAlert(message: string, action: string, duration: number): void {
-    this.snackBar.open(message, action, {
-      duration: duration,
-    })
-  }
-
 
   handleLogin(): void {
     this.loading = true
     this.authService.login(this.loginForm).subscribe({
       next: (response) => {
-        this.showAlert(response.message, 'Close', 3000)
+        this.utilityService.showAlert(response.message, 'Close', 3000)
         this.authService.setLoginStatus(true)
         this.loading = false
         this.router.navigate(['/about-us'])
       },
       error: (error) => {
         this.loading = false
-        this.showAlert(error.message, 'Close', 3000)
+        const errorMessage = error.error.message || 'An unknown error occurred'
+        this.utilityService.showAlert(errorMessage, 'Close', 3000)
       },
     })
   }
