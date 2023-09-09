@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   logout(): Observable<MessageResponseOnly> {
-    return this.http.post<MessageResponseOnly>(`'${this.apiBaseUrl}/auth/logout`, {}, {withCredentials: true})
+    return this.http.get<MessageResponseOnly>(`${this.apiBaseUrl}/auth/logout`, {withCredentials: true})
   }
 
   getDataWithJwtCookie(): Observable<UserWithReviews> {
