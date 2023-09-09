@@ -18,7 +18,7 @@ export const authentication = (salt: string, password: string) => {
 
 export const generateSessionToken = (userId: string): string => {
   const payload = {userId}
-  const options = {expiresIn: '1h'} // Set the token expiration time, e.g., 1 hour
+  const options = {expiresIn: '72h'}
   return jwt.sign(payload, process.env.SECRET_KEY, options)
 }
 
@@ -26,7 +26,6 @@ export const decodeJWT = (token: string): DecodedToken | null => {
   try {
     return jwt.verify(token, process.env.SECRET_KEY) as DecodedToken
   } catch (error) {
-    // If the token is invalid or expired, an error will be thrown
     return null
   }
 }
