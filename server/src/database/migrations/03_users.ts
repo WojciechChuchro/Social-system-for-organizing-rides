@@ -13,10 +13,10 @@ export async function up(knex: Knex): Promise<void> {
     table.string('name', 20).notNullable()
     table.string('surname', 30).notNullable()
     table.string('phoneNumber', 12).notNullable().unique()
-    table.string('profilePicture', 100).nullable()
+    table.string('profilePicture', 255).nullable()
     table.string('password', 255).notNullable().notNullable()
     table.string('salt', 255).notNullable()
-    table.string('sessionToken', 16).notNullable()
+    table.string('sessionToken', 255).notNullable()
   })
 }
 export async function down(knex: Knex): Promise<void> {
