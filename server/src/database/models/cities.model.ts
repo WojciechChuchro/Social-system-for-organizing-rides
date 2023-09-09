@@ -49,8 +49,6 @@ class Cities extends Model {
 export const createStartAndDestinationCity = async (
   startCityName: string,
   destinationCityName: string,
-  startCountryId: number,
-  destinationCountryId: number
 ): Promise<CityIds> => {
   const cityIds: CityIds = {
     startCityId: -1,
@@ -58,21 +56,19 @@ export const createStartAndDestinationCity = async (
   }
 
   try {
-    // Process start city
     const existingStartCity = await Cities.query().findOne({ cityName: startCityName })
 
     if (!existingStartCity) {
-      const newStartCity = await Cities.query().insert({ cityName: startCityName, countryId: startCountryId })
+      const newStartCity = await Cities.query().insert({ cityName: startCityName })
       cityIds.startCityId = newStartCity.id
     } else {
       cityIds.startCityId = existingStartCity.id
     }
 
-    // Process destination city
     const existingDestCity = await Cities.query().findOne({ cityName: destinationCityName })
 
     if (!existingDestCity) {
-      const newDestCity = await Cities.query().insert({ cityName: destinationCityName, countryId: destinationCountryId })
+      const newDestCity = await Cities.query().insert({ cityName: destinationCityName })
       cityIds.destinationCityId = newDestCity.id
     } else {
       cityIds.destinationCityId = existingDestCity.id
