@@ -9,20 +9,16 @@ class Addresses extends Model {
   id!: number
   streetId!: number
   zipCode!: string
-  houseNumber: string
-  gpsX: number
-  gpsY: number
+  houseNumber!: string
 
   static get addresses() {
     return {
-      required: ['id', 'streetId', 'zipCode'],
+      required: ['id', 'streetId', 'zipCode', 'houseNumber'],
       properties: {
-        id: {type: 'integer'},
+        id: {type: 'integer', unsigned: true},
         streetId: {type: 'integer'},
-        houseNumber: {type: 'string'},
-        zipCode: {type: 'string'},
-        gpsX: {type: 'number'},
-        gpsY: {type: 'number'},
+        houseNumber: {type: 'string', length: 7},
+        zipCode: {type: 'string', length: 9},
       }
     }
   }
@@ -33,7 +29,7 @@ class Addresses extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: StreetModel,
         join: {
-          from: 'addresses.StreetId',
+          from: 'addresses.streetId',
           to: 'streets.id',
         },
       },

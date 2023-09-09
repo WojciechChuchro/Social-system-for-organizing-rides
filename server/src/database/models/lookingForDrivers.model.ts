@@ -4,27 +4,28 @@ import userRides from './userRides.model'
 
 Model.knex(knex)
 
+
 class LookingForDrivers extends Model {
   id!: number
   startAddressId!: number
   destinationAddressId!: number
   earliestDepartureTime!: string
-  latestDepartureTime: string
+  latestDepartureTime!: string
   maxPrice!: number
   numberOfPeople!: number
 
 
   static get lookingForDrivers() {
     return {
-      required: ['id', 'startAddressId', 'destinationAddressId', 'earliestDepartureTime', 'maxPrice', 'numberOfPeople'],
+      required: ['id', 'startAddressId', 'destinationAddressId', 'latestDepartureTime', 'maxPrice', 'numberOfPeople'],
       properties: {
         id: {type: 'integer'},
         startAddressId: {type: 'integer'},
         destinationAddressId: {type: 'integer'},
-        earliestDepartureTime: {type: 'string'},
-        latestDepartureTime: {type: 'string'},
-        maxPrice: {type: 'float'},
-        numberOfPeople: {type: 'integer'},
+        earliestDepartureTime: {type: 'date-string'},
+        latestDepartureTime: {type: 'date-string'},
+        maxPrice: {type: 'float', length: 2},
+        numberOfPeople: {type: 'integer', length: 2},
       }
     }
   }

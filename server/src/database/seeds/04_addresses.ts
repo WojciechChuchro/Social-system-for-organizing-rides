@@ -1,9 +1,8 @@
 import {Knex} from 'knex'
 import { faker } from '@faker-js/faker'
+import {generateZipCode} from '../fakerHelpers'
 
 export async function seed(knex: Knex): Promise<void> {
-  await knex('addresses').del()
-
   const addresses = []
   const numberOfStreets = 10
 
@@ -11,13 +10,12 @@ export async function seed(knex: Knex): Promise<void> {
 
   for (let i = 0; i < numberOfStreets; i++) {
     addresses.push({
-      zipCode: faker.location.zipCode(),
+      zipCode: generateZipCode(),
       houseNumber: faker.location.buildingNumber(),
-      gpsX: faker.number.int({min: 0, max:10}),
-      gpsY: faker.number.int({min: 0, max:10}),
       streetId: existingStreetsIds[faker.number.int({min: 0, max: 9})],
     })
   }
 
+  await knex('addresses').del()
   await knex('addresses').insert(addresses)
 }

@@ -2,8 +2,6 @@ import {Knex} from 'knex'
 import {faker} from '@faker-js/faker'
 
 export async function seed(knex: Knex): Promise<void> {
-  await knex('brands').del()
-
   const brands = []
   const numberOfBrands = 10
 
@@ -13,5 +11,6 @@ export async function seed(knex: Knex): Promise<void> {
     })
   }
 
+  await knex('brands').del()
   await knex('brands').insert(brands)
 }

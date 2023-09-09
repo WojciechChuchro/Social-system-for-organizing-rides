@@ -1,20 +1,20 @@
 import {Knex} from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
-  return knex.schema.createTable('addresses', (table: Knex.TableBuilder) => {
+  return knex.schema.createTable('cars', (table: Knex.TableBuilder) => {
     table.increments('id').unsigned().primary().notNullable()
-    table.integer('streetId')
+    table.integer('modelId')
       .unsigned()
       .references('id')
-      .inTable('streets')
+      .inTable('models')
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
-      .notNullable
-    table.string('zipCode', 9).notNullable
-    table.string('houseNumber', 7).notNullable
+      .notNullable()
+    table.string('registrationNumber', 9).notNullable()
+    table.string('color', 25).notNullable()
   })
 }
 export async function down(knex: Knex): Promise<void> {
-  return knex.schema.dropTable('addresses')
+  return knex.schema.dropTable('cars')
 }
 

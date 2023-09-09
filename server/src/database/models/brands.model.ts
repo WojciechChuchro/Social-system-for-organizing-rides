@@ -6,13 +6,13 @@ Model.knex(knex)
 
 class Brands extends Model {
   id!: number
-  brandName: string
+  brandName!: string
   static get models() {
     return {
-      required: ['id'],
+      required: ['id', 'brandName'],
       properties: {
         id: {type: 'integer'},
-        brandName: {type: 'string'},
+        brandName: {type: 'string', length: 15},
       }
     }
   }

@@ -2,10 +2,8 @@ import {Knex} from 'knex'
 import {faker} from '@faker-js/faker'
 
 export async function seed(knex: Knex): Promise<void> {
-  await knex('reviews').del()
   const reviews = []
   const numberOfReviews = 10
-
 
   const existingUserIds = await knex('users').pluck('id')
 
@@ -16,6 +14,7 @@ export async function seed(knex: Knex): Promise<void> {
       userId: existingUserIds[faker.number.int({min: 0, max: 9})],
     })
   }
+
   await knex('reviews').del()
   await knex('reviews').insert(reviews)
 }

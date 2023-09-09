@@ -12,13 +12,13 @@ class UserRides extends Model {
   id!: number
   userId!: number
   rideId!: number
-  lookingForDriverId!: number | null
+  lookingForDriverId?: number
   statusId!: number
 
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['userId', 'rideId', 'statusId'],
+      required: ['id', 'userId', 'rideId', 'statusId'],
       properties: {
         id: {type: 'integer'},
         userId: {type: 'integer'},
@@ -43,7 +43,6 @@ class UserRides extends Model {
           to: 'rides.id',
         },
       },
-
       user: {
         relation: Model.BelongsToOneRelation,
         modelClass: Users,
@@ -52,7 +51,6 @@ class UserRides extends Model {
           to: 'users.id',
         },
       },
-
       lookingForDriver: {
         relation: Model.BelongsToOneRelation,
         modelClass: LookingForDrivers,
@@ -61,7 +59,6 @@ class UserRides extends Model {
           to: 'lookingForDrivers.id',
         },
       },
-
       status: {
         relation: Model.BelongsToOneRelation,
         modelClass: Statuses,

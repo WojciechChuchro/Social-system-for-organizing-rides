@@ -2,14 +2,14 @@ import {Model} from 'objection'
 import knex from '../config/database'
 import Reviews from './reviews.model'
 import Messages from './messages.model'
-import Models from './models.model'
 import {authentication} from '../../helpers'
+import Cars from './cars.model'
 
 Model.knex(knex)
 
 class Users extends Model {
   id!: number
-  modelId!: number
+  carId?: number
   email!: string
   name!: string
   surname!: string
@@ -25,15 +25,15 @@ class Users extends Model {
       required: ['id', 'modelId', 'email', 'name', 'surname', 'phoneNumber', 'profilePicture', 'password', 'sessionToken', 'salt'],
       properties: {
         id: {type: 'integer'},
-        modelId: {type: 'integer'},
-        email: {type: 'string'},
-        name: {type: 'string'},
-        surname: {type: 'string'},
-        phoneNumber: {type: 'string'},
-        profilePicture: {type: 'string'},
-        password: {type: 'string'},
-        salt: {type: 'string'},
-        sessionToken: {type: 'string'},
+        carId: {type: 'integer'},
+        email: {type: 'string', length: 50},
+        name: {type: 'string', length: 20},
+        surname: {type: 'string', length: 30},
+        phoneNumber: {type: 'string', length: 12},
+        profilePicture: {type: 'string', length: 255},
+        password: {type: 'string', length: 255},
+        salt: {type: 'string', length: 255},
+        sessionToken: {type: 'string', length: 255},
       }
     }
   }
@@ -56,12 +56,12 @@ class Users extends Model {
           to: 'messages.userId'
         }
       },
-      model: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: Models,
+      cars: {
+        relation: Model.HasManyRelation,
+        modelClass: Cars,
         join: {
-          from: 'users.modelId',
-          to: 'models.id',
+          from: 'users.carId',
+          to: 'cars.id',
         },
       },
 
@@ -115,7 +115,6 @@ class Users extends Model {
     email,
     password,
     salt,
-    modelId,
   }: {
     name: string;
     surname: string;
@@ -123,7 +122,6 @@ class Users extends Model {
     email: string;
     password: string;
     salt: string;
-    modelId: number;
   }): Promise<void> {
     try {
       await Users.query().insert({
@@ -133,7 +131,7 @@ class Users extends Model {
         email,
         password: authentication(salt, password),
         salt,
-        modelId,
+        carId: null
       })
     } catch (error) {
       console.error('Error creating user:', error)

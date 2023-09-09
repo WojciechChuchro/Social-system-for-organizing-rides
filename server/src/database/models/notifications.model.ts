@@ -18,8 +18,8 @@ class Notifications
       properties: {
         id: {type: 'integer'},
         userId: {type: 'integer'},
-        message: {type: 'string'},
-        wasRead: {type: 'integer'},
+        message: {type: 'string', length: 255},
+        wasRead: {type: 'number', length: 1},
       }
     }
   }

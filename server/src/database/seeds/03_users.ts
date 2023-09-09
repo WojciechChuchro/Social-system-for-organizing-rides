@@ -5,11 +5,11 @@ export async function seed(knex: Knex): Promise<void> {
   const users = []
   const numberOfUsers = 10
 
-  const existingModelsIds = await knex('countries').pluck('id')
+  const existingCarsIds = await knex('cars').pluck('id')
 
   for (let i = 0; i < numberOfUsers; i++) {
     users.push({
-      modelId: existingModelsIds[faker.number.int({min: 0, max: 9})],
+      carId: existingCarsIds[faker.number.int({min: 0, max: 9})],
       email: faker.internet.email(),
       name: faker.person.firstName(),
       surname: faker.person.lastName(),
@@ -20,6 +20,7 @@ export async function seed(knex: Knex): Promise<void> {
       sessionToken: faker.number.int().toString(),
     })
   }
+
   await knex('users').del()
   await knex('users').insert(users)
 }

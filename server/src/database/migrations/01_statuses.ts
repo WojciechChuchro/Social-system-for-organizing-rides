@@ -2,8 +2,8 @@ import {Knex} from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('statuses', (table: Knex.TableBuilder) => {
-    table.increments('id').primary()
-    table.tinyint('isAccepted')
+    table.increments('id').unsigned().primary().notNullable()
+    table.tinyint('isAccepted').notNullable()
   })
 }
 
