@@ -56,7 +56,6 @@ export class SearchComponent implements OnInit {
     this.search.getAllRides().subscribe({
       next: (response: RidesResponse) => {
         this.rides = response.rides.map((ride: Rides) => {
-          // Format the date strings in each ride object
           ride.earliestDepartureTime = this.formatDate(ride.earliestDepartureTime)
           ride.latestDepartureTime = this.formatDate(ride.latestDepartureTime)
           return ride
