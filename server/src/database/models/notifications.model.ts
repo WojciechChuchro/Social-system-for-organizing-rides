@@ -9,7 +9,7 @@ class Notifications
   id!: number
   userId!: number
   message!: string
-  wasRead!: boolean
+  wasRead!: number
 
 
   static get reviews() {
@@ -18,8 +18,8 @@ class Notifications
       properties: {
         id: {type: 'integer'},
         userId: {type: 'integer'},
-        message: {type: 'string'},
-        wasRead: {type: 'boolean'},
+        message: {type: 'string', length: 255},
+        wasRead: {type: 'number', length: 1},
       }
     }
   }

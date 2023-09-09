@@ -1,7 +1,6 @@
 import {Model} from 'objection'
 import knex from '../config/database'
 import Users from './users.model'
-import Models from './models.model'
 import Addresses from './addresses.model'
 import UserRides from './userRides.model'
 
@@ -31,8 +30,8 @@ class Rides extends Model {
         earliestDepartureTime: {type: 'date-string'},
         latestDepartureTime: {type: 'date-string'},
         registrationNumber: {type: 'string'},
-        seatsNumber: {type: 'integer'},
-        pricePerPerson: {type: 'float'},
+        seatsNumber: {type: 'integer', length: 1},
+        pricePerPerson: {type: 'float', length: 2},
       }
     }
   }
@@ -51,19 +50,19 @@ class Rides extends Model {
           to: 'users.id',
         },
       },
-      model: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: Models,
-        join: {
-          from: 'rides.modelId',
-          to: 'models.id',
-        },
-      },
       startAddress: {
         relation: Model.HasManyRelation,
         modelClass: Addresses,
         join: {
           from: 'rides.startAddressId',
+          to: 'addresses.id',
+        },
+      },
+      destinationAddress: {
+        relation: Model.HasManyRelation,
+        modelClass: Addresses,
+        join: {
+          from: 'rides.destinationAddressId',
           to: 'addresses.id',
         },
       },
@@ -73,15 +72,6 @@ class Rides extends Model {
         join: {
           from: 'rides.id',
           to: 'userRides.rideId',
-        },
-      },
-      
-      destinationAddress: {
-        relation: Model.HasManyRelation,
-        modelClass: Addresses,
-        join: {
-          from: 'rides.destinationAddressId',
-          to: 'addresses.id',
         },
       },
     }
@@ -100,52 +90,93 @@ export async function getRidesByUserId(userId: number): Promise<Rides[]> {
   }
 }
 
-
 export const getRidesWithEveryChildrenTable = async () => {
-  return (await Rides.query()
-    .select('users.name as driverName',
-      'users.email as driverEmail',
-      'models.modelName as driverModelName',
-      'brands.brandName as driverBrandName',
-      'startAddresses.zipCode as startZipCode',
-      'startAddresses.houseNumber as startHouseNumber',
-      'startStreets.streetName as startStreetName',
-      'startCities.cityName as startCityName',
-      'startCountries.countryName as startCountryName',
-      'destinationAddresses.zipCode as destinationZipCode',
-      'destinationAddresses.houseNumber as destinationHouseNumber',
-      'destinationStreets.streetName as destinationStreetName',
-      'destinationCities.cityName as destinationCityName',
-      'destinationCountries.countryName as destinationCountryName',
-      'rides.id',
-      'rides.earliestDepartureTime',
-      'rides.latestDepartureTime',
-      'rides.pricePerPerson',
-      'rides.seatsNumber',
-      'rides.registrationNumber')
-    .join('users', 'rides.driverId', 'users.id')
-    .join('models', 'users.modelId', 'models.id')
-    .join('brands', 'models.brandId', 'brands.id')
-    .join('addresses as startAddresses', 'rides.startAddressId', 'startAddresses.id')
-    .join('streets as startStreets', 'startAddresses.streetId', 'startStreets.id')
-    .join('cities as startCities', 'startStreets.cityId', 'startCities.id')
-    .join('countries as startCountries', 'startCities.countryId', 'startCountries.id')
-    .join('addresses as destinationAddresses', 'rides.destinationAddressId', 'destinationAddresses.id')
-    .join('streets as destinationStreets', 'destinationAddresses.streetId', 'destinationStreets.id')
-    .join('cities as destinationCities', 'destinationStreets.cityId', 'destinationCities.id')
-    .join('countries as destinationCountries', 'destinationCities.countryId', 'destinationCountries.id')
-    .whereNotNull('rides.driverId')
-    .whereNotNull('rides.startAddressId')
-    .whereNotNull('rides.destinationAddressId')
-    .whereNotNull('users.modelId')
-    .whereNotNull('models.brandId')
-    .whereNotNull('startAddresses.streetId')
-    .whereNotNull('destinationAddresses.streetId')
-    .whereNotNull('startCities.id')
-    .whereNotNull('destinationCities.id')
-    .whereNotNull('startCountries.id')
-    .whereNotNull('destinationCountries.id'))
+  try {
+    return await Rides.query()
+      .select([
+        'rides.id',
+        'rides.earliestDepartureTime',
+        'rides.latestDepartureTime',
+        'rides.pricePerPerson',
+        'rides.seatsNumber',
+        'rides.registrationNumber',
+      ])
+      .withGraphFetched(
+        `
+          driver(selectColumns).[model(selectBrand).brand(selectColumns)],
+          startAddress(selectColumns).[street(selectCity).city(selectCountry).country(selectColumns)],
+          destinationAddress(selectColumns).[street(selectCity).city(selectCountry).country(selectColumns)]
+        `
+      )
+      .modifiers({
+        selectColumns(builder) {
+          builder.select('id', 'name', 'email')
+        },
+        selectBrand(builder) {
+          builder.select('id', 'modelName')
+        },
+        selectCity(builder) {
+          builder.select('id', 'cityName')
+        },
+        selectCountry(builder) {
+          builder.select('id', 'countryName')
+        },
+      })
+      .whereNotNull('rides.driverId')
+      .whereNotNull('rides.startAddressId')
+      .whereNotNull('rides.destinationAddressId')
+  } catch (error) {
+    console.error('Error fetching rides:', error)
+    throw error
+  }
 }
+
+
+// export const getRidesWithEveryChildrenTable = async () => {
+//   return (await Rides.query()
+//     .select('users.name as driverName',
+//       'users.email as driverEmail',
+//       'models.modelName as driverModelName',
+//       'brands.brandName as driverBrandName',
+//       'startAddresses.zipCode as startZipCode',
+//       'startAddresses.houseNumber as startHouseNumber',
+//       'startStreets.streetName as startStreetName',
+//       'startCities.cityName as startCityName',
+//       'startCountries.countryName as startCountryName',
+//       'destinationAddresses.zipCode as destinationZipCode',
+//       'destinationAddresses.houseNumber as destinationHouseNumber',
+//       'destinationStreets.streetName as destinationStreetName',
+//       'destinationCities.cityName as destinationCityName',
+//       'destinationCountries.countryName as destinationCountryName',
+//       'rides.id',
+//       'rides.earliestDepartureTime',
+//       'rides.latestDepartureTime',
+//       'rides.pricePerPerson',
+//       'rides.seatsNumber',
+//       'rides.registrationNumber')
+//     .join('users', 'rides.driverId', 'users.id')
+//     .join('models', 'users.modelId', 'models.id')
+//     .join('brands', 'models.brandId', 'brands.id')
+//     .join('addresses as startAddresses', 'rides.startAddressId', 'startAddresses.id')
+//     .join('streets as startStreets', 'startAddresses.streetId', 'startStreets.id')
+//     .join('cities as startCities', 'startStreets.cityId', 'startCities.id')
+//     .join('countries as startCountries', 'startCities.countryId', 'startCountries.id')
+//     .join('addresses as destinationAddresses', 'rides.destinationAddressId', 'destinationAddresses.id')
+//     .join('streets as destinationStreets', 'destinationAddresses.streetId', 'destinationStreets.id')
+//     .join('cities as destinationCities', 'destinationStreets.cityId', 'destinationCities.id')
+//     .join('countries as destinationCountries', 'destinationCities.countryId', 'destinationCountries.id')
+//     .whereNotNull('rides.driverId')
+//     .whereNotNull('rides.startAddressId')
+//     .whereNotNull('rides.destinationAddressId')
+//     .whereNotNull('users.modelId')
+//     .whereNotNull('models.brandId')
+//     .whereNotNull('startAddresses.streetId')
+//     .whereNotNull('destinationAddresses.streetId')
+//     .whereNotNull('startCities.id')
+//     .whereNotNull('destinationCities.id')
+//     .whereNotNull('startCountries.id')
+//     .whereNotNull('destinationCountries.id'))
+// }
 
 export default Rides
 

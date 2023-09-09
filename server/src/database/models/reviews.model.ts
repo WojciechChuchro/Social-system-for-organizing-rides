@@ -6,16 +6,16 @@ Model.knex(knex)
 
 class Reviews extends Model {
   id!: number
-  comment!: string
+  comment?: string
   rating!: number
   userId!: number
 
   static get reviews() {
     return {
-      required: ['id', 'comment', 'rating', 'userId'],
+      required: ['id', 'rating', 'userId'],
       properties: {
         id: {type: 'integer'},
-        comment: {type: 'string'},
+        comment: {type: 'string', length: 255},
         rating: {type: 'integer', maxValue: 5, minValue: 1},
         userId: { type: 'integer'},
       }

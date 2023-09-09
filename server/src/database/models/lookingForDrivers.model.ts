@@ -9,7 +9,7 @@ class LookingForDrivers extends Model {
   id!: number
   startAddressId!: number
   destinationAddressId!: number
-  earliestDepartureTime: string
+  earliestDepartureTime!: string
   latestDepartureTime!: string
   maxPrice!: number
   numberOfPeople!: number
@@ -24,8 +24,8 @@ class LookingForDrivers extends Model {
         destinationAddressId: {type: 'integer'},
         earliestDepartureTime: {type: 'date-string'},
         latestDepartureTime: {type: 'date-string'},
-        maxPrice: {type: 'float', },
-        numberOfPeople: {type: 'integer'},
+        maxPrice: {type: 'float', length: 2},
+        numberOfPeople: {type: 'integer', length: 2},
       }
     }
   }

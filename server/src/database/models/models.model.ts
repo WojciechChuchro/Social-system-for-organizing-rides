@@ -14,7 +14,7 @@ class Models extends Model {
       properties: {
         id: {type: 'integer'},
         BrandId: {type: 'integer'},
-        modelName: {type: 'string', length: 50},
+        modelName: {type: 'string', length: 30},
       }
     }
   }
