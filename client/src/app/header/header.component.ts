@@ -57,16 +57,14 @@ export class HeaderComponent implements OnInit {
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {
-        this.authService.setLoginStatus(false) // Set isLoggedIn to false after logout
-        this.router.navigate(['/login']) // Redirect user to login page after logout
-      }
-      ,
+        this.authService.setLoginStatus(false)
+        this.router.navigate(['/login'])
+      },
       error: (error) => {
+        console.log(error)
         const errorMessage = error.error.message || 'An unknown error occurred'
         this.utilityService.showAlert(errorMessage, 'Close', 3000)
       }
     })
   }
-
-
 }
