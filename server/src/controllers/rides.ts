@@ -2,10 +2,9 @@ import {Request, Response} from 'express'
 import Users from '../database/models/users.model'
 import Rides, {getRidesByUserId, getRidesWithEveryChildrenTable,} from '../database/models/rides.model'
 import {createStartAndDestinationAddress} from '../database/models/addresses.model'
-import {createStartAndDestinationCountry} from '../database/models/countries.model'
 import {createStartAndDestinationCity} from '../database/models/cities.model'
 import {createStartAndDestinationStreet} from '../database/models/streets.model'
-import {AddressIds, CityIds, CountryIds, StreetIds} from '../types/model'
+import {AddressIds, CityIds, StreetIds} from '../types/model'
 import userRides, {getUserRidesByUserId} from '../database/models/userRides.model'
 import Statuses from '../database/models/statuses.model'
 
@@ -21,7 +20,7 @@ export const getAllRides = async (req: Request, res: Response) => {
 
 export const getRidesWithDrivers = async (req: Request, res: Response) => {
   try {
-    const ridesData = await getRidesWithEveryChildrenTable() // Call the data function with the id
+    const ridesData = await getRidesWithEveryChildrenTable()
     return res.status(200).json({rides: ridesData})
   } catch (error) {
     console.error('Error:', error)
@@ -52,8 +51,6 @@ export const createRide = async (req: Request, res: Response) => {
       destinationHouseNumber,
       startCityName,
       destinationCityName,
-      startCountryName,
-      destinationCountryName,
       startStreetName,
       destinationStreetName,
     } = req.body
@@ -69,31 +66,25 @@ export const createRide = async (req: Request, res: Response) => {
     ) {
       return res.status(400).json({message: 'Invalid data format'})
     }
-    const countryIds: CountryIds = await createStartAndDestinationCountry(
-      startCountryName,
-      destinationCountryName
-    )
 
     const cityIds: CityIds = await createStartAndDestinationCity(
       startCityName,
       destinationCityName,
-      countryIds.startCountryId, // Provide the appropriate IDs here
-      countryIds.destinationCountryId // Provide the appropriate IDs here
     )
 
     const streetIds: StreetIds = await createStartAndDestinationStreet(
       startStreetName,
       destinationStreetName,
-      cityIds.startCityId, // Provide the appropriate IDs here
-      cityIds.destinationCityId // Provide the appropriate IDs here
+      cityIds.startCityId,
+      cityIds.destinationCityId
     )
     const addressIds: AddressIds = await createStartAndDestinationAddress(
       startZipCode,
       startHouseNumber,
       destinationZipCode,
       destinationHouseNumber,
-      streetIds.startStreetId, // Provide the appropriate IDs here
-      streetIds.destinationStreetId // Provide the appropriate IDs here
+      streetIds.startStreetId,
+      streetIds.destinationStreetId
     )
 
     const newRide = {
