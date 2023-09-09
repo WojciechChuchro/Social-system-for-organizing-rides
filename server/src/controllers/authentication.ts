@@ -23,7 +23,6 @@ export const login = async (req: express.Request, res: express.Response) => {
     try {
       await Users.updateSessionToken(user, sessionToken)
     } catch (error) {
-      console.error('Error updating session token:', error)
       return res.status(500).send({message: 'Internal server error'})
     }
 
