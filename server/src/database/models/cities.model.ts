@@ -22,14 +22,6 @@ class Cities extends Model {
   }
   static get relationMappings() {
     return {
-      country: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: Countries,
-        join: {
-          from: 'countries.countryId',
-          to: 'cities.id',
-        },
-      },
       street: {
         relation: Model.HasManyRelation,
         modelClass: Street,
