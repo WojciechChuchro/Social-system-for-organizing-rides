@@ -8,12 +8,16 @@ export interface CityIds {
   destinationCityId: number;
 }
 
-export interface CountryIds {
-  startCountryId: number;
-  destinationCountryId: number;
-}
-
 export interface StreetIds {
   startStreetId: number;
   destinationStreetId: number;
+}
+
+export interface NewUser {
+  name: string;
+  surname: string;
+  phoneNumber: string;
+  email: string;
+  password: string;
+  salt: string;
 }
