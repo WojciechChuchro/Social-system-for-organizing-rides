@@ -5,14 +5,14 @@ import userRides from './userRides.model'
 Model.knex(knex)
 
 class Statuses extends Model {
-  id: number
-  isAccepted: boolean
+  id!: number
+  isAccepted!: number
   static get statuses() {
     return {
-      required: ['isAccepted'],
+      required: ['id', 'isAccepted'],
       properties: {
         id: {type: 'integer'},
-        isAccepted: {type: 'boolean'},
+        isAccepted: {type: 'number', length: 1},
       }
     }
   }

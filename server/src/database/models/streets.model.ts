@@ -1,6 +1,6 @@
 import {Model} from 'objection'
 import knex from '../config/database'
-import Countries from './countries.model'
+import Countries from './cars.model'
 import Addresses from './addresses.model'
 import {StreetIds} from '../../types/model'
 
