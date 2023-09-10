@@ -82,7 +82,7 @@ export async function getRidesByUserId(userId: number): Promise<Rides[]> {
   try {
     return await Rides.query()
       .where('driverId', userId)
-      .withGraphFetched('[driver, model, startAddress, destinationAddress, userRides.[user, status]]')
+      .withGraphFetched('[driver, startAddress, destinationAddress, userRides.[user, status]]')
       .orderBy('earliestDepartureTime')
   } catch (error) {
     console.error('Error fetching rides:', error)
@@ -98,30 +98,31 @@ export const getRidesWithEveryChildrenTable = async () => {
         'rides.earliestDepartureTime',
         'rides.latestDepartureTime',
         'rides.pricePerPerson',
-        'rides.seatsNumber',
-        'rides.registrationNumber',
+        'rides.seatsNumber'
       ])
       .withGraphFetched(
         `
-          driver(selectColumns).[model(selectBrand).brand(selectColumns)],
-          startAddress(selectColumns).[street(selectCity).city(selectCountry).country(selectColumns)],
-          destinationAddress(selectColumns).[street(selectCity).city(selectCountry).country(selectColumns)]
-        `
+               [driver.[cars.[models.[brands]]], startAddress.[street.[city]], destinationAddress.[street.[city]]]
+               `
+
       )
-      .modifiers({
-        selectColumns(builder) {
-          builder.select('id', 'name', 'email')
-        },
-        selectBrand(builder) {
-          builder.select('id', 'modelName')
-        },
-        selectCity(builder) {
-          builder.select('id', 'cityName')
-        },
-        selectCountry(builder) {
-          builder.select('id', 'countryName')
-        },
-      })
+      // .modifiers({
+      //   selectColumns(builder) {
+      //     builder.select('id', 'name', 'email')
+      //   },
+      //   selectBrand(builder) {
+      //     builder.select('id', 'modelName')
+      //   },
+      //   selectModel(builder) {
+      //     builder.select('id', 'modelName')
+      //   },
+      //   selectCars(builder) {
+      //     builder.select('id', 'registrationNumber', 'color')
+      //   },
+      //   selectCity(builder) {
+      //     builder.select('id', 'cityName')
+      //   }
+      // })
       .whereNotNull('rides.driverId')
       .whereNotNull('rides.startAddressId')
       .whereNotNull('rides.destinationAddressId')
