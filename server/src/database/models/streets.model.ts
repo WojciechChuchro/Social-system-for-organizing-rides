@@ -1,8 +1,8 @@
 import {Model} from 'objection'
 import knex from '../config/database'
-import Countries from './cars.model'
 import Addresses from './addresses.model'
 import {StreetIds} from '../../types/model'
+import Cities from './cities.model'
 
 Model.knex(knex)
 
@@ -26,10 +26,10 @@ class Streets extends Model {
     return {
       city: {
         relation: Model.BelongsToOneRelation,
-        modelClass: Countries,
+        modelClass: Cities,
         join: {
-          from: 'streets.CityId',
-          to: 'countries.id',
+          from: 'streets.cityId',
+          to: 'cities.id',
         },
       },
       address: {
