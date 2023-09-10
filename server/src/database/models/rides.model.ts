@@ -51,7 +51,7 @@ class Rides extends Model {
         },
       },
       startAddress: {
-        relation: Model.HasManyRelation,
+        relation: Model.BelongsToOneRelation,
         modelClass: Addresses,
         join: {
           from: 'rides.startAddressId',
@@ -59,7 +59,7 @@ class Rides extends Model {
         },
       },
       destinationAddress: {
-        relation: Model.HasManyRelation,
+        relation: Model.BelongsToOneRelation,
         modelClass: Addresses,
         join: {
           from: 'rides.destinationAddressId',
@@ -82,7 +82,7 @@ export async function getRidesByUserId(userId: number): Promise<Rides[]> {
   try {
     return await Rides.query()
       .where('driverId', userId)
-      .withGraphFetched('[driver, startAddress, destinationAddress, userRides.[user, status]]')
+      .withGraphFetched('[driver, startAddress.[street.[city]], destinationAddress.[street.[city]], userRides.[user, status]]')
       .orderBy('earliestDepartureTime')
   } catch (error) {
     console.error('Error fetching rides:', error)
@@ -102,7 +102,10 @@ export const getRidesWithEveryChildrenTable = async () => {
       ])
       .withGraphFetched(
         `
-               [driver.[cars.[models.[brands]]], startAddress.[street.[city]], destinationAddress.[street.[city]]]
+               [
+               driver.[cars.[models.[brands]]], startAddress.[street.[city]], 
+               destinationAddress.[street.[city]]
+               ]
                `
 
       )

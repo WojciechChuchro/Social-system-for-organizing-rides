@@ -2,8 +2,7 @@ import {Injectable} from '@angular/core'
 import {BehaviorSubject, Observable} from 'rxjs'
 // import {Ride, UserRides} from '../types/ride'
 import {HttpClient} from '@angular/common/http'
-import {Rides, RidesResponse, UserRides, UserRidesResponse} from '../types/response'
-import {map} from 'rxjs/operators'
+import {Rides, RidesResponse, UserRidesResponse} from '../types/response'
 import {MessageResponseOnly} from '../types/user'
 import {environment} from '../environments/environment.development'
 
@@ -31,10 +30,10 @@ export class RideService {
     return date.toLocaleDateString('en-GB', options)
   }
 
-  formatTime(dateTime: string): string {
-    const timePart = dateTime.split(' ')[1] // Get the time part
-    return timePart.slice(0, 5) // Remove seconds
-  }
+  // formatTime(dateTime: string): string {
+  //   const timePart = dateTime.split(' ')[1] // Get the time part
+  //   return timePart.slice(0, 5) // Remove seconds
+  // }
 
   calculateDuration(startTime: string, endTime: string): string {
     const start = new Date(startTime)
@@ -67,59 +66,19 @@ export class RideService {
     return this.http.post<MessageResponseOnly>(`${this.apiBaseUrl}/accept-ride`, {rideId}, {withCredentials: true})
   }
 
-  fetchRides(): Observable<Rides[]> {
-    return this.http
-      .get<RidesResponse>(`${this.apiBaseUrl}/get-rides`, {withCredentials: true})
-      .pipe(
-        map((response) => {
-          return response.rides.map((ride: Rides) => {
-            ride.earliestDepartureDate = this.formatDate(
-              ride.earliestDepartureTime,
-            )
-            ride.latestDepartureDate = this.formatDate(ride.latestDepartureTime)
-            ride.earliestDepartureTime = this.formatTime(
-              ride.earliestDepartureTime,
-            )
-            ride.latestDepartureTime = this.formatTime(ride.latestDepartureTime)
-            ride.duration = this.calculateDuration(
-              ride.earliestDepartureDate + ' ' + ride.earliestDepartureTime,
-              ride.latestDepartureDate + ' ' + ride.latestDepartureTime,
-            )
-            return ride
-          })
-        }),
-      )
+  fetchRides(): Observable<RidesResponse> {
+    return this.http.get<RidesResponse>(`${this.apiBaseUrl}/get-rides`, {
+      withCredentials: true,
+    })
   }
 
-  fetchRidesAsPassenger(): Observable<UserRides[]> {
-    return this.http
-      .get<UserRidesResponse>(`${this.apiBaseUrl}/get-rides-as-passenger`, {
-        withCredentials: true,
-      })
-      .pipe(
-        map((response) => {
-          return response.userRides.map((userRide: UserRides) => {
-            userRide.ride.earliestDepartureDate = this.formatDate(
-              userRide.ride.earliestDepartureTime
-            )
-            userRide.ride.latestDepartureDate = this.formatDate(
-              userRide.ride.latestDepartureTime
-            )
-            userRide.ride.earliestDepartureTime = this.formatTime(
-              userRide.ride.earliestDepartureTime
-            )
-            userRide.ride.latestDepartureTime = this.formatTime(
-              userRide.ride.latestDepartureTime
-            )
-            userRide.ride.duration = this.calculateDuration(
-              userRide.ride.earliestDepartureDate + ' ' + userRide.ride.earliestDepartureTime,
-              userRide.ride.latestDepartureDate + ' ' + userRide.ride.latestDepartureTime
-            )
-            return userRide
-          })
-        })
-      )
+
+  fetchRidesAsPassenger(): Observable<UserRidesResponse> {
+    return this.http.get<UserRidesResponse>(`${this.apiBaseUrl}/get-rides-as-passenger`, {
+      withCredentials: true,
+    })
   }
+
 
   deleteUser(statusId: number): Observable<MessageResponseOnly> {
     return this.http.post<MessageResponseOnly>(`${this.apiBaseUrl}/delete`, {statusId}, {
