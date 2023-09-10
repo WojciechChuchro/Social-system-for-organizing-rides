@@ -1,6 +1,7 @@
 import {Model} from 'objection'
 import knex from '../config/database'
-import Cities from './cities.model'
+import Models from './models.model'
+import Users from './users.model'
 
 Model.knex(knex)
 
@@ -25,11 +26,19 @@ class Cars extends Model {
   static get relationMappings() {
     return {
       users: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: Cities,
+        relation: Model.HasManyRelation,
+        modelClass: Users,
         join: {
           from: 'cars.id',
-          to: 'users.id'
+          to: 'users.carId',
+        },
+      },
+      models: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Models,
+        join: {
+          from: 'cars.modelId',
+          to: 'models.id',
         },
       },
     }
@@ -39,7 +48,6 @@ class Cars extends Model {
     return 'cars'
   }
 }
-
 
 
 // export const createStartAndDestinationCountry = async (
