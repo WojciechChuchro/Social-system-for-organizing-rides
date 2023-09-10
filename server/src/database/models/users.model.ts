@@ -4,6 +4,7 @@ import Reviews from './reviews.model'
 import Messages from './messages.model'
 import {authentication} from '../../helpers'
 import Cars from './cars.model'
+import Rides from './rides.model'
 
 Model.knex(knex)
 
@@ -64,7 +65,14 @@ class Users extends Model {
           to: 'cars.id',
         },
       },
-
+      rides: {
+        relation: Model.HasManyRelation,
+        modelClass: Rides,
+        join: {
+          from: 'users.id',
+          to: 'rides.driverId',
+        },
+      },
     }
   }
 
