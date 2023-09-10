@@ -7,10 +7,20 @@ export interface TokenValidationResponse {
 
 export interface Address {
   zipCode: string;
+  id: number;
+  street: Street
   houseNumber: string;
-  streetName: string;
-  cityName: string;
-  countryName: string;
+}
+
+export interface Street {
+  city: City
+  id: number;
+  streetName: string
+}
+
+export interface City {
+  id: number;
+  cityName: string
 }
 
 export interface TimeWindow {
@@ -39,10 +49,7 @@ export interface Ride extends TimeWindow {
 
 export interface Rides extends TimeWindow {
   id: number;
-  driverName: string;
-  driverEmail: string;
-  driverModelName: string;
-  driverBrandName: string;
+  driver: User;
   startAddress: Address;
   destinationAddress: Address;
   pricePerPerson: number;
@@ -76,7 +83,7 @@ export interface UserRidesResponse {
 
 export interface User {
   id: number;
-  modelId: number;
+  carId: number;
   email: string;
   name: string;
   surname: string;
