@@ -6,46 +6,42 @@
 
 <mat-card *ngIf="rides.length != 0">
     <mat-card-content>
-        Ride where you are a driver
+        Rides where you are a driver
     </mat-card-content>
 </mat-card>
+
 <mat-card *ngFor="let ride of rides">
     <mat-card-content>
-        <div class="ride-detail">
-            <h3><strong>Departure Date:</strong></h3>
-            <p>{{ ride.earliestDepartureDate }} - {{ ride.latestDepartureDate }}</p>
-        </div>
-        <div class="ride-detail">
-            <h3><strong>Departure Time:</strong></h3>
-            <p>{{ ride.earliestDepartureTime }} - {{ ride.latestDepartureTime }}</p>
-        </div>
-        <div class="ride-detail">
-            <h3><strong>Ride Duration:</strong></h3>
-            <p>Ride will take: {{ ride.duration }}</p>
-        </div>
-        <div *ngIf="ride.userRides && ride.userRides.length > 0" class="users-in-ride">
+        <div class="grid-container">
+            <div class="grid-item-label">Start Date:</div>
+            <div class="grid-item date">{{ride.earliestDepartureTime | date:'dd/MM/yyyy, h:mm a'}}</div>
 
-            <!-- Section for accepted passengers -->
-            <h4><strong>Passengers Who Drive:</strong></h4>
-            <div *ngFor="let userRide of ride.userRides">
-                <div class="user-detail" *ngIf="userRide.status.isAccepted === 1">
-                    <p>{{ userRide.user.name }} {{ userRide.user.surname }}</p>
-                    <button mat-button color="warn" (click)="deleteUser(userRide.statusId)">Delete</button>
+            <div class="grid-item-label">Start Address:</div>
+            <div class="grid-item address">{{ride.startAddress.street.city.cityName}}</div>
 
-                </div>
-            </div>
+            <div class="grid-item-label">Details:</div>
+            <button mat-button (click)="navigateToDetailsPage()">Go to Details</button>
 
-            <!-- Section for waiting passengers -->
-            <h4><strong>Waiting:</strong></h4>
-            <div *ngFor="let userRide of ride.userRides">
-                <div class="user-detail" *ngIf="userRide.status.isAccepted === 0">
-                    <p>{{ userRide.user.name }} {{ userRide.user.surname }}</p>
-                    <button mat-button color="accent" (click)="acceptUser(userRide.statusId)">Accept</button>
+            <div class="grid-item-label">Destination Date:</div>
+            <div class="grid-item date">{{ride.earliestDepartureTime | date:'dd/MM/yyyy, h:mm a'}}</div>
 
-                </div>
-            </div>
+            <div class="grid-item-label">Destination Address:</div>
+            <div class="grid-item address">{{ride.destinationAddress.street.city.cityName}}</div>
+
+            <div class="grid-item-label">Price:</div>
+            <div class="grid-item price">{{ride.pricePerPerson}}</div>
+
+            <div class="grid-item-label">Profile:</div>
+            <div class="grid-item profile-pic"><img [src]="ride.driver.profilePicture" alt="Profile Picture"></div>
+
+            <div class="grid-item-label">Name:</div>
+            <div class="grid-item name">{{ride.driver.name}}</div>
+
+            <div class="grid-item-label">Surname:</div>
+            <div class="grid-item surname">{{ride.driver.surname}}</div>
         </div>
     </mat-card-content>
+
 </mat-card>
 
 <!-- Display a card when there are passenger rides -->

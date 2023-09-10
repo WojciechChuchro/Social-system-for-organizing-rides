@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core'
 import {HttpClient} from '@angular/common/http'
-import {Rides, UserRides} from '../../types/response'
+import {Rides, RidesResponse, UserRides, UserRidesResponse} from '../../types/response'
 import {RideService} from '../../services/ride.service'
 import {MessageResponseOnly} from '../../types/user'
 import {MatSnackBar} from '@angular/material/snack-bar'
 import {UtilityService} from '../../services/utility.service'
+import {Router} from '@angular/router'
 
 @Component({
   selector: 'app-your-rides',
@@ -14,33 +15,39 @@ import {UtilityService} from '../../services/utility.service'
 export class YourRidesComponent implements OnInit {
   rides: Rides[] = []
   ridesPassangers: UserRides[] = []
+  constructor(private http: HttpClient, private rideService: RideService, private snackBar: MatSnackBar, private utilityService: UtilityService, private router: Router) {
+  }
 
-  constructor(private http: HttpClient, private rideService: RideService, private snackBar: MatSnackBar, private utilityService: UtilityService) {}
   ngOnInit(): void {
     this.fetchAllRides()
   }
 
   fetchAllRides(): void {
     this.rideService.fetchRides().subscribe({
-      next: (rides: Rides[]) => {
-        this.rides = rides
+      next: (ridesResponse: RidesResponse) => {
+        this.rides = ridesResponse.rides
+        console.log('rides', ridesResponse.rides)
       },
       error: error => {
-        const errorMessage = error.error.message || 'An unknown error occurred'
+        const errorMessage = error.message || 'An unknown error occurred'
         this.utilityService.showAlert(errorMessage, 'Close', 3000)
       },
     })
 
+
     this.rideService.fetchRidesAsPassenger().subscribe({
-      next: (rides: UserRides[]) => {
-        this.ridesPassangers = rides
+      next: (userRidesResponse: UserRidesResponse) => {
+        this.ridesPassangers = userRidesResponse.userRides
+        console.log(userRidesResponse.userRides)
       },
       error: error => {
-        const errorMessage = error.error.message || 'An unknown error occurred'
+        const errorMessage = error.message || 'An unknown error occurred'
         this.utilityService.showAlert(errorMessage, 'Close', 3000)
       },
     })
+
   }
+
   deleteUser(statusId: number): void {
     this.rideService.deleteUser(statusId).subscribe({
       next: (response: MessageResponseOnly) => {
@@ -48,11 +55,12 @@ export class YourRidesComponent implements OnInit {
         this.fetchAllRides()
       },
       error: error => {
-        const errorMessage = error.error.message || 'An unknown error occurred'
+        const errorMessage = error.message || 'An unknown error occurred'
         this.utilityService.showAlert(errorMessage, 'Close', 3000)
       }
     })
   }
+
   acceptUser(statusId: number): void {
     this.rideService.acceptUser(statusId).subscribe({
       next: (response: MessageResponseOnly) => {
@@ -60,10 +68,14 @@ export class YourRidesComponent implements OnInit {
         this.fetchAllRides()
       },
       error: error => {
-        const errorMessage = error.error.message || 'An unknown error occurred'
+        const errorMessage = error.message || 'An unknown error occurred'
         this.utilityService.showAlert(errorMessage, 'Close', 3000)
       }
     })
+  }
+
+  navigateToDetailsPage() {
+    this.router.navigate(['/details-page']); // Replace '/details-page' with the route you want to navigate to
   }
 }
 
