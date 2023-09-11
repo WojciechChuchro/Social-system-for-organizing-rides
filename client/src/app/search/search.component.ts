@@ -25,7 +25,7 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true
-    this.fetchRides()
+    this.getRides()
   }
 
   onRideClick(rideId: number): void {
@@ -52,7 +52,7 @@ export class SearchComponent implements OnInit {
     return date.toLocaleDateString('en-GB', options)
   }
 
-  fetchRides():void {
+  getRides():void {
     this.search.getAllRides().subscribe({
       next: (response: RidesResponse) => {
         this.rides = response.rides.map((ride: Rides) => {
@@ -63,7 +63,7 @@ export class SearchComponent implements OnInit {
       },
       error: (error) => {
         this.loading = false
-        console.error('Error fetching rides:', error)
+        console.error('Error getting rides:', error)
       }
     })
   }

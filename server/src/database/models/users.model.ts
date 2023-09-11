@@ -91,7 +91,7 @@ class Users extends Model {
 
       return null
     } catch (error) {
-      console.error('Error fetching hashed password by email:', error)
+      console.error('Error getting hashed password by email:', error)
       return null
     }
   }
@@ -102,7 +102,7 @@ class Users extends Model {
       const user = await Users.query().where('email', email).first()
       return user || null
     } catch (error) {
-      console.error('Error fetching user by email:', error)
+      console.error('Error getting user by email:', error)
       return null
     }
   }

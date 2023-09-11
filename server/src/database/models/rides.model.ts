@@ -130,7 +130,7 @@ export const getRidesWithEveryChildrenTable = async () => {
       .whereNotNull('rides.startAddressId')
       .whereNotNull('rides.destinationAddressId')
   } catch (error) {
-    console.error('Error fetching rides:', error)
+    console.error('Error getting rides:', error)
     throw error
   }
 }

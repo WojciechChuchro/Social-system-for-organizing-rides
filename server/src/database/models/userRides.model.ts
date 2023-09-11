@@ -80,7 +80,7 @@ export async function getUserRidesByUserId(userId: number): Promise<UserRides[]>
       .withGraphFetched('[user, ride, lookingForDriver, status]')  // fetch related records
       .orderBy('userRides.id')  // sort by userRides id
   } catch (error) {
-    console.error('Error fetching userRides:', error)
+    console.error('Error getting userRides:', error)
     throw error
   }
 }

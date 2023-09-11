@@ -15,15 +15,16 @@ import {Router} from '@angular/router'
 export class YourRidesComponent implements OnInit {
   rides: Rides[] = []
   ridesPassangers: UserRides[] = []
+
   constructor(private http: HttpClient, private rideService: RideService, private snackBar: MatSnackBar, private utilityService: UtilityService, private router: Router) {
   }
 
   ngOnInit(): void {
-    this.fetchAllRides()
+    this.getAllRides()
   }
 
-  fetchAllRides(): void {
-    this.rideService.fetchRides().subscribe({
+  getAllRides(): void {
+    this.rideService.getRidesForDriver().subscribe({
       next: (ridesResponse: RidesResponse) => {
         this.rides = ridesResponse.rides
         console.log('rides', ridesResponse.rides)
@@ -35,7 +36,7 @@ export class YourRidesComponent implements OnInit {
     })
 
 
-    this.rideService.fetchRidesAsPassenger().subscribe({
+    this.rideService.getRidesForPassenger().subscribe({
       next: (userRidesResponse: UserRidesResponse) => {
         this.ridesPassangers = userRidesResponse.userRides
         console.log(userRidesResponse.userRides)
@@ -52,7 +53,7 @@ export class YourRidesComponent implements OnInit {
     this.rideService.deleteUser(statusId).subscribe({
       next: (response: MessageResponseOnly) => {
         this.utilityService.showAlert(response.message, 'Close', 3000)
-        this.fetchAllRides()
+        this.getAllRides()
       },
       error: error => {
         const errorMessage = error.message || 'An unknown error occurred'
@@ -65,7 +66,7 @@ export class YourRidesComponent implements OnInit {
     this.rideService.acceptUser(statusId).subscribe({
       next: (response: MessageResponseOnly) => {
         this.utilityService.showAlert(response.message, 'Close', 3000)
-        this.fetchAllRides()
+        this.getAllRides()
       },
       error: error => {
         const errorMessage = error.message || 'An unknown error occurred'
@@ -75,7 +76,7 @@ export class YourRidesComponent implements OnInit {
   }
 
   navigateToDetailsPage() {
-    this.router.navigate(['/details-page']); // Replace '/details-page' with the route you want to navigate to
+    this.router.navigate(['/details-page'])
   }
 }
 

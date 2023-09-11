@@ -66,14 +66,14 @@ export class RideService {
     return this.http.post<MessageResponseOnly>(`${this.apiBaseUrl}/accept-ride`, {rideId}, {withCredentials: true})
   }
 
-  fetchRides(): Observable<RidesResponse> {
+  getRidesForDriver(): Observable<RidesResponse> {
     return this.http.get<RidesResponse>(`${this.apiBaseUrl}/get-rides`, {
       withCredentials: true,
     })
   }
 
 
-  fetchRidesAsPassenger(): Observable<UserRidesResponse> {
+  getRidesForPassenger(): Observable<UserRidesResponse> {
     return this.http.get<UserRidesResponse>(`${this.apiBaseUrl}/get-rides-as-passenger`, {
       withCredentials: true,
     })
