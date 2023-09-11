@@ -1,10 +1,10 @@
-import {JwtPayload} from 'jsonwebtoken'
-import {Knex} from 'knex'
+import { JwtPayload } from 'jsonwebtoken';
+import { Knex } from 'knex';
 
 export interface DecodedToken extends JwtPayload {
-    userId: string;
+  userId: string;
 }
 
 interface KnexConfig {
-    [key: string]: Knex.Config
+  [key: string]: Knex.Config;
 }

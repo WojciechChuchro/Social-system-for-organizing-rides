@@ -12,8 +12,8 @@ export interface Users {
 }
 
 export interface Reviews {
-  comment: string
-  rating: string
+  comment: string;
+  rating: string;
 }
 export interface UserWithReviews extends Users {
   reviews: Reviews[];
@@ -32,9 +32,9 @@ export interface RegisterForm {
 }
 
 export interface MessageResponseOnly {
-  message: string
+  message: string;
 }
-export interface profileForm  {
+export interface profileForm {
   email?: string;
   name?: string;
   surname?: string;

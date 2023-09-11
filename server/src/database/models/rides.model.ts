@@ -1,43 +1,53 @@
-import {Model} from 'objection'
-import knex from '../config/database'
-import Users from './users.model'
-import Addresses from './addresses.model'
-import UserRides from './userRides.model'
+import { Model } from 'objection';
+import knex from '../config/database';
+import Users from './users.model';
+import Addresses from './addresses.model';
+import UserRides from './userRides.model';
 
-Model.knex(knex)
+Model.knex(knex);
 
 class Rides extends Model {
-  id!: number
-  driverId!: number
-  modelId!: number
-  startAddressId!: number
-  destinationAddressId!: number
-  earliestDepartureTime!: string
-  latestDepartureTime!: string
-  pricePerPerson!: number
-  seatsNumber!: number
-  registrationNumber!: string
+  id!: number;
+  driverId!: number;
+  modelId!: number;
+  startAddressId!: number;
+  destinationAddressId!: number;
+  earliestDepartureTime!: string;
+  latestDepartureTime!: string;
+  pricePerPerson!: number;
+  seatsNumber!: number;
+  registrationNumber!: string;
 
   static get rides() {
     return {
-      required: ['id', 'driverId', 'earliestDepartureTime', 'latestDepartureTime', 'modelId', 'startAddressId', 'seatsNumber', 'pricePerPerson', 'registrationNumber'],
+      required: [
+        'id',
+        'driverId',
+        'earliestDepartureTime',
+        'latestDepartureTime',
+        'modelId',
+        'startAddressId',
+        'seatsNumber',
+        'pricePerPerson',
+        'registrationNumber',
+      ],
       properties: {
-        id: {type: 'integer'},
-        driverId: {type: 'integer'},
-        modelId: {type: 'integer'},
-        startAddressId: {type: 'integer'},
-        destinationAddressId: {type: 'integer'},
-        earliestDepartureTime: {type: 'date-string'},
-        latestDepartureTime: {type: 'date-string'},
-        registrationNumber: {type: 'string'},
-        seatsNumber: {type: 'integer', length: 1},
-        pricePerPerson: {type: 'float', length: 2},
-      }
-    }
+        id: { type: 'integer' },
+        driverId: { type: 'integer' },
+        modelId: { type: 'integer' },
+        startAddressId: { type: 'integer' },
+        destinationAddressId: { type: 'integer' },
+        earliestDepartureTime: { type: 'date-string' },
+        latestDepartureTime: { type: 'date-string' },
+        registrationNumber: { type: 'string' },
+        seatsNumber: { type: 'integer', length: 1 },
+        pricePerPerson: { type: 'float', length: 2 },
+      },
+    };
   }
 
   static get tableName(): string {
-    return 'rides'
+    return 'rides';
   }
 
   static get relationMappings() {
@@ -74,7 +84,7 @@ class Rides extends Model {
           to: 'userRides.rideId',
         },
       },
-    }
+    };
   }
 }
 
@@ -82,11 +92,13 @@ export async function getRidesByUserId(userId: number): Promise<Rides[]> {
   try {
     return await Rides.query()
       .where('driverId', userId)
-      .withGraphFetched('[driver, startAddress.[street.[city]], destinationAddress.[street.[city]], userRides.[user, status]]')
-      .orderBy('earliestDepartureTime')
+      .withGraphFetched(
+        '[driver, startAddress.[street.[city]], destinationAddress.[street.[city]], userRides.[user, status]]',
+      )
+      .orderBy('earliestDepartureTime');
   } catch (error) {
-    console.error('Error fetching rides:', error)
-    throw error
+    console.error('Error fetching rides:', error);
+    throw error;
   }
 }
 
@@ -98,7 +110,7 @@ export const getRidesWithEveryChildrenTable = async () => {
         'rides.earliestDepartureTime',
         'rides.latestDepartureTime',
         'rides.pricePerPerson',
-        'rides.seatsNumber'
+        'rides.seatsNumber',
       ])
       .withGraphFetched(
         `
@@ -106,8 +118,7 @@ export const getRidesWithEveryChildrenTable = async () => {
                driver.[cars.[models.[brands]]], startAddress.[street.[city]], 
                destinationAddress.[street.[city]]
                ]
-               `
-
+               `,
       )
       // .modifiers({
       //   selectColumns(builder) {
@@ -128,13 +139,12 @@ export const getRidesWithEveryChildrenTable = async () => {
       // })
       .whereNotNull('rides.driverId')
       .whereNotNull('rides.startAddressId')
-      .whereNotNull('rides.destinationAddressId')
+      .whereNotNull('rides.destinationAddressId');
   } catch (error) {
-    console.error('Error getting rides:', error)
-    throw error
+    console.error('Error getting rides:', error);
+    throw error;
   }
-}
-
+};
 
 // export const getRidesWithEveryChildrenTable = async () => {
 //   return (await Rides.query()
@@ -182,5 +192,4 @@ export const getRidesWithEveryChildrenTable = async () => {
 //     .whereNotNull('destinationCountries.id'))
 // }
 
-export default Rides
-
+export default Rides;

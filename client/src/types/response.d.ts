@@ -1,4 +1,4 @@
-import {Users} from './user'
+import { Users } from './user';
 
 export interface TokenValidationResponse {
   message: string;
@@ -8,19 +8,19 @@ export interface TokenValidationResponse {
 export interface Address {
   zipCode: string;
   id: number;
-  street: Street
+  street: Street;
   houseNumber: string;
 }
 
 export interface Street {
-  city: City
+  city: City;
   id: number;
-  streetName: string
+  streetName: string;
 }
 
 export interface City {
   id: number;
-  cityName: string
+  cityName: string;
 }
 
 export interface TimeWindow {

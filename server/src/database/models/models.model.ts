@@ -1,26 +1,25 @@
-import {Model} from 'objection'
-import knex from '../config/database'
-import Cars from './cars.model'
-import Brands from './brands.model'
+import { Model } from 'objection';
+import knex from '../config/database';
+import Cars from './cars.model';
+import Brands from './brands.model';
 
-Model.knex(knex)
+Model.knex(knex);
 
 class Models extends Model {
-  id: number
-  brandId: number
-  modelName!: string
+  id: number;
+  brandId: number;
+  modelName!: string;
 
   static get models() {
     return {
       required: ['id', 'brandId'],
       properties: {
-        id: {type: 'integer'},
-        BrandId: {type: 'integer'},
-        modelName: {type: 'string', length: 30},
-      }
-    }
+        id: { type: 'integer' },
+        BrandId: { type: 'integer' },
+        modelName: { type: 'string', length: 30 },
+      },
+    };
   }
-
 
   static get relationMappings() {
     return {
@@ -40,13 +39,12 @@ class Models extends Model {
           to: 'cars.modelId',
         },
       },
-    }
+    };
   }
 
-
   static get tableName(): string {
-    return 'models'
+    return 'models';
   }
 }
 
-export default Models
+export default Models;

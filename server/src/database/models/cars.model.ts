@@ -1,26 +1,26 @@
-import {Model} from 'objection'
-import knex from '../config/database'
-import Models from './models.model'
-import Users from './users.model'
+import { Model } from 'objection';
+import knex from '../config/database';
+import Models from './models.model';
+import Users from './users.model';
 
-Model.knex(knex)
+Model.knex(knex);
 
 class Cars extends Model {
-  id!: number
-  modelId!: number
-  registrationNumber!: string
-  color!: string
+  id!: number;
+  modelId!: number;
+  registrationNumber!: string;
+  color!: string;
 
   static get cars() {
     return {
       required: ['id', 'color', 'modelId', 'registrationNumber'],
       properties: {
-        id: {type: 'integer'},
-        modelId: {type: 'integer'},
-        registrationNumber: {type: 'string', length: 9},
-        color: {type: 'string', length: 25}
-      }
-    }
+        id: { type: 'integer' },
+        modelId: { type: 'integer' },
+        registrationNumber: { type: 'string', length: 9 },
+        color: { type: 'string', length: 25 },
+      },
+    };
   }
 
   static get relationMappings() {
@@ -41,14 +41,13 @@ class Cars extends Model {
           to: 'models.id',
         },
       },
-    }
+    };
   }
 
   static get tableName(): string {
-    return 'cars'
+    return 'cars';
   }
 }
-
 
 // export const createStartAndDestinationCountry = async (
 //   startCountryName: string,
@@ -86,4 +85,4 @@ class Cars extends Model {
 //     throw new Error('Cannot create a country')
 //   }
 // }
-export default Cars
+export default Cars;

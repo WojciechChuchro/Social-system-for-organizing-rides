@@ -1,17 +1,17 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'
-import { ReactiveFormsModule } from '@angular/forms'
-import { MatButtonModule } from '@angular/material/button'
-import { MatCardModule } from '@angular/material/card'
-import { MatInputModule } from '@angular/material/input'
-import { MatRadioModule } from '@angular/material/radio'
-import { MatSelectModule } from '@angular/material/select'
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 
-import { RegistrationComponent } from './registration.component'
+import { RegistrationComponent } from './registration.component';
 
 describe('RegistrationComponent', () => {
-  let component: RegistrationComponent
-  let fixture: ComponentFixture<RegistrationComponent>
+  let component: RegistrationComponent;
+  let fixture: ComponentFixture<RegistrationComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -24,17 +24,17 @@ describe('RegistrationComponent', () => {
         MatInputModule,
         MatRadioModule,
         MatSelectModule,
-      ]
-    }).compileComponents()
-  }))
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegistrationComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  })
+    fixture = TestBed.createComponent(RegistrationComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should compile', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

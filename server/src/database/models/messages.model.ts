@@ -1,34 +1,34 @@
-import {Model} from 'objection'
-import knex from '../config/database'
-import Users from './users.model'
-import UserRides from '../models/userRides.model'
+import { Model } from 'objection';
+import knex from '../config/database';
+import Users from './users.model';
+import UserRides from '../models/userRides.model';
 
-Model.knex(knex)
+Model.knex(knex);
 
 class Messages extends Model {
-  id!: number
-  userRideId!: number
-  userId!: number
-  text!: string
-  sendTime!: string
-  wasRead!: number
+  id!: number;
+  userRideId!: number;
+  userId!: number;
+  text!: string;
+  sendTime!: string;
+  wasRead!: number;
 
   static get messages() {
     return {
       required: ['id', 'userRideId', 'userId', 'text', 'sendTime', 'wasRead'],
       properties: {
-        id: {type: 'integer'},
-        userRideId: {type: 'integer'},
-        userId: {type: 'integer'},
-        text: {type: 'string', length: 255},
-        sendTime: {type: 'date-string'},
-        wasRead: {type: 'number', length: 1},
-      }
-    }
+        id: { type: 'integer' },
+        userRideId: { type: 'integer' },
+        userId: { type: 'integer' },
+        text: { type: 'string', length: 255 },
+        sendTime: { type: 'date-string' },
+        wasRead: { type: 'number', length: 1 },
+      },
+    };
   }
 
   static get tableName(): string {
-    return 'messages'
+    return 'messages';
   }
   static get relationMappings() {
     return {
@@ -45,12 +45,11 @@ class Messages extends Model {
         modelClass: UserRides,
         join: {
           from: 'messages.userRideId',
-          to: 'userRides.id'
-        }
-      }
-    }
+          to: 'userRides.id',
+        },
+      },
+    };
   }
 }
 
-export default Messages
-
+export default Messages;

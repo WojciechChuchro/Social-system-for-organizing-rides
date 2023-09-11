@@ -8,7 +8,7 @@ describe('StylesLibraryComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [StylesLibraryComponent]
+      declarations: [StylesLibraryComponent],
     });
     fixture = TestBed.createComponent(StylesLibraryComponent);
     component = fixture.componentInstance;

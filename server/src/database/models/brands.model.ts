@@ -1,20 +1,20 @@
-import {Model} from 'objection'
-import knex from '../config/database'
-import Models from './models.model'
+import { Model } from 'objection';
+import knex from '../config/database';
+import Models from './models.model';
 
-Model.knex(knex)
+Model.knex(knex);
 
 class Brands extends Model {
-  id!: number
-  brandName!: string
+  id!: number;
+  brandName!: string;
   static get models() {
     return {
       required: ['id', 'brandName'],
       properties: {
-        id: {type: 'integer'},
-        brandName: {type: 'string', length: 15},
-      }
-    }
+        id: { type: 'integer' },
+        brandName: { type: 'string', length: 15 },
+      },
+    };
   }
 
   static get relationMappings() {
@@ -24,13 +24,13 @@ class Brands extends Model {
         modelClass: Models,
         join: {
           from: 'brands.id',
-          to: 'models.brandId'
+          to: 'models.brandId',
         },
       },
-    }
+    };
   }
   static get tableName(): string {
-    return 'brands'
+    return 'brands';
   }
 }
-export default Brands
+export default Brands;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-create-ride-passenger',
@@ -6,12 +6,12 @@ import { Component } from '@angular/core'
   styleUrls: ['./create-ride-passenger.component.scss'],
 })
 export class CreateRidePassengerComponent {
-  starting_point: string = ''
-  destination: string = ''
-  earliest_departure_time: string = ''
-  latest_departure_time: string = ''
-  number_of_passengers: number | null = null
-  max_price: number | null = null
+  starting_point: string = '';
+  destination: string = '';
+  earliest_departure_time: string = '';
+  latest_departure_time: string = '';
+  number_of_passengers: number | null = null;
+  max_price: number | null = null;
 
   handleCreateRide(): void {
     // Implement your create ride logic here
@@ -22,6 +22,6 @@ export class CreateRidePassengerComponent {
       latest_departure_time: this.latest_departure_time,
       number_of_passengers: this.number_of_passengers,
       max_price: this.max_price,
-    })
+    });
   }
 }

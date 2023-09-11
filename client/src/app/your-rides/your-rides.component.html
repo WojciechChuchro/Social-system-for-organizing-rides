@@ -14,7 +14,7 @@
     <mat-card-content>
         <div class="grid-container">
             <div class="grid-item-label">Start Date:</div>
-            <div class="grid-item date">{{ride.earliestDepartureTime | date:'dd/MM/yyyy, h:mm a'}}</div>
+            <div class="grid-item date">{{ride.earliestDepartureTime | date:'h:mm a'}}</div>
 
             <div class="grid-item-label">Start Address:</div>
             <div class="grid-item address">{{ride.startAddress.street.city.cityName}}</div>
@@ -23,7 +23,7 @@
             <button mat-button (click)="navigateToDetailsPage()">Go to Details</button>
 
             <div class="grid-item-label">Destination Date:</div>
-            <div class="grid-item date">{{ride.earliestDepartureTime | date:'dd/MM/yyyy, h:mm a'}}</div>
+            <div class="grid-item date">{{ride.earliestDepartureTime | date:'h:mm a'}}</div>
 
             <div class="grid-item-label">Destination Address:</div>
             <div class="grid-item address">{{ride.destinationAddress.street.city.cityName}}</div>

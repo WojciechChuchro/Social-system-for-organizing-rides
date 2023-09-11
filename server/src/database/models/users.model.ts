@@ -1,42 +1,51 @@
-import {Model} from 'objection'
-import knex from '../config/database'
-import Reviews from './reviews.model'
-import Messages from './messages.model'
-import {authentication} from '../../helpers'
-import Cars from './cars.model'
-import Rides from './rides.model'
+import { Model } from 'objection';
+import knex from '../config/database';
+import Reviews from './reviews.model';
+import Messages from './messages.model';
+import { authentication } from '../../helpers';
+import Cars from './cars.model';
+import Rides from './rides.model';
 
-Model.knex(knex)
+Model.knex(knex);
 
 class Users extends Model {
-  id!: number
-  carId?: number | null
-  email!: string
-  name!: string
-  surname!: string
-  phoneNumber!: string
-  profilePicture!: string
-  password!: string
-  sessionToken!: string
-  salt!: string
-
+  id!: number;
+  carId?: number | null;
+  email!: string;
+  name!: string;
+  surname!: string;
+  phoneNumber!: string;
+  profilePicture!: string;
+  password!: string;
+  sessionToken!: string;
+  salt!: string;
 
   static get UserSchema() {
     return {
-      required: ['id', 'email', 'name', 'surname', 'phoneNumber', 'profilePicture', 'password', 'sessionToken', 'salt'],
+      required: [
+        'id',
+        'email',
+        'name',
+        'surname',
+        'phoneNumber',
+        'profilePicture',
+        'password',
+        'sessionToken',
+        'salt',
+      ],
       properties: {
-        id: {type: 'integer'},
-        carId: {type: ['integer', 'null']},
-        email: {type: 'string', length: 50},
-        name: {type: 'string', length: 20},
-        surname: {type: 'string', length: 30},
-        phoneNumber: {type: 'string', length: 12},
-        profilePicture: {type: 'string', length: 255},
-        password: {type: 'string', length: 255},
-        salt: {type: 'string', length: 255},
-        sessionToken: {type: 'string', length: 255},
-      }
-    }
+        id: { type: 'integer' },
+        carId: { type: ['integer', 'null'] },
+        email: { type: 'string', length: 50 },
+        name: { type: 'string', length: 20 },
+        surname: { type: 'string', length: 30 },
+        phoneNumber: { type: 'string', length: 12 },
+        profilePicture: { type: 'string', length: 255 },
+        password: { type: 'string', length: 255 },
+        salt: { type: 'string', length: 255 },
+        sessionToken: { type: 'string', length: 255 },
+      },
+    };
   }
 
   static get relationMappings() {
@@ -46,7 +55,7 @@ class Users extends Model {
         modelClass: Reviews,
         join: {
           from: 'users.id',
-          to: 'reviews.userId'
+          to: 'reviews.userId',
         },
       },
       messages: {
@@ -54,8 +63,8 @@ class Users extends Model {
         modelClass: Messages,
         join: {
           from: 'users.id',
-          to: 'messages.userId'
-        }
+          to: 'messages.userId',
+        },
       },
       cars: {
         relation: Model.HasManyRelation,
@@ -73,46 +82,50 @@ class Users extends Model {
           to: 'rides.driverId',
         },
       },
-    }
+    };
   }
 
   static get tableName(): string {
-    return 'users'
+    return 'users';
   }
-
 
   static async getHashPassword(email: string): Promise<string | null> {
     try {
-      const user = await Users.query().where('email', email).select('password', 'salt').first()
+      const user = await Users.query()
+        .where('email', email)
+        .select('password', 'salt')
+        .first();
 
       if (user) {
-        return user.password
+        return user.password;
       }
 
-      return null
+      return null;
     } catch (error) {
-      console.error('Error getting hashed password by email:', error)
-      return null
+      console.error('Error getting hashed password by email:', error);
+      return null;
     }
   }
-
 
   static async getUserByEmail(email: string): Promise<Users | null> {
     try {
-      const user = await Users.query().where('email', email).first()
-      return user || null
+      const user = await Users.query().where('email', email).first();
+      return user || null;
     } catch (error) {
-      console.error('Error getting user by email:', error)
-      return null
+      console.error('Error getting user by email:', error);
+      return null;
     }
   }
 
-  static async updateSessionToken(user: Users, sessionToken: string): Promise<void> {
+  static async updateSessionToken(
+    user: Users,
+    sessionToken: string,
+  ): Promise<void> {
     try {
-      await Users.query().findById(user.id).patch({sessionToken})
+      await Users.query().findById(user.id).patch({ sessionToken });
     } catch (error) {
-      console.error('Error updating session token:', error)
-      throw error
+      console.error('Error updating session token:', error);
+      throw error;
     }
   }
 
@@ -139,15 +152,13 @@ class Users extends Model {
         email,
         password: authentication(salt, password),
         salt,
-        carId: null
-      })
+        carId: null,
+      });
     } catch (error) {
-      console.error('Error creating user:', error)
-      throw error
+      console.error('Error creating user:', error);
+      throw error;
     }
   }
-
 }
 
-export default Users
-
+export default Users;

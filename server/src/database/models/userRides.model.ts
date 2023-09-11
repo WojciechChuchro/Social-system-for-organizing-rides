@@ -1,36 +1,35 @@
-import {Model} from 'objection'
-import knex from '../config/database'
-import Rides from './rides.model'
-import LookingForDrivers from './lookingForDrivers.model'
-import Statuses from './statuses.model'
-import Users from './users.model'
+import { Model } from 'objection';
+import knex from '../config/database';
+import Rides from './rides.model';
+import LookingForDrivers from './lookingForDrivers.model';
+import Statuses from './statuses.model';
+import Users from './users.model';
 
-
-Model.knex(knex)
+Model.knex(knex);
 
 class UserRides extends Model {
-  id!: number
-  userId!: number
-  rideId!: number
-  lookingForDriverId?: number
-  statusId!: number
+  id!: number;
+  userId!: number;
+  rideId!: number;
+  lookingForDriverId?: number;
+  statusId!: number;
 
   static get jsonSchema() {
     return {
       type: 'object',
       required: ['id', 'userId', 'rideId', 'statusId'],
       properties: {
-        id: {type: 'integer'},
-        userId: {type: 'integer'},
-        rideId: {type: 'integer'},
-        lookingForDriverId: {type: ['integer', 'null']},
-        statusId: {type: 'integer'},
+        id: { type: 'integer' },
+        userId: { type: 'integer' },
+        rideId: { type: 'integer' },
+        lookingForDriverId: { type: ['integer', 'null'] },
+        statusId: { type: 'integer' },
       },
-    }
+    };
   }
 
   static get tableName(): string {
-    return 'userRides'
+    return 'userRides';
   }
 
   static get relationMappings() {
@@ -67,22 +66,24 @@ class UserRides extends Model {
           to: 'statuses.id',
         },
       },
-    }
+    };
   }
 }
 
-export async function getUserRidesByUserId(userId: number): Promise<UserRides[]> {
+export async function getUserRidesByUserId(
+  userId: number,
+): Promise<UserRides[]> {
   try {
     return await UserRides.query()
-      .select('userRides.*', 'rides.*')  // select columns from both userRides and rides
-      .join('rides', 'userRides.rideId', 'rides.id')  // join the rides table
-      .where('userRides.userId', userId)  // filter by userId
-      .withGraphFetched('[user, ride, lookingForDriver, status]')  // fetch related records
-      .orderBy('userRides.id')  // sort by userRides id
+      .select('userRides.*', 'rides.*') // select columns from both userRides and rides
+      .join('rides', 'userRides.rideId', 'rides.id') // join the rides table
+      .where('userRides.userId', userId) // filter by userId
+      .withGraphFetched('[user, ride, lookingForDriver, status]') // fetch related records
+      .orderBy('userRides.id'); // sort by userRides id
   } catch (error) {
-    console.error('Error getting userRides:', error)
-    throw error
+    console.error('Error getting userRides:', error);
+    throw error;
   }
 }
 
-export default UserRides
+export default UserRides;

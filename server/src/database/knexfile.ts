@@ -1,10 +1,9 @@
-import dotenv from 'dotenv'
-import path from 'path'
-import {KnexConfig} from '../types/config'
+import dotenv from 'dotenv';
+import path from 'path';
+import { KnexConfig } from '../types/config';
 
-
-const envFilePath = path.join(__dirname, '../../.env')
-dotenv.config({ path: envFilePath })
+const envFilePath = path.join(__dirname, '../../.env');
+dotenv.config({ path: envFilePath });
 
 const knexfile: KnexConfig = {
   development: {
@@ -17,11 +16,11 @@ const knexfile: KnexConfig = {
     },
     migrations: {
       tableName: 'migrations',
-      directory: './migrations'
+      directory: './migrations',
     },
     seeds: {
-      directory: './seeds'
-    }
+      directory: './seeds',
+    },
   },
 
   // staging: {
@@ -57,6 +56,6 @@ const knexfile: KnexConfig = {
   //     tableName: "knex_migrations",
   //   },
   // },
-}
+};
 
-export default knexfile
+export default knexfile;

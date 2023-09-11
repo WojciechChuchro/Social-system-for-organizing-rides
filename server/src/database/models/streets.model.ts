@@ -1,25 +1,25 @@
-import {Model} from 'objection'
-import knex from '../config/database'
-import Addresses from './addresses.model'
-import {StreetIds} from '../../types/model'
-import Cities from './cities.model'
+import { Model } from 'objection';
+import knex from '../config/database';
+import Addresses from './addresses.model';
+import { StreetIds } from '../../types/model';
+import Cities from './cities.model';
 
-Model.knex(knex)
+Model.knex(knex);
 
 class Streets extends Model {
-  id!: number
-  cityId!: number
-  streetName!: string
+  id!: number;
+  cityId!: number;
+  streetName!: string;
 
   static get Streets() {
     return {
       required: ['id', 'cityId', 'streetName'],
       properties: {
-        id: {type: 'integer'},
-        cityId: {type: 'integer'},
-        streetName: {type: 'string', length: 50},
-      }
-    }
+        id: { type: 'integer' },
+        cityId: { type: 'integer' },
+        streetName: { type: 'string', length: 50 },
+      },
+    };
   }
 
   static get relationMappings() {
@@ -37,58 +37,63 @@ class Streets extends Model {
         modelClass: Addresses,
         join: {
           from: 'streets.id',
-          to: 'addresses.streetId'
-        }
-      }
-    }
+          to: 'addresses.streetId',
+        },
+      },
+    };
   }
 
   static get tableName(): string {
-    return 'streets'
+    return 'streets';
   }
 }
-
-
 
 export const createStartAndDestinationStreet = async (
   startStreetName: string,
   destinationStreetName: string,
   startCityId: number,
-  destinationCityId: number
+  destinationCityId: number,
 ): Promise<StreetIds> => {
   const streetIds: StreetIds = {
     startStreetId: -1,
-    destinationStreetId: -1
-  }
+    destinationStreetId: -1,
+  };
 
   try {
     // Process start street
-    const existingStartStreet = await Streets.query().findOne({streetName: startStreetName})
+    const existingStartStreet = await Streets.query().findOne({
+      streetName: startStreetName,
+    });
 
     if (!existingStartStreet) {
-      const newStartStreet = await Streets.query().insert({streetName: startStreetName, cityId: startCityId})
-      streetIds.startStreetId = newStartStreet.id
+      const newStartStreet = await Streets.query().insert({
+        streetName: startStreetName,
+        cityId: startCityId,
+      });
+      streetIds.startStreetId = newStartStreet.id;
     } else {
-      streetIds.startStreetId = existingStartStreet.id
+      streetIds.startStreetId = existingStartStreet.id;
     }
 
     // Process destination street
-    const existingDestStreet = await Streets.query().findOne({streetName: destinationStreetName})
+    const existingDestStreet = await Streets.query().findOne({
+      streetName: destinationStreetName,
+    });
 
     if (!existingDestStreet) {
       const newDestStreet = await Streets.query().insert({
         streetName: destinationStreetName,
-        cityId: destinationCityId
-      })
-      streetIds.destinationStreetId = newDestStreet.id
+        cityId: destinationCityId,
+      });
+      streetIds.destinationStreetId = newDestStreet.id;
     } else {
-      streetIds.destinationStreetId = existingDestStreet.id
+      streetIds.destinationStreetId = existingDestStreet.id;
     }
 
-    return streetIds
+    return streetIds;
   } catch (error) {
-    console.error('Error:', error)
-    throw new Error('Cannot create a street')
+    console.error('Error:', error);
+    throw new Error('Cannot create a street');
   }
-}
-export default Streets
+};
+export default Streets;
