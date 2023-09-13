@@ -1,9 +1,8 @@
-# Ride Mate: Social System for Organizing Rides
+# Ride Mate
 
 ## About
 
-RideMate is a community-driven platform aimed at simplifying the process of organizing rides for various activities such
-as carpooling to work, attending events, and more. Whether you have a vehicle and are looking to split costs or you're seeking a ride,
+RideMate is a community-driven platform aimed at simplifying the process of organizing rides. Whether you have a vehicle and are looking to split costs or you're seeking a ride,
 RideMate connects you with like-minded individuals to make your journey easier, economical, and more sustainable.
 
 ## Features
