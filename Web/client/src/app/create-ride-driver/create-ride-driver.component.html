@@ -1,0 +1,35 @@
+<mat-card class="flex-center-container">
+  <mat-card-header>
+    <mat-card-title>Create Ride</mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="rideForm" (ngSubmit)="handleCreateRide()">
+    <div class="flex-center-column-container">
+      <!-- Your other form fields here -->
+
+      <mat-form-field>
+        <mat-label>Start City</mat-label>
+        <input formControlName="start_city" matInput />
+        <mat-error *ngIf="rideForm.get('start_city')">
+          You must select a city from the list.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Dropdown for Cities -->
+      <div *ngIf="cities.length > 0 && showCityList">
+        <mat-list>
+          <mat-list-item *ngFor="let city of cities" (click)="onCitySelected(city)">
+            {{ city }}
+          </mat-list-item>
+        </mat-list>
+      </div>
+
+
+
+      <mat-card-actions>
+        <button mat-raised-button color="primary" type="submit">
+          Register
+        </button>
+      </mat-card-actions>
+    </div>
+  </form>
+</mat-card>

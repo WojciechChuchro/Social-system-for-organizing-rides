@@ -202,3 +202,58 @@ export const acceptRide = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error inserting ride request.' });
   }
 };
+export const getCities = async (req: Request, res: Response) => {
+  const { nameFilter } = req.params;
+  const largestPolishCities = [
+    'Warszawa',
+    'Kraków',
+    'Łódź',
+    'Wrocław',
+    'Poznań',
+    'Gdańsk',
+    'Szczecin',
+    'Bydgoszcz',
+    'Lublin',
+    'Katowice',
+    'Białystok',
+    'Gdynia',
+    'Częstochowa',
+    'Radom',
+    'Sosnowiec',
+    'Toruń',
+    'Kielce',
+    'Gliwice',
+    'Zabrze',
+    'Bytom',
+    'Olsztyn',
+    'Bielsko-Biała',
+    'Rzeszów',
+    'Ruda Śląska',
+    'Rybnik',
+    'Tychy',
+    'Dąbrowa Górnicza',
+    'Opole',
+    'Elbląg',
+    'Płock',
+    'Wałbrzych',
+    'Gorzów Wielkopolski',
+    'Włocławek',
+    'Tarnów',
+    'Chorzów',
+    'Koszalin',
+    'Kalisz',
+    'Legnica',
+    'Grudziądz',
+    'Słupsk',
+  ];
+  try {
+    const filteredCities = largestPolishCities.filter((city) =>
+      city.toLowerCase().includes(nameFilter.toLowerCase()),
+    );
+
+    res.status(200).json({ filteredCities });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error inserting ride request.' });
+  }
+};

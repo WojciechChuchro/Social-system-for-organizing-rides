@@ -6,6 +6,7 @@ import {
   getRidesByUser,
   getRidesWithDrivers,
   GetRidesByUserAsPassenger,
+  getCities,
 } from '../controllers/rides';
 
 export default (router: express.Router) => {
@@ -18,4 +19,5 @@ export default (router: express.Router) => {
     authenticateJWT,
     GetRidesByUserAsPassenger,
   );
+  router.get('/get-cities/:nameFilter', getCities);
 };
