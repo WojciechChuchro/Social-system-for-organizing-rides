@@ -17,16 +17,42 @@
       <!-- Dropdown for Cities -->
       <div *ngIf="cities.length > 0 && showCityList">
         <mat-list>
-          <mat-list-item *ngFor="let city of cities" (click)="onCitySelected(city)">
+          <mat-list-item
+            *ngFor="let city of cities"
+            (click)="onCitySelected(city)"
+          >
             {{ city }}
           </mat-list-item>
         </mat-list>
       </div>
 
+      <mat-form-field>
+        <mat-label>Destination City</mat-label>
+        <input formControlName="destination_city" matInput />
+        <mat-error *ngIf="rideForm.get('destination_city')">
+          You must select a city from the list.
+        </mat-error>
+      </mat-form-field>
 
+      <!-- Dropdown for Destination Cities -->
+      <div *ngIf="destinationCities.length > 0 && showDestinationCityList">
+        <mat-list>
+          <mat-list-item
+            *ngFor="let city of destinationCities"
+            (click)="onDestinationCitySelected(city)"
+          >
+            {{ city }}
+          </mat-list-item>
+        </mat-list>
+      </div>
 
       <mat-card-actions>
-        <button mat-raised-button color="primary" type="submit">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="handleCreateRide()"
+          [disabled]="!rideForm.valid"
+        >
           Register
         </button>
       </mat-card-actions>
