@@ -7,8 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "eslint \"src/**/*.{ts,tsx}\"",
-    "lint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix"
+    "lint": "eslint \"src/**/*.{ts,tsx, html}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,tsx, html}\" --fix"
   },
   "private": true,
   "dependencies": {
