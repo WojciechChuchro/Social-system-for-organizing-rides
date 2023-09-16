@@ -6,6 +6,7 @@ import { tap } from 'rxjs';
 import { cityValidator } from '../validators';
 import * as moment from 'moment';
 import { UtilityService } from '../../services/utility.service';
+import { MessageResponseOnly } from '../../types/user';
 
 @Component({
   selector: 'app-create-ride-driver',
@@ -155,7 +156,7 @@ export class CreateRideDriverComponent implements OnInit {
       'YYYY-MM-DD HH:mm:ss',
     );
 
-    const combinedValues = {
+    return {
       destinationCityName,
       startHouseNumber,
       startCityName,
@@ -166,23 +167,24 @@ export class CreateRideDriverComponent implements OnInit {
       pricePerPerson,
       seatsNumber,
     };
-
-    return combinedValues;
   }
 
   handleCreateRide() {
     const combinedValues = this.combineValuesAndCalculateDates(
       this.rideForm.value,
     );
-    console.log('Combined Values:', combinedValues);
 
     this.http
-      .post('http://localhost:8080/api/create-ride', combinedValues, {
-        withCredentials: true,
-      })
+      .post<MessageResponseOnly>(
+        'http://localhost:8080/api/create-ride',
+        combinedValues,
+        {
+          withCredentials: true,
+        },
+      )
       .subscribe(
         (response) => {
-          console.log('Ride created successfully:', response);
+          this.utilityService.showAlert(response.message, 'Close', 3000);
         },
         (error) => {
           const errorMessage =
