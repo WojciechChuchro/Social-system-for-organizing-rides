@@ -7,7 +7,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { switchMap } from 'rxjs/operators';
+import { filter, switchMap } from 'rxjs/operators';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-create-ride-driver',
@@ -20,6 +21,7 @@ export class CreateRideDriverComponent implements OnInit {
   showCityList = false;
   destinationCities: string[] = [];
   showDestinationCityList = false;
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -44,6 +46,13 @@ export class CreateRideDriverComponent implements OnInit {
     this.rideForm
       .get('start_city')
       ?.valueChanges.pipe(
+        tap((value) => {
+          if (value.trim().length === 0) {
+            this.cities = [];
+            this.showCityList = false;
+          }
+        }),
+        filter((value) => value.trim().length > 0),
         switchMap((value) =>
           this.http.get<any>(`http://localhost:8080/api/get-cities/${value}`),
         ),
@@ -65,6 +74,13 @@ export class CreateRideDriverComponent implements OnInit {
     this.rideForm
       .get('destination_city')
       ?.valueChanges.pipe(
+        tap((value) => {
+          if (value.trim().length === 0) {
+            this.destinationCities = [];
+            this.showDestinationCityList = false;
+          }
+        }),
+        filter((value) => value.trim().length > 0),
         switchMap((value) =>
           this.http.get<any>(`http://localhost:8080/api/get-cities/${value}`),
         ),
@@ -107,6 +123,7 @@ export class CreateRideDriverComponent implements OnInit {
     this.destinationCities = [];
     this.showDestinationCityList = false;
   }
+
   handleCreateRide() {
     console.log(this.rideForm);
   }

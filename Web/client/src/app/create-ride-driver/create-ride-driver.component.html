@@ -14,8 +14,10 @@
         </mat-error>
       </mat-form-field>
 
-      <!-- Dropdown for Cities -->
-      <div *ngIf="cities.length > 0 && showCityList">
+      <div
+        *ngIf="cities.length > 0 && showCityList"
+        class="city-list-container"
+      >
         <mat-list>
           <mat-list-item
             *ngFor="let city of cities"
@@ -34,8 +36,10 @@
         </mat-error>
       </mat-form-field>
 
-      <!-- Dropdown for Destination Cities -->
-      <div *ngIf="destinationCities.length > 0 && showDestinationCityList">
+      <div
+        *ngIf="destinationCities.length > 0 && showDestinationCityList"
+        class="city-list-container"
+      >
         <mat-list>
           <mat-list-item
             *ngFor="let city of destinationCities"
