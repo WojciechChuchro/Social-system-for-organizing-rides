@@ -44,10 +44,10 @@ class Addresses extends Model {
 export const createStartAndDestinationAddress = async (
   startZipCode: string,
   startHouseNumber: string,
-  destinationZipCode: string,
-  destinationHouseNumber: string,
+  destinationZipCode: string | null,
+  destinationHouseNumber: string | null,
   startStreetId: number,
-  destinationStreetId: number,
+  destinationStreetId: number | null,
 ): Promise<AddressIds> => {
   const addressIds: AddressIds = {
     startAddressId: -1,
@@ -73,31 +73,39 @@ export const createStartAndDestinationAddress = async (
     }
   } catch (error) {
     console.error('Error:', error);
-    throw new Error('Cannot create an starting address');
+    throw new Error('Cannot create a starting address');
   }
 
-  try {
-    const existingDestinationAddress = await Addresses.query().findOne({
-      streetId: destinationStreetId,
-      zipCode: destinationZipCode,
-      houseNumber: destinationHouseNumber,
-    });
-
-    if (!existingDestinationAddress) {
-      const newDestinationAddress = await Addresses.query().insert({
+  // Only create destination address if destinationZipCode and destinationHouseNumber are not null
+  if (
+    destinationZipCode !== null &&
+    destinationHouseNumber !== null &&
+    destinationStreetId !== null
+  ) {
+    try {
+      const existingDestinationAddress = await Addresses.query().findOne({
         streetId: destinationStreetId,
         zipCode: destinationZipCode,
         houseNumber: destinationHouseNumber,
       });
-      addressIds.destinationAddressId = newDestinationAddress.id;
-    } else {
-      addressIds.destinationAddressId = existingDestinationAddress.id;
-    }
 
-    return addressIds;
-  } catch (error) {
-    console.error('Error:', error);
-    throw new Error('Cannot create an destination address');
+      if (!existingDestinationAddress) {
+        const newDestinationAddress = await Addresses.query().insert({
+          streetId: destinationStreetId,
+          zipCode: destinationZipCode,
+          houseNumber: destinationHouseNumber,
+        });
+        addressIds.destinationAddressId = newDestinationAddress.id;
+      } else {
+        addressIds.destinationAddressId = existingDestinationAddress.id;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      throw new Error('Cannot create a destination address');
+    }
   }
+
+  return addressIds;
 };
+
 export default Addresses;

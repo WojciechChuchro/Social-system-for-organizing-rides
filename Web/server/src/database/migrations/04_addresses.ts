@@ -10,8 +10,8 @@ export async function up(knex: Knex): Promise<void> {
       .inTable('streets')
       .onUpdate('CASCADE')
       .onDelete('CASCADE').notNullable;
-    table.string('zipCode', 9).notNullable;
-    table.string('houseNumber', 7).notNullable;
+    table.string('zipCode', 9).nullable;
+    table.string('houseNumber', 7).nullable;
   });
 }
 export async function down(knex: Knex): Promise<void> {

@@ -29,7 +29,7 @@ export async function up(knex: Knex): Promise<void> {
       .inTable('addresses')
       .onUpdate('CASCADE')
       .onDelete('CASCADE')
-      .notNullable();
+      .nullable();
     table.timestamp('earliestDepartureTime').notNullable();
     table.timestamp('latestDepartureTime').notNullable();
     table.float('pricePerPerson', 8, 2).notNullable();
