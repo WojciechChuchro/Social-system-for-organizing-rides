@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { filter, switchMap } from 'rxjs/operators';
 import { tap } from 'rxjs';
+import { cityValidator } from '../validators';
+import * as moment from 'moment';
+import { UtilityService } from '../../services/utility.service';
 
 @Component({
   selector: 'app-create-ride-driver',
@@ -17,34 +14,36 @@ import { tap } from 'rxjs';
 })
 export class CreateRideDriverComponent implements OnInit {
   rideForm!: FormGroup;
-  cities: string[] = []; // Initialize as an empty array
+  cities: string[] = [];
   showCityList = false;
   destinationCities: string[] = [];
   showDestinationCityList = false;
 
   constructor(
+    private utilityService: UtilityService,
     private fb: FormBuilder,
     private http: HttpClient,
   ) {}
 
   ngOnInit() {
     this.rideForm = this.fb.group({
-      starting_point: [''],
-      departure_time: [''],
-      arrival_time: [''],
-      price: [''],
-      car_model: [''],
-      registration_number: [''],
-      number_of_seats: [''],
-      start_city: ['', [Validators.required, this.cityValidator(this.cities)]],
-      destination_city: [
+      startStreetName: ['', Validators.required],
+      startZipCode: ['', Validators.required],
+      startHouseNumber: ['', Validators.required],
+      startDate: ['', Validators.required],
+      startTime: ['', Validators.required],
+      duration: ['', [Validators.required, Validators.min(1)]],
+      startCityName: ['', [Validators.required, cityValidator(this.cities)]],
+      destinationCityName: [
         '',
-        [Validators.required, this.cityValidator(this.destinationCities)],
+        [Validators.required, cityValidator(this.destinationCities)],
       ],
+      pricePerPerson: ['', [Validators.required, Validators.min(1)]],
+      seatsNumber: ['', [Validators.required, Validators.min(1)]],
     });
 
     this.rideForm
-      .get('start_city')
+      .get('startCityName')
       ?.valueChanges.pipe(
         tap((value) => {
           if (value.trim().length === 0) {
@@ -61,18 +60,15 @@ export class CreateRideDriverComponent implements OnInit {
         this.cities = data.filteredCities;
         this.showCityList = true;
         this.rideForm
-          .get('start_city')
-          ?.setValidators([
-            Validators.required,
-            this.cityValidator(this.cities),
-          ]);
+          .get('startCityName')
+          ?.setValidators([Validators.required, cityValidator(this.cities)]);
         this.rideForm
-          .get('start_city')
+          .get('startCityName')
           ?.updateValueAndValidity({ emitEvent: false });
       });
 
     this.rideForm
-      .get('destination_city')
+      .get('destinationCityName')
       ?.valueChanges.pipe(
         tap((value) => {
           if (value.trim().length === 0) {
@@ -89,42 +85,110 @@ export class CreateRideDriverComponent implements OnInit {
         this.destinationCities = data.filteredCities;
         this.showDestinationCityList = true;
         this.rideForm
-          .get('destination_city')
+          .get('destinationCityName')
           ?.setValidators([
             Validators.required,
-            this.cityValidator(this.destinationCities),
+            cityValidator(this.destinationCities),
           ]);
         this.rideForm
-          .get('destination_city')
+          .get('destinationCityName')
           ?.updateValueAndValidity({ emitEvent: false });
       });
   }
 
-  cityValidator(
-    allowedCities: string[],
-  ): (control: AbstractControl) => ValidationErrors | null {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value;
-      if (!allowedCities.includes(value)) {
-        return { cityNotInList: true };
-      }
-      return null;
-    };
-  }
-
   onCitySelected(city: string) {
-    this.rideForm.get('start_city')?.setValue(city, { emitEvent: false });
+    this.rideForm.get('startCityName')?.setValue(city, { emitEvent: false });
     this.cities = [];
     this.showCityList = false;
   }
 
   onDestinationCitySelected(city: string) {
-    this.rideForm.get('destination_city')?.setValue(city, { emitEvent: false });
+    this.rideForm
+      .get('destinationCityName')
+      ?.setValue(city, { emitEvent: false });
     this.destinationCities = [];
     this.showDestinationCityList = false;
   }
 
+  combineValuesAndCalculateDates(formValue: any): {
+    earliestDepartureTime: string;
+    latestDepartureTime: string;
+    startStreetName: any;
+    startHouseNumber: any;
+    startCityName: any;
+    destinationCityName: any;
+    startZipCode: any;
+    pricePerPerson: any;
+    seatsNumber: any;
+  } {
+    const {
+      destinationCityName,
+      duration,
+      startHouseNumber,
+      startDate,
+      startTime,
+      startCityName,
+      startStreetName,
+      startZipCode,
+      pricePerPerson,
+      seatsNumber,
+    } = formValue;
+
+    const startMoment = moment(startDate).set({
+      hour: parseInt(startTime.split(':')[0], 10),
+      minute: parseInt(startTime.split(':')[1], 10),
+      second: 0,
+    });
+
+    const formattedStartTime = startMoment.format('YYYY-MM-DD HH:mm:ss');
+
+    const durationMinutes =
+      parseInt(duration.split(':')[0], 10) * 60 +
+      parseInt(duration.split(':')[1], 10);
+
+    const latestDepartureMoment = moment(startMoment).add(
+      durationMinutes,
+      'minutes',
+    );
+
+    const formattedLatestDepartureTime = latestDepartureMoment.format(
+      'YYYY-MM-DD HH:mm:ss',
+    );
+
+    const combinedValues = {
+      destinationCityName,
+      startHouseNumber,
+      startCityName,
+      startStreetName,
+      startZipCode,
+      earliestDepartureTime: formattedStartTime,
+      latestDepartureTime: formattedLatestDepartureTime,
+      pricePerPerson,
+      seatsNumber,
+    };
+
+    return combinedValues;
+  }
+
   handleCreateRide() {
-    console.log(this.rideForm);
+    const combinedValues = this.combineValuesAndCalculateDates(
+      this.rideForm.value,
+    );
+    console.log('Combined Values:', combinedValues);
+
+    this.http
+      .post('http://localhost:8080/api/create-ride', combinedValues, {
+        withCredentials: true,
+      })
+      .subscribe(
+        (response) => {
+          console.log('Ride created successfully:', response);
+        },
+        (error) => {
+          const errorMessage =
+            error.error.message || 'An unknown error occurred';
+          this.utilityService.showAlert(errorMessage, 'Close', 3000);
+        },
+      );
   }
 }

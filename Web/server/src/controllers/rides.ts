@@ -35,7 +35,6 @@ export const getRidesWithDrivers = async (req: Request, res: Response) => {
 
 export const createRide = async (req: Request, res: Response) => {
   const { userId } = res.locals.jwt;
-
   try {
     const user = await Users.query().findById(userId);
 
@@ -44,7 +43,6 @@ export const createRide = async (req: Request, res: Response) => {
     }
 
     const {
-      modelId,
       earliestDepartureTime,
       latestDepartureTime,
       registrationNumber,
@@ -52,23 +50,15 @@ export const createRide = async (req: Request, res: Response) => {
       pricePerPerson,
       startZipCode,
       startHouseNumber,
-      destinationZipCode,
-      destinationHouseNumber,
       startCityName,
       destinationCityName,
       startStreetName,
       destinationStreetName,
     } = req.body;
-
-    const parsedModelId = parseInt(modelId);
     const parsedSeatsNumber = parseInt(seatsNumber);
     const parsedPricePerPerson = parseFloat(pricePerPerson);
 
-    if (
-      isNaN(parsedModelId) ||
-      isNaN(parsedSeatsNumber) ||
-      isNaN(parsedPricePerPerson)
-    ) {
+    if (isNaN(parsedSeatsNumber) || isNaN(parsedPricePerPerson)) {
       return res.status(400).json({ message: 'Invalid data format' });
     }
 
@@ -79,23 +69,24 @@ export const createRide = async (req: Request, res: Response) => {
 
     const streetIds: StreetIds = await createStartAndDestinationStreet(
       startStreetName,
-      destinationStreetName,
+      null,
       cityIds.startCityId,
-      cityIds.destinationCityId,
+      null,
     );
+
     const addressIds: AddressIds = await createStartAndDestinationAddress(
       startZipCode,
       startHouseNumber,
-      destinationZipCode,
-      destinationHouseNumber,
+      null,
+      null,
       streetIds.startStreetId,
-      streetIds.destinationStreetId,
+      null,
     );
 
     const newRide = {
       driverId: userId,
       startAddressId: addressIds.startAddressId,
-      destinationAddressId: addressIds.destinationAddressId,
+      destinationAddressId: null as number | null,
       earliestDepartureTime,
       latestDepartureTime,
       pricePerPerson: parsedPricePerPerson,

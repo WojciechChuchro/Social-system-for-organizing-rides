@@ -50,9 +50,9 @@ class Streets extends Model {
 
 export const createStartAndDestinationStreet = async (
   startStreetName: string,
-  destinationStreetName: string,
+  destinationStreetName: string | null,
   startCityId: number,
-  destinationCityId: number,
+  destinationCityId: number | null,
 ): Promise<StreetIds> => {
   const streetIds: StreetIds = {
     startStreetId: -1,
@@ -75,25 +75,58 @@ export const createStartAndDestinationStreet = async (
       streetIds.startStreetId = existingStartStreet.id;
     }
 
-    // Process destination street
-    const existingDestStreet = await Streets.query().findOne({
-      streetName: destinationStreetName,
-    });
-
-    if (!existingDestStreet) {
-      const newDestStreet = await Streets.query().insert({
+    // Process destination street only if destinationStreetName is provided
+    if (destinationStreetName && destinationCityId !== null) {
+      const existingDestStreet = await Streets.query().findOne({
         streetName: destinationStreetName,
-        cityId: destinationCityId,
       });
-      streetIds.destinationStreetId = newDestStreet.id;
-    } else {
-      streetIds.destinationStreetId = existingDestStreet.id;
+
+      if (!existingDestStreet) {
+        const newDestStreet = await Streets.query().insert({
+          streetName: destinationStreetName,
+          cityId: destinationCityId,
+        });
+        streetIds.destinationStreetId = newDestStreet.id;
+      } else {
+        streetIds.destinationStreetId = existingDestStreet.id;
+      }
     }
 
     return streetIds;
   } catch (error) {
     console.error('Error:', error);
-    throw new Error('Cannot create a street');
+    throw new Error('Cannot create streets');
   }
 };
+
+
+export const createStartStreet = async (
+  startStreetName: string,
+  startCityId: number,
+): Promise<number> => {
+  let startStreetId = -1;
+
+  try {
+    // Process start street
+    const existingStartStreet = await Streets.query().findOne({
+      streetName: startStreetName,
+    });
+
+    if (!existingStartStreet) {
+      const newStartStreet = await Streets.query().insert({
+        streetName: startStreetName,
+        cityId: startCityId,
+      });
+      startStreetId = newStartStreet.id;
+    } else {
+      startStreetId = existingStartStreet.id;
+    }
+
+    return startStreetId;
+  } catch (error) {
+    console.error('Error:', error);
+    throw new Error('Cannot create a start street');
+  }
+};
+
 export default Streets;
