@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { LoginForm } from 'src/types/user';
 import { Router } from '@angular/router';
 import { UtilityService } from '../../services/utility.service';
+import {FormBuilder, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-login',
@@ -10,22 +11,30 @@ import { UtilityService } from '../../services/utility.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  loginForm: LoginForm = {
-    email: '',
-    password: '',
-  };
+  loginForm = this.formBuilder.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
+  });
+
   hidePassword: boolean = true;
   loading: boolean = false;
+
+  @ViewChild('emailInput') emailInput!: ElementRef;
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private utilityService: UtilityService,
+    private formBuilder: FormBuilder
   ) {}
+  ngAfterViewInit(): void {
+    this.emailInput.nativeElement.focus();
+  }
 
   handleLogin(): void {
     this.loading = true;
-    this.authService.login(this.loginForm).subscribe({
+    const formData = this.loginForm.value as LoginForm;
+    this.authService.login(formData).subscribe({
       next: (response) => {
         this.utilityService.showAlert(response.message, 'Close', 3000);
         this.authService.setLoginStatus(true);
@@ -39,6 +48,7 @@ export class LoginComponent {
       },
     });
   }
+
 
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;

@@ -2,14 +2,27 @@
   <mat-card-header>
     <mat-card-title>Login</mat-card-title>
   </mat-card-header>
+  <form [formGroup]="loginForm" class="flex-center-column-container">
+
 
   <mat-form-field>
     <input
+      #emailInput
       matInput
-      [(ngModel)]="loginForm.email"
+      formControlName="email"
       placeholder="Email"
+      (keyup.enter)="handleLogin()"
       required
+      tabindex="1"
+      autofocus
     />
+    <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+      Email is required
+    </mat-error>
+    <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+      Please enter a valid email address
+    </mat-error>
+
     <button mat-icon-button matSuffix>
       <mat-icon>login</mat-icon>
     </button>
@@ -19,10 +32,17 @@
     <input
       matInput
       [type]="hidePassword ? 'password' : 'text'"
-      [(ngModel)]="loginForm.password"
+      formControlName="password"
+      (keyup.enter)="handleLogin()"
       placeholder="Password"
       required
+      tabindex="2"
     />
+    <mat-error
+      *ngIf="loginForm.get('password')?.hasError('required')"
+    >
+      Error in password
+    </mat-error>
     <button mat-icon-button matSuffix (click)="togglePasswordVisibility()">
       <mat-icon>{{ hidePassword ? "visibility_off" : "visibility" }}</mat-icon>
     </button>
@@ -42,4 +62,5 @@
       loading</mat-spinner
     >
   </mat-card-actions>
+  </form>
 </mat-card>
