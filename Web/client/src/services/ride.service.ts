@@ -10,7 +10,7 @@ import { environment } from '../environments/environment.development';
   providedIn: 'root',
 })
 export class RideService {
-  private apiBaseUrl: string;
+  private readonly apiBaseUrl: string;
   private rideSource = new BehaviorSubject<Rides | undefined>(undefined);
   currentRide = this.rideSource.asObservable();
 
