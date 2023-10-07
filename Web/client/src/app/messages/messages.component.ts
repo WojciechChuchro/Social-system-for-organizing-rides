@@ -28,7 +28,7 @@ export class MessagesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.getDataWithJwtCookie().subscribe({
+    this.authService.getUserWithJwtCookie().subscribe({
       next: (response: UserWithReviews) => {
         this.email = response.email;
         this.name = response.name;
