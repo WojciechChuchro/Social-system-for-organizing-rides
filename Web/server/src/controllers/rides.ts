@@ -7,6 +7,7 @@ import Rides, {
 import { createStartAndDestinationAddress } from '../database/models/addresses.model';
 import { createStartAndDestinationCity } from '../database/models/cities.model';
 import { createStartAndDestinationStreet } from '../database/models/streets.model';
+import { getRidesWithFilters } from '../database/models/rides.model'
 import { AddressIds, CityIds, StreetIds } from '../types/model';
 import userRides, {
   getUserRidesByUserId,
@@ -244,6 +245,20 @@ export const getCities = async (req: Request, res: Response) => {
 
     res.status(200).json({ filteredCities });
   } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error inserting ride request.' });
+  }
+};
+
+export const getSearchRides = async (req: Request, res: Response) => {
+  const {startCity, destinationCity, selectedDate} = req.params;
+
+  try {
+    const rides = await getRidesWithFilters(startCity, destinationCity, selectedDate);
+
+    res.status(200).json({ rides, message: "Success" });
+  }
+ catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error inserting ride request.' });
   }

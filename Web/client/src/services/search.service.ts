@@ -8,16 +8,13 @@ import { environment } from '../environments/environment.development';
   providedIn: 'root',
 })
 export class SearchService {
-  private apiBaseUrl: string;
+  private readonly apiBaseUrl: string;
   constructor(private http: HttpClient) {
     this.apiBaseUrl = environment.apiBaseUrl;
   }
 
-  getAllRides(): Observable<RidesResponse> {
-    return this.http.get<RidesResponse>(`${this.apiBaseUrl}/rides`);
-  }
-
-  getUsers(userIds: number[]): Observable<UsersResponse> {
-    return this.http.post<UsersResponse>(`${this.apiBaseUrl}/users`, userIds);
+  getAllRides(startCity: string, destinationCity: string, selectedDate: string): Observable<RidesResponse> {
+    const url = `${this.apiBaseUrl}/rides/${startCity}/${destinationCity}/${selectedDate}`;
+    return this.http.get<RidesResponse>(url);
   }
 }

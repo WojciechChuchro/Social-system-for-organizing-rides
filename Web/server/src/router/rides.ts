@@ -6,10 +6,11 @@ import {
   getRidesByUser,
   getRidesWithDrivers,
   GetRidesByUserAsPassenger,
-  getCities,
+  getCities, getSearchRides,
 } from '../controllers/rides';
 
 export default (router: express.Router) => {
+  router.get('/rides/:startCity/:destinationCity/:selectedDate', getSearchRides);
   router.get('/rides', getRidesWithDrivers);
   router.get('/get-rides', authenticateJWT, getRidesByUser);
   router.post('/create-ride', authenticateJWT, createRide);

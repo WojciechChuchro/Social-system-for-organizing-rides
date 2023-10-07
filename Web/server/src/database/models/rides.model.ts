@@ -86,6 +86,71 @@ class Rides extends Model {
       },
     };
   }
+
+
+
+}
+
+export async function getRidesWithFilters(
+  startCity: string,
+  destinationCity: string,
+  selectedDate: string,
+) {
+  try {
+    const ridesQuery = Rides.query()
+      .select(['rides.*'])
+      .modifiers({
+        onlyStartCity(builder) {
+          builder.andWhere('cityName', '=', startCity);
+        },
+        onlyDestinationCity(builder) {
+          builder.andWhere('cityName', '=', destinationCity);
+        },
+      }).withGraphFetched(`[
+      startAddress.[street.[city(onlyStartCity)]],
+      destinationAddress.[street.[city(onlyDestinationCity)]]
+      driver
+      ]`);
+
+    const rides = await ridesQuery;
+
+    const filteredRidesByStartCity = rides.filter(
+      // @ts-ignore
+      (ride) => ride.startAddress.street.city !== null && true,
+    );
+    // @ts-ignore
+    const filteredRidesByDestinationCity = filteredRidesByStartCity.filter(
+      // @ts-ignore
+      (ride) => ride.destinationAddress.street.city !== null && true,
+    );
+    const selectedDateObj = new Date(selectedDate);
+    const selectedDatePart = new Date(
+      selectedDateObj.getFullYear(),
+      selectedDateObj.getMonth(),
+      selectedDateObj.getDate()
+    );
+
+    // Filter rides by comparing the date part of earliestDepartureTime with selectedDatePart
+    const filteredRidesByDate = filteredRidesByDestinationCity.filter(
+      (ride) => {
+        // Convert earliestDepartureTime to a date object and get the date part
+        const departureDate = new Date(ride.earliestDepartureTime);
+        const departureDatePart = new Date(
+          departureDate.getFullYear(),
+          departureDate.getMonth(),
+          departureDate.getDate()
+        );
+
+        // Compare date parts
+        return departureDatePart.getTime() === selectedDatePart.getTime();
+      }
+    );
+
+    return filteredRidesByDate;
+  } catch (error) {
+    console.error('Error getting rides:', error);
+    throw error;
+  }
 }
 
 export async function getRidesByUserId(userId: number): Promise<Rides[]> {
