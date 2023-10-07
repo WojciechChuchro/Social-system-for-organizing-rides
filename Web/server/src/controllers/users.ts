@@ -63,7 +63,7 @@ export const getUserByJWT = async (req: Request, res: Response) => {
     const user = await Users.query()
       .findById(decodedJwt.userId)
       .withGraphFetched('reviews')
-      .select('email', 'name', 'surname', 'phoneNumber', 'profilePicture');
+      .select('id', 'email', 'name', 'surname', 'phoneNumber', 'profilePicture');
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
