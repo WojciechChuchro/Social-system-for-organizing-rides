@@ -61,7 +61,7 @@ export class AuthService {
     );
   }
 
-  getDataWithJwtCookie(): Observable<UserWithReviews> {
+  getUserWithJwtCookie(): Observable<UserWithReviews> {
     return this.http.get<UserWithReviews>(`${this.apiBaseUrl}/user`, {
       withCredentials: true,
     });
