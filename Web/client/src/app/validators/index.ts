@@ -11,9 +11,7 @@ export function zipCodeValidator(
   return null;
 }
 
-export function cityValidator(
-  allowedCities: string[],
-): (control: AbstractControl) => ValidationErrors | null {
+export function cityValidator(allowedCities: string[]): (control: AbstractControl) => ValidationErrors | null {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
     if (!allowedCities.includes(value)) {
