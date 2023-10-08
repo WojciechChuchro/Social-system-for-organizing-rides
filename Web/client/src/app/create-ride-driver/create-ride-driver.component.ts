@@ -54,6 +54,7 @@ export class CreateRideDriverComponent implements OnInit {
         }),
         filter((value) => value.trim().length > 0),
         switchMap((value) =>
+          // todo: Fix types
           this.http.get<any>(`http://localhost:8080/api/get-cities/${value}`),
         ),
       )
