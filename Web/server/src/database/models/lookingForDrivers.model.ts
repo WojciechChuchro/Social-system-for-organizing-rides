@@ -51,6 +51,13 @@ class LookingForDrivers extends Model {
       },
     };
   }
+  static async getAllLookingForDrivers() {
+    try {
+      return await LookingForDrivers.query()
+    } catch (error) {
+      throw new Error('Error fetching looking for drivers: ' + error.message);
+    }
+  }
 }
 
 export default LookingForDrivers;

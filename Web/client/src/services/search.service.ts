@@ -17,4 +17,8 @@ export class SearchService {
     const url = `${this.apiBaseUrl}/rides/${startCity}/${destinationCity}/${selectedDate}`;
     return this.http.get<RidesResponse>(url);
   }
+
+  getAllRides2(): Observable<RidesResponse> {
+    return this.http.get<RidesResponse>(`${this.apiBaseUrl}/rides`);
+  }
 }

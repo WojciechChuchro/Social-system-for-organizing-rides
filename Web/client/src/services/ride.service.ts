@@ -133,4 +133,17 @@ export class RideService {
       },
     );
   }
+
+  getLookingForDrivers(pricePerPerson: number, numberOfSeats: number, startCityName: string, destinationCityName: string, departureTime: string){
+    // todo: Fix types
+    return this.http.post<LookingForDriverResponse>(
+      `${this.apiBaseUrl}/looking-for-drivers`,
+      {
+        pricePerPerson, numberOfSeats, startCityName, destinationCityName, departureTime
+      },
+      {
+        withCredentials: true,
+      }
+    )
+  }
 }

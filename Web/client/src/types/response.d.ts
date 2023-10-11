@@ -57,6 +57,21 @@ export interface Rides extends TimeWindow {
   registrationNumber: string;
   duration: string;
   userRides: UserRides[];
+  lookingForDrivers: LookingForDrivers[];
+}
+
+export interface LookingForDriverResponse extends MessageResponseOnly {
+  lookingForDrivers: LookingForDrivers[];
+}
+export interface LookingForDrivers {
+  id: number
+  driverId: number
+  startAddressId: number
+  destinationAddressId: number
+  earliestDepartureTime: string
+  latestDepartureTime: string
+  pricePerPerson: number
+  seatsNumber: number
 }
 
 export interface UserRides extends TimeWindow {
@@ -109,6 +124,7 @@ export interface Status {
 
 export interface RidesResponse {
   rides: Rides[];
+  message: string;
 }
 export interface UserRidesResponse {
   userRides: UserRides[];

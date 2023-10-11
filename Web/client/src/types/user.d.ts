@@ -34,6 +34,18 @@ export interface RegisterForm {
 export interface MessageResponseOnly {
   message: string;
 }
+
+export interface Messages {
+  id: number
+  driverId: number
+  passengerId: number
+  text: string;
+  sendTime: string;
+  wasRead: number
+}
+export interface MessagesResponse extends MessageResponseOnly{
+  messages: Messages[]
+}
 export interface profileForm {
   email?: string;
   name?: string;

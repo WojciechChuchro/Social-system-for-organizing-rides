@@ -37,10 +37,10 @@ export class YourRidesComponent implements OnInit {
     this.rideService.getRidesForDriver().subscribe({
       next: (ridesResponse: RidesResponse) => {
         this.rides = ridesResponse.rides;
-        console.log('rides', ridesResponse.rides);
       },
       error: (error) => {
-        const errorMessage = error.message || 'An unknown error occurred';
+        console.log(error);
+        const errorMessage = error.error.message || 'An unknown error occurred';
         this.utilityService.showAlert(errorMessage, 'Close', 3000);
       },
     });
@@ -48,13 +48,29 @@ export class YourRidesComponent implements OnInit {
     this.rideService.getRidesForPassenger().subscribe({
       next: (userRidesResponse: UserRidesResponse) => {
         this.ridesPassangers = userRidesResponse.userRides;
-        console.log(userRidesResponse.userRides);
       },
       error: (error) => {
         const errorMessage = error.message || 'An unknown error occurred';
         this.utilityService.showAlert(errorMessage, 'Close', 3000);
       },
     });
+
+
+
+      this.rides.map(ride => {
+        const { pricePerPerson, seatsNumber } = ride;
+        this.rideService.getLookingForDrivers(pricePerPerson, seatsNumber, ride.startAddress.street.city.cityName, ride.destinationAddress.street.city.cityName, ride.earliestDepartureTime).subscribe({
+          next: (response) => {
+            console.log(response);
+            ride.lookingForDrivers = response.lookingForDrivers
+            this.utilityService.showAlert(response.message, 'Close', 3000);
+          },
+          error: (error) => {
+            const errorMessage = error.message || 'An unknown error occurred';
+            this.utilityService.showAlert(errorMessage, 'Close', 3000);
+          }
+        })
+      })
   }
 
   deleteUser(statusId: number): void {

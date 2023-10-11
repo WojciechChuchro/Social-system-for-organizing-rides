@@ -17,7 +17,7 @@ class UserRides extends Model {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['id', 'userId', 'rideId', 'statusId'],
+      required: ['userId', 'rideId', 'statusId'],
       properties: {
         id: { type: 'integer' },
         userId: { type: 'integer' },

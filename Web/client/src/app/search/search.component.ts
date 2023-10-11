@@ -38,6 +38,9 @@ export class SearchComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.getRides();
+
     this.searchForm = this.formBuilder.group({
       startCity: ['', [Validators.required
         , cityValidator(this.startCities)
@@ -114,7 +117,6 @@ export class SearchComponent implements OnInit {
     this.search.getAllRides(startCity, destinationCity, selectedDate)
       .subscribe((ridesResponse: RidesResponse) => {
         this.searchedRides = ridesResponse.rides;
-        console.log(this.searchedRides);
       });
   }
 
@@ -131,6 +133,23 @@ export class SearchComponent implements OnInit {
   }
 
   onRideClick(rideId: number) {
+    const ride: Rides | undefined = this.rides.find((r) => r.id === rideId);
+    if (!ride) {
+      return;
+    }
+    this.rideSharingService.changeRide(ride);
     this.router.navigate(['/ride-detail', rideId]);
+  }
+
+  getRides(): void {
+    this.search.getAllRides2().subscribe({
+      next: (response: RidesResponse) => {
+        this.rides = response.rides
+      },
+      error: (error) => {
+        this.loading = false;
+        console.error('Error getting rides:', error);
+      },
+    });
   }
 }

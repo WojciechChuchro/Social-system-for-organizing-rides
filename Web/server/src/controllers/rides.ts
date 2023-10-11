@@ -13,6 +13,7 @@ import userRides, {
   getUserRidesByUserId,
 } from '../database/models/userRides.model';
 import Statuses from '../database/models/statuses.model';
+import LookingForDrivers from '../database/models/lookingForDrivers.model';
 
 export const getAllRides = async (req: Request, res: Response) => {
   try {
@@ -35,6 +36,7 @@ export const getRidesWithDrivers = async (req: Request, res: Response) => {
 };
 
 export const createRide = async (req: Request, res: Response) => {
+
   const { userId } = res.locals.jwt;
   try {
     const user = await Users.query().findById(userId);
@@ -54,7 +56,6 @@ export const createRide = async (req: Request, res: Response) => {
       startCityName,
       destinationCityName,
       startStreetName,
-      destinationStreetName,
     } = req.body;
     const parsedSeatsNumber = parseInt(seatsNumber);
     const parsedPricePerPerson = parseFloat(pricePerPerson);
@@ -68,26 +69,27 @@ export const createRide = async (req: Request, res: Response) => {
       destinationCityName,
     );
 
+    // todo: What should I do with destination address
     const streetIds: StreetIds = await createStartAndDestinationStreet(
       startStreetName,
-      null,
+      "Not specified",
       cityIds.startCityId,
-      null,
+      cityIds.destinationCityId,
     );
 
     const addressIds: AddressIds = await createStartAndDestinationAddress(
       startZipCode,
       startHouseNumber,
-      null,
-      null,
+      "00-000",
+      "0",
       streetIds.startStreetId,
-      null,
+      streetIds.destinationStreetId,
     );
 
     const newRide = {
       driverId: userId,
       startAddressId: addressIds.startAddressId,
-      destinationAddressId: null as number | null,
+      destinationAddressId: addressIds.destinationAddressId,
       earliestDepartureTime,
       latestDepartureTime,
       pricePerPerson: parsedPricePerPerson,
@@ -127,6 +129,7 @@ export const GetRidesByUserAsPassenger = async (
 };
 
 export const getRidesByUser = async (req: Request, res: Response) => {
+
   const { userId } = res.locals.jwt;
 
   if (isNaN(userId)) {
@@ -135,7 +138,6 @@ export const getRidesByUser = async (req: Request, res: Response) => {
 
   try {
     const rides = await getRidesByUserId(userId);
-
     if (rides.length === 0) {
       return res.status(404).json({ message: 'No rides found for this user.' });
     }
@@ -180,15 +182,15 @@ export const acceptRide = async (req: Request, res: Response) => {
     const newStatus: StatusesInterface = await Statuses.query().insertAndFetch({
       isAccepted: 0,
     });
-
-    await userRides.query().insert({
+    const newUserRide = {
       userId: parsedUserId,
       rideId: parsedRideId,
       statusId: newStatus.id,
-      lookingForDriverId: null,
-    });
+      lookingForDriverId: null as null,
+    };
 
-    res.status(201).json({ message: 'Ride request added successfully!' });
+    await userRides.query().insert(newUserRide);
+    res.status(201).json({ message: 'You have send request for ride!' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error inserting ride request.' });
@@ -263,3 +265,19 @@ export const getSearchRides = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error inserting ride request.' });
   }
 };
+
+export const getAllLookingForDrivers = async (req: Request, res: Response) => {
+  const {pricePerPerson, seatsNumber, startCityName, destinationCityName, departureTime} = req.body
+
+  console.log(pricePerPerson, seatsNumber, startCityName, destinationCityName, departureTime);
+
+  try {
+  const lookingForDrivers = await LookingForDrivers.getAllLookingForDrivers()
+
+  return res.status(200).json({message: "Success", lookingForDrivers})
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message: 'Error fetching looking for drivers.'})
+  }
+}
