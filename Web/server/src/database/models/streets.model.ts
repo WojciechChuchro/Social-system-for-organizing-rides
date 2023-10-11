@@ -76,21 +76,21 @@ export const createStartAndDestinationStreet = async (
     }
 
     // Process destination street only if destinationStreetName is provided
-    if (destinationStreetName && destinationCityId !== null) {
-      const existingDestStreet = await Streets.query().findOne({
-        streetName: destinationStreetName,
-      });
+    // if (destinationStreetName && destinationCityId !== null) {
+    //   const existingDestStreet = await Streets.query().findOne({
+    //     streetName: destinationStreetName,
+    //   });
 
-      if (!existingDestStreet) {
+      // if (!existingDestStreet) {
         const newDestStreet = await Streets.query().insert({
           streetName: destinationStreetName,
           cityId: destinationCityId,
         });
         streetIds.destinationStreetId = newDestStreet.id;
-      } else {
-        streetIds.destinationStreetId = existingDestStreet.id;
-      }
-    }
+      // } else {
+      //   streetIds.destinationStreetId = existingDestStreet.id;
+      // }
+    // }
 
     return streetIds;
   } catch (error) {

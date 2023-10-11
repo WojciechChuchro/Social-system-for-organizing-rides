@@ -83,22 +83,22 @@ export const createStartAndDestinationAddress = async (
     destinationStreetId !== null
   ) {
     try {
-      const existingDestinationAddress = await Addresses.query().findOne({
-        streetId: destinationStreetId,
-        zipCode: destinationZipCode,
-        houseNumber: destinationHouseNumber,
-      });
-
-      if (!existingDestinationAddress) {
+      // const existingDestinationAddress = await Addresses.query().findOne({
+      //   streetId: destinationStreetId,
+      //   zipCode: destinationZipCode,
+      //   houseNumber: destinationHouseNumber,
+      // });
+      //
+      // if (!existingDestinationAddress) {
         const newDestinationAddress = await Addresses.query().insert({
           streetId: destinationStreetId,
           zipCode: destinationZipCode,
           houseNumber: destinationHouseNumber,
         });
         addressIds.destinationAddressId = newDestinationAddress.id;
-      } else {
-        addressIds.destinationAddressId = existingDestinationAddress.id;
-      }
+      // } else {
+      //   addressIds.destinationAddressId = existingDestinationAddress.id;
+      // }
     } catch (error) {
       console.error('Error:', error);
       throw new Error('Cannot create a destination address');
