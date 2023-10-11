@@ -39,6 +39,29 @@
 
             <div class="grid-item-label">Surname:</div>
             <div class="grid-item surname">{{ride.driver.surname}}</div>
+
+          <!-- Section for accepted passengers -->
+          <h4><strong>Passengers Who Drive:</strong></h4>
+          <div *ngFor="let userRide of ride.userRides">
+            <div class="user-detail" *ngIf="userRide.status.isAccepted === 1">
+              <p>{{ userRide.user.name }} {{ userRide.user.surname }}</p>
+              <button mat-button color="warn" (click)="deleteUser(userRide.statusId)">Delete</button>
+              <button mat-raised-button color="primary" (click)="handleOpenChat(ride.driver.id, userRide.userId)">Message a driver</button>
+
+            </div>
+          </div>
+
+          <!-- Section for waiting passengers -->
+          <h4><strong>Waiting For Accept:</strong></h4>
+          <div *ngFor="let userRide of ride.userRides">
+            <div class="user-detail" *ngIf="userRide.status.isAccepted === 0">
+              <p>{{ userRide.user.name }} {{ userRide.user.surname }}</p>
+              <button mat-button color="accent" (click)="acceptUser(userRide.statusId)">Accept</button>
+               </div>
+          </div>
+
+          <h4><strong>Passengers Who Could Drive with you:</strong></h4>
+<!--          todo: List passangers that are registered their offerts for ride -->
         </div>
     </mat-card-content>
 
@@ -75,6 +98,7 @@
         <div class="user-detail">
             <p>{{ userRide.user.name }} {{ userRide.user.surname }}</p>
         </div>
+      <button mat-raised-button color="primary" (click)="handleOpenChat(userRide.ride.driverId, userRide.userId)">Message a driver</button>
         <!-- You can add other sections based on the userRide object structure -->
     </mat-card-content>
 </mat-card>

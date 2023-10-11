@@ -86,4 +86,9 @@ export class YourRidesComponent implements OnInit {
   navigateToDetailsPage() {
     this.router.navigate(['/details-page']);
   }
+
+  handleOpenChat(driverId: number, passangerId: number) {
+    this.rideService.changeId(driverId, passangerId)
+    this.router.navigate(['/messages'])
+  }
 }

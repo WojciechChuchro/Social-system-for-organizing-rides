@@ -5,21 +5,21 @@ import UserRides from '../models/userRides.model';
 
 Model.knex(knex);
 
-class Messages extends Model {
+export class Messages extends Model {
   id!: number;
-  userRideId!: number;
-  userId!: number;
+  passengerId!: number;
+  driverId!: number;
   text!: string;
   sendTime!: string;
   wasRead!: number;
 
   static get messages() {
     return {
-      required: ['id', 'userRideId', 'userId', 'text', 'sendTime', 'wasRead'],
+      required: ['id', 'passengerId', 'driverId', 'text', 'sendTime', 'wasRead'],
       properties: {
         id: { type: 'integer' },
-        userRideId: { type: 'integer' },
-        userId: { type: 'integer' },
+        passengerId: { type: 'integer' },
+        driverId: { type: 'integer' },
         text: { type: 'string', length: 255 },
         sendTime: { type: 'date-string' },
         wasRead: { type: 'number', length: 1 },
@@ -32,24 +32,38 @@ class Messages extends Model {
   }
   static get relationMappings() {
     return {
-      user: {
+      driver: {
         relation: Model.BelongsToOneRelation,
         modelClass: Users,
         join: {
-          from: 'messages.userId',
+          from: 'messages.driverId',
           to: 'users.id',
         },
       },
-      userRide: {
+      passenger: {
         relation: Model.BelongsToOneRelation,
         modelClass: UserRides,
         join: {
-          from: 'messages.userRideId',
+          from: 'messages.passengerId',
           to: 'userRides.id',
         },
       },
     };
   }
+
+  static async getMessagesByDriverAndPassenger(driverId, passengerId) {
+    try {
+      const messages = await Messages.query()
+        .where('driverId', driverId)
+        .andWhere('passengerId', passengerId)
+        .orderBy('sendTime', 'asc');
+
+      return messages;
+    } catch (error) {
+      throw new Error('Error fetching messages: ' + error.message);
+    }
+  }
+
 }
 
 export default Messages;

@@ -6,7 +6,7 @@ import {
   getRidesByUser,
   getRidesWithDrivers,
   GetRidesByUserAsPassenger,
-  getCities, getSearchRides,
+  getCities, getSearchRides, getAllLookingForDrivers
 } from '../controllers/rides';
 
 export default (router: express.Router) => {
@@ -21,4 +21,5 @@ export default (router: express.Router) => {
     GetRidesByUserAsPassenger,
   );
   router.get('/get-cities/:nameFilter', getCities);
+  router.post('/looking-for-drivers', getAllLookingForDrivers)
 };
