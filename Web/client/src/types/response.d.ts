@@ -1,4 +1,4 @@
-import { Users } from './user';
+import { MessageResponseOnly, Users } from './user';
 
 export interface TokenValidationResponse {
   message: string;
