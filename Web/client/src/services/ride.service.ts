@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, take } from 'rxjs';
 // import {Ride, UserRides} from '../types/ride'
 import { HttpClient } from '@angular/common/http';
-import { Rides, RidesResponse, UserRidesResponse } from '../types/response';
-import { MessageResponseOnly } from '../types/user';
+import { LookingForDriverResponse, Rides, RidesResponse, UserRidesResponse } from '../types/response';
+import { MessageResponseOnly, MessagesResponse } from '../types/user';
 import { environment } from '../environments/environment.development';
+import { switchMap } from 'rxjs/operators';
 
+
+export interface IdSource{
+  driverId: number
+  passengerId: number
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -13,13 +19,14 @@ export class RideService {
   private readonly apiBaseUrl: string;
   private rideSource = new BehaviorSubject<Rides | undefined>(undefined);
   currentRide = this.rideSource.asObservable();
-
+  private idSource = new BehaviorSubject<IdSource | undefined>(undefined)
+  currentIds = this.idSource.asObservable()
   constructor(private http: HttpClient) {
     this.apiBaseUrl = environment.apiBaseUrl;
   }
 
   formatDate(dateTime: string): string {
-    const datePart = dateTime.split(' ')[0]; // Get the date part
+    const datePart = dateTime.split(' ')[0];
     const date = new Date(datePart);
     const options: Intl.DateTimeFormatOptions = {
       weekday: 'long',
@@ -62,6 +69,10 @@ export class RideService {
     this.rideSource.next(ride);
   }
 
+  changeId(driverId: number, passengerId: number): void {
+    this.idSource.next({driverId, passengerId})
+  }
+
   reserveRide(rideId: number): Observable<MessageResponseOnly> {
     return this.http.post<MessageResponseOnly>(
       `${this.apiBaseUrl}/accept-ride`,
@@ -69,6 +80,24 @@ export class RideService {
       { withCredentials: true },
     );
   }
+
+  getMessages(): Observable<MessagesResponse> {
+    return this.currentIds.pipe(
+      take(1),
+      switchMap((ids) => {
+        if (ids && ids.driverId && ids.passengerId) {
+          // Construct the URL with the driverId and passengerId
+          return this.http.get<MessagesResponse>(
+            `${this.apiBaseUrl}/messages/${ids.driverId}/${ids.passengerId}`,
+            { withCredentials: true }
+          );
+        } else {
+          return EMPTY;
+        }
+      })
+    );
+  }
+
 
   getRidesForDriver(): Observable<RidesResponse> {
     return this.http.get<RidesResponse>(`${this.apiBaseUrl}/get-rides`, {
