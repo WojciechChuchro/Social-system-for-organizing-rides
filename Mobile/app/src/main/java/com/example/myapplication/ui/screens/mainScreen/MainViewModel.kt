@@ -17,8 +17,8 @@ class MainViewModel : ViewModel(){
     }
     private fun makeNetworkRequestPeriodic(){
         fixedRateTimer(period = 1000L){
-            val randomNumber =  repo.fetchData()
-            _modelData.update { randomNumber }
+            //val randomNumber =  repo.fetchData()
+            //_modelData.update { randomNumber }
         }
     }
 }

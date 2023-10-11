@@ -3,9 +3,17 @@ package com.example.myapplication.data.repository
 import kotlin.random.Random
 
 class Repository {
+    //todo
+    //pull from db
+    //validation
+    //!!!
 
-    fun fetchData(): Int{//data from database
+    fun fetchLogin(): String{   //data from database
         //ODBIERAM DANE
-        return Random.nextInt(0,100)
+        return "login"
+    }
+    fun fetchPassword(): String{    //data from database
+        //ODBIERAM DANE
+        return "haslo"
     }
 }

@@ -17,6 +17,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.ui.screens.Screen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.myapplication.ui.screens.login.LoginScreen
+import com.example.myapplication.data.repository.Repository
+import com.example.myapplication.ui.screens.login.LoginViewModel
+import com.example.myapplication.ui.screens.mainScreen.MainViewModel
 import com.example.myapplication.ui.screens.rides.Ride
 import com.example.myapplication.ui.screens.rides.RideList
 import com.example.myapplication.ui.screens.rides.RideScreen
@@ -28,6 +32,7 @@ fun AppNavGraph() {
     val items = listOf(Screen.Screen1, Screen.Screen2, Screen.Screen3)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val loginModel = LoginViewModel();
 
     Scaffold(
         bottomBar = {
@@ -51,7 +56,11 @@ fun AppNavGraph() {
         }
     ) {
         NavHost(navController = navController, startDestination = Screen.Screen1.route) {
-            composable(Screen.Screen1.route) { RideScreen() }
+            //todo
+            //!!!
+            composable(Screen.Screen1.route) { LoginScreen { username, password ->
+                loginModel.LoginAttempt(username,password)
+            } }
             composable(Screen.Screen2.route) { Screen2() }
             composable(Screen.Screen3.route) { Screen3() }
         }
