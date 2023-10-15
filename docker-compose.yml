@@ -1,0 +1,43 @@
+version: "3"
+services:
+
+  client-service:
+    container_name: ${CLIENT_CONTAINER_NAME}
+    image: ${CLIENT_IMAGE_NAME}
+    build:
+      context: ./client
+    volumes:
+      - ./client:/usr/local/app/client
+    stdin_open: true
+    ports:
+      - ${CLIENT_PORT}
+
+  server-service:
+    container_name: ${CLIENT_CONTAINER_NAME}
+    image: ${SERVER_IMAGE_NAME}
+    build:
+      context: ./server
+    volumes:
+      - ./server:/usr/local/app/server
+    depends_on:
+      - mysql-service
+    ports:
+      - ${SERVER_PORT}
+
+  mysql-service:
+    image: mysql:latest
+    container_name: ${MYSQL_CONTAINER_NAME}
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_DATABASE=${DB_NAME}
+    ports:
+      - ${MYSQL_PORT}
+
+  phpmyadmin-service:
+    image: phpmyadmin:latest
+    container_name: ${PHPMYADMIN_CONTAINER_NAME}
+    environment:
+      - PMA_HOST=${MYSQL_CONTAINER_NAME}
+      - PMA_USER=${DB_USER}
+    ports:
+      - ${PHPMYADMIN_PORT}

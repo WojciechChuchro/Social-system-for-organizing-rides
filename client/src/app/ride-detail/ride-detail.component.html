@@ -1,0 +1,15 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+<!--      <p>{{ ride?.startCityName }} -&ndash;&gt; {{ ride?.destinationCityName }}</p>-->
+    </mat-card-title>
+<!--    <mat-card-subtitle>Driver Name: {{ ride?.driverName }}</mat-card-subtitle>-->
+  </mat-card-header>
+  <mat-card-content>
+    <p>Price: {{ ride?.pricePerPerson }}</p>
+    <p>Seats Available: {{ ride?.seatsNumber }}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button (click)="reserveRide()" mat-button>Reserve a ride</button>
+  </mat-card-actions>
+</mat-card>
