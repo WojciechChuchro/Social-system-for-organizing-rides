@@ -7,7 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
+import com.example.myapplication.ui.screens.login.LoginScreen
+import com.example.myapplication.ui.screens.login.LoginViewModel
 import com.example.myapplication.ui.screens.navigation.AppNavGraph
+val loginModel = LoginViewModel()
 
 class MainActivity : ComponentActivity() {
         val mainVm by viewModels<MainViewModel>()
@@ -16,7 +19,17 @@ class MainActivity : ComponentActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppNavGraph()
+            var isLoggedIn by remember { mutableStateOf(false) }
+
+            if (isLoggedIn) {
+                AppNavGraph()
+            } else {
+               LoginScreen { username, password ->
+                loginModel.LoginAttempt(username,password, onLoginSuccess = { isLoggedIn = true})
+                }
+            }
+
+
             }
         }
 }

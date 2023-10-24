@@ -58,9 +58,10 @@ fun AppNavGraph() {
         NavHost(navController = navController, startDestination = Screen.Screen1.route) {
             //todo
             //!!!
-            composable(Screen.Screen1.route) { LoginScreen { username, password ->
-                loginModel.LoginAttempt(username,password)
-            } }
+//            composable(Screen.Screen1.route) { LoginScreen { username, password ->
+//                loginModel.LoginAttempt(username,password)
+//            } }
+            composable(Screen.Screen1.route) { Screen1() }
             composable(Screen.Screen2.route) { Screen2() }
             composable(Screen.Screen3.route) { Screen3() }
         }
