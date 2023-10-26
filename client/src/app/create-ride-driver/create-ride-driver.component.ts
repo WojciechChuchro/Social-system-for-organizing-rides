@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { filter, switchMap } from 'rxjs/operators';
 import { tap } from 'rxjs';
-import { cityValidator } from '../validators';
+import { cityValidator } from '../../validators/search';
 import * as moment from 'moment';
 import { UtilityService } from '../../services/utility.service';
 import { MessageResponseOnly } from '../../types/user';
