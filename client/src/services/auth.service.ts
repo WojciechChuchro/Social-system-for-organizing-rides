@@ -15,7 +15,7 @@ import { environment } from '../environments/environment.development';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiBaseUrl: string;
+  private readonly apiBaseUrl: string;
   private loginStatusSubject = new BehaviorSubject<boolean>(false);
   loginStatus$ = this.loginStatusSubject.asObservable();
 
