@@ -1,4 +1,8 @@
 @import "~@angular/material/prebuilt-themes/purple-green.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   height: 100%;
@@ -8,19 +12,44 @@ body {
   margin: 0;
 }
 
-.flex-center-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-.p-1 {
-  padding: 1rem;
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
-.flex-center-column-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+// Styles for search scrollbar //
+
+/* Make it look Material-ish */
+.city-list-container::-webkit-scrollbar {
+  width: 12px;
 }
+
+.city-list-container::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+  border-radius: 20px;
+}
+
+.city-list-container::-webkit-scrollbar-thumb {
+  background-color: #3f51b5;  /* A Material-ish blue */
+  border-radius: 20px;
+}
+
+/* For Firefox */
+.city-list-container {
+  scrollbar-width: thin;
+  scrollbar-color: #3f51b5 #f5f5f5;
+}
+
+/* Common styles */
+.city-list-container {
+  max-height: 200px; /* Adjust as per your need */
+  overflow-y: auto;
+}
+
+
