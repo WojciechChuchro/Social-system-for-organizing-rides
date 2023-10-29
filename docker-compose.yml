@@ -25,7 +25,7 @@ services:
       - ${SERVER_PORT}
 
   mysql-service:
-    image: mysql:latest
+    image: mysql:8.2.0
     container_name: ${MYSQL_CONTAINER_NAME}
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
@@ -34,7 +34,7 @@ services:
       - ${MYSQL_PORT}
 
   phpmyadmin-service:
-    image: phpmyadmin:latest
+    image: phpmyadmin:5.2.1-apache
     container_name: ${PHPMYADMIN_CONTAINER_NAME}
     environment:
       - PMA_HOST=${MYSQL_CONTAINER_NAME}
