@@ -6,8 +6,34 @@
 <!--    <mat-card-subtitle>Driver Name: {{ ride?.driverName }}</mat-card-subtitle>-->
   </mat-card-header>
   <mat-card-content>
-    <p>Price: {{ ride?.pricePerPerson }}</p>
-    <p>Seats Available: {{ ride?.seatsNumber }}</p>
+    <div>
+      <p>
+        Start address:
+        {{
+          (ride?.startAddress?.street?.city?.cityName ?? 'Default City Name') +
+            (ride?.startAddress?.street?.streetName ?? 'Default Street Name')
+        }}
+
+        Destination address:
+        {{
+          (ride?.destinationAddress?.street?.city?.cityName ??
+            'Default City Name') +
+            (ride?.destinationAddress?.street?.streetName ??
+              'Default Street Name')
+        }}
+
+        Driver:
+        {{ ride?.driver?.name ?? 'Default Driver Name' }}
+        {{ ride?.driver?.surname ?? 'Default Driver Surname' }}
+      </p>
+      <div *ngIf="ride?.driver?.profilePicture">
+        <img
+          class="h-[5rem] w-[5rem] rounded-2xl"
+          [src]="ride?.driver?.profilePicture"
+          alt="Profile Picture"
+        />
+      </div>
+    </div>
   </mat-card-content>
   <mat-card-actions>
     <button (click)="reserveRide()" mat-button>Reserve a ride</button>

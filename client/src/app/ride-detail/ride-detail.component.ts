@@ -18,6 +18,7 @@ export class RideDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.rideSharingService.currentRide.subscribe((ride) => (this.ride = ride));
+    console.log(this.ride);
   }
 
   reserveRide(): void {
