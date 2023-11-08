@@ -2,15 +2,19 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable, take } from 'rxjs';
 // import {Ride, UserRides} from '../types/ride'
 import { HttpClient } from '@angular/common/http';
-import { LookingForDriverResponse, Rides, RidesResponse, UserRidesResponse } from '../types/response';
+import {
+  LookingForDriverResponse,
+  Rides, RidesPassangers,
+  RidesResponse,
+  UserRidesResponse,
+} from '../types/response';
 import { MessageResponseOnly, MessagesResponse } from '../types/user';
 import { environment } from '../environments/environment.development';
 import { switchMap } from 'rxjs/operators';
 
-
-export interface IdSource{
-  driverId: number
-  passengerId: number
+export interface IdSource {
+  driverId: number;
+  passengerId: number;
 }
 @Injectable({
   providedIn: 'root',
@@ -19,8 +23,8 @@ export class RideService {
   private readonly apiBaseUrl: string;
   private rideSource = new BehaviorSubject<Rides | undefined>(undefined);
   currentRide = this.rideSource.asObservable();
-  private idSource = new BehaviorSubject<IdSource | undefined>(undefined)
-  currentIds = this.idSource.asObservable()
+  private idSource = new BehaviorSubject<IdSource | undefined>(undefined);
+  currentIds = this.idSource.asObservable();
   constructor(private http: HttpClient) {
     this.apiBaseUrl = environment.apiBaseUrl;
   }
@@ -70,7 +74,7 @@ export class RideService {
   }
 
   changeId(driverId: number, passengerId: number): void {
-    this.idSource.next({driverId, passengerId})
+    this.idSource.next({ driverId, passengerId });
   }
 
   reserveRide(rideId: number): Observable<MessageResponseOnly> {
@@ -89,15 +93,14 @@ export class RideService {
           // Construct the URL with the driverId and passengerId
           return this.http.get<MessagesResponse>(
             `${this.apiBaseUrl}/messages/${ids.driverId}/${ids.passengerId}`,
-            { withCredentials: true }
+            { withCredentials: true },
           );
         } else {
           return EMPTY;
         }
-      })
+      }),
     );
   }
-
 
   getRidesForDriver(): Observable<RidesResponse> {
     return this.http.get<RidesResponse>(`${this.apiBaseUrl}/get-rides`, {
@@ -105,8 +108,8 @@ export class RideService {
     });
   }
 
-  getRidesForPassenger(): Observable<UserRidesResponse> {
-    return this.http.get<UserRidesResponse>(
+  getRidesForPassenger(): Observable<RidesPassangers> {
+    return this.http.get<RidesPassangers>(
       `${this.apiBaseUrl}/get-rides-as-passenger`,
       {
         withCredentials: true,
@@ -134,16 +137,26 @@ export class RideService {
     );
   }
 
-  getLookingForDrivers(pricePerPerson: number, numberOfSeats: number, startCityName: string, destinationCityName: string, departureTime: string){
+  getLookingForDrivers(
+    pricePerPerson: number,
+    numberOfSeats: number,
+    startCityName: string,
+    destinationCityName: string,
+    departureTime: string,
+  ) {
     // todo: Fix types
     return this.http.post<LookingForDriverResponse>(
       `${this.apiBaseUrl}/looking-for-drivers`,
       {
-        pricePerPerson, numberOfSeats, startCityName, destinationCityName, departureTime
+        pricePerPerson,
+        numberOfSeats,
+        startCityName,
+        destinationCityName,
+        departureTime,
       },
       {
         withCredentials: true,
-      }
-    )
+      },
+    );
   }
 }

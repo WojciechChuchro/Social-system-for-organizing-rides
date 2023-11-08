@@ -4,7 +4,7 @@ import userRides from './userRides.model';
 
 Model.knex(knex);
 
-class LookingForDrivers extends Model {
+export class LookingForDrivers extends Model {
   id!: number;
   startAddressId!: number;
   destinationAddressId!: number;

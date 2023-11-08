@@ -3,15 +3,33 @@
     <mat-card-title>Registration</mat-card-title>
   </mat-card-header>
   <mat-form-field>
-    <input matInput [(ngModel)]="registerForm.email" placeholder="Email" required (keyup.enter)="handleRegister()" />
+    <input
+      matInput
+      [(ngModel)]="registerForm.email"
+      placeholder="Email"
+      required
+      (keyup.enter)="handleRegister()"
+    />
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [(ngModel)]="registerForm.name" placeholder="Name" required (keyup.enter)="handleRegister()"/>
+    <input
+      matInput
+      [(ngModel)]="registerForm.name"
+      placeholder="Name"
+      required
+      (keyup.enter)="handleRegister()"
+    />
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput [(ngModel)]="registerForm.surname" placeholder="Surname" required (keyup.enter)="handleRegister()"/>
+    <input
+      matInput
+      [(ngModel)]="registerForm.surname"
+      placeholder="Surname"
+      required
+      (keyup.enter)="handleRegister()"
+    />
   </mat-form-field>
 
   <mat-form-field>

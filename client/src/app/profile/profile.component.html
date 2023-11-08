@@ -1,29 +1,58 @@
-<div class="flex-center-container">
-  <div class="flex-center-column-container p-1">
+<div class="flex flex justify-center items-center">
+  <div class="flex flex-col justify-center items-center p-1">
     <h2>Driver Rating: {{ averageRating?.toFixed(2) || 'No reviews yet' }}</h2>
     <mat-form-field>
-      <input matInput type="text" [placeholder]="name || 'name'" [(ngModel)]="profileForm.name"/>
+      <input
+        matInput
+        type="text"
+        [placeholder]="profileForm.name || 'name'"
+        [(ngModel)]="profileForm.name"
+      />
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="text" [placeholder]="surname || 'surname'" [(ngModel)]="profileForm.surname"/>
+      <input
+        matInput
+        type="text"
+        [placeholder]="profileForm.surname || 'surname'"
+        [(ngModel)]="profileForm.surname"
+      />
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="text" [placeholder]="phoneNumber || 'phoneNumber'"
-             [(ngModel)]="profileForm.phoneNumber"/>
+      <input
+        matInput
+        type="text"
+        [placeholder]="profileForm.phoneNumber || 'phoneNumber'"
+        [(ngModel)]="profileForm.phoneNumber"
+      />
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="email" [placeholder]="email || 'email'" [(ngModel)]="profileForm.email"/>
+      <input
+        matInput
+        type="email"
+        [placeholder]="profileForm.email || 'email'"
+        [(ngModel)]="profileForm.email"
+      />
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="password" placeholder="Password" [(ngModel)]="profileForm.password"/>
+      <input
+        matInput
+        type="password"
+        placeholder="Password"
+        [(ngModel)]="profileForm.password"
+      />
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit" (click)="updateProfile()">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      (click)="updateProfile()"
+    >
       Save Changes
     </button>
   </div>
-  <div class="flex-center-column-container p-1">
-    <div *ngIf="profilePicture; else noPicture">
-      <img [src]="profilePicture" alt="Profile Picture">
+  <div class="flex flex-col justify-center items-center p-1">
+    <div *ngIf="profileForm.profilePicture; else noPicture">
+      <img [src]="profileForm.profilePicture" alt="Profile Picture" />
     </div>
     <ng-template #noPicture>
       <h2>There is no profile picture</h2>

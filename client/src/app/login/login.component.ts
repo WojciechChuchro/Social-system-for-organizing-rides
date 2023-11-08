@@ -1,9 +1,9 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { LoginForm } from 'src/types/user';
 import { Router } from '@angular/router';
 import { UtilityService } from '../../services/utility.service';
-import {FormBuilder, Validators} from "@angular/forms";
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +25,7 @@ export class LoginComponent {
     private router: Router,
     private authService: AuthService,
     private utilityService: UtilityService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
   ) {}
   ngAfterViewInit(): void {
     this.emailInput.nativeElement.focus();
@@ -48,7 +48,6 @@ export class LoginComponent {
       },
     });
   }
-
 
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;

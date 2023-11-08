@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from '../../services/socket.service';
-import { MessageResponseOnly, Messages, MessagesResponse, Reviews, UserWithReviews } from '../../types/user';
+import {
+  MessageResponseOnly,
+  Messages,
+  MessagesResponse,
+  Reviews,
+  UserWithReviews,
+} from '../../types/user';
 import { AuthService } from '../../services/auth.service';
 import { UtilityService } from '../../services/utility.service';
 import { IdSource, RideService } from '../../services/ride.service';
@@ -27,13 +33,13 @@ export class MessagesComponent implements OnInit {
     private socketService: SocketService,
     private authService: AuthService,
     private utilityService: UtilityService,
-    private rideService: RideService
+    private rideService: RideService,
   ) {}
 
   ngOnInit(): void {
     this.rideService.currentIds.subscribe({
       next: (response) => {
-        this.currentIds = response
+        this.currentIds = response;
       },
       error: (error) => {
         console.error('Error:', error);
@@ -44,9 +50,9 @@ export class MessagesComponent implements OnInit {
 
     this.rideService.getMessages().subscribe({
       next: (messages: MessagesResponse) => {
-        this.messages =  messages.messages
-        const successMessage = messages.message || 'Success'
-        this.utilityService.showAlert(successMessage, 'Close', 3000)
+        this.messages = messages.messages;
+        const successMessage = messages.message || 'Success';
+        this.utilityService.showAlert(successMessage, 'Close', 3000);
       },
       error: (error) => {
         console.error('Error:', error);
@@ -55,11 +61,11 @@ export class MessagesComponent implements OnInit {
       },
     });
 
-
     this.authService.getUserWithJwtCookie().subscribe({
       next: (response: UserWithReviews) => {
-        const {id, email, name, surname, phoneNumber, profilePicture} = response
-        this.id = id
+        const { id, email, name, surname, phoneNumber, profilePicture } =
+          response;
+        this.id = id;
         this.email = email;
         this.name = name;
         this.surname = surname;
@@ -73,11 +79,9 @@ export class MessagesComponent implements OnInit {
       },
     });
 
-    this.socketService.listenForEvent(
-      'newMessage', (data: Messages) => {
-        this.messages?.push(data);
-      },
-    );
+    this.socketService.listenForEvent('newMessage', (data: Messages) => {
+      this.messages?.push(data);
+    });
   }
   formatDateToYYYYMMDDHHMMSS(date: Date) {
     const year = date.getFullYear();
@@ -99,7 +103,7 @@ export class MessagesComponent implements OnInit {
       driverId: this.currentIds?.driverId,
       text: this.message,
       sendTime: this.formatDateToYYYYMMDDHHMMSS(new Date()),
-      wasRead: 0
+      wasRead: 0,
     };
     this.socketService.emitEvent('sendMessage', messageData);
     this.message = '';

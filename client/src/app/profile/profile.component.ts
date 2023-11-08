@@ -18,13 +18,8 @@ import { environment } from '../../environments/environment.development';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  email: string | null = null;
-  name: string | null = null;
-  surname: string | null = null;
-  phoneNumber: string | null = null;
-  profilePicture: string | null = null;
-  reviews: Reviews[] | null = null;
-  averageRating: number | null = null;
+  reviews?: Reviews[];
+  averageRating?: number | null;
 
   profileForm: profileForm = {
     email: '',
@@ -32,6 +27,7 @@ export class ProfileComponent implements OnInit {
     surname: '',
     phoneNumber: '',
     password: '',
+    profilePicture: '',
   };
   private apiBaseUrl: string;
 
@@ -60,13 +56,12 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.authService.getUserWithJwtCookie().subscribe({
       next: (response: UserWithReviews) => {
-        console.log(response);
         this.reviews = response.reviews;
-        this.email = response.email;
-        this.name = response.name;
-        this.surname = response.surname;
-        this.phoneNumber = response.phoneNumber;
-        this.profilePicture = response.profilePicture;
+        this.profileForm.email = response.email;
+        this.profileForm.name = response.name;
+        this.profileForm.surname = response.surname;
+        this.profileForm.phoneNumber = response.phoneNumber;
+        this.profileForm.profilePicture = response.profilePicture;
         this.computeAverageRating();
       },
       error: (error) => {
@@ -86,13 +81,13 @@ export class ProfileComponent implements OnInit {
       )
       .subscribe({
         next: (response: MessageResponseOnly) => {
-          this.utilityService.showAlert(response.message, 'Close', 3000); // Use the service method
+          this.utilityService.showAlert(response.message, 'Close', 3000);
         },
         error: (error) => {
           console.log(error);
           const errorMessage =
             error.error.message || 'An unknown error occurred';
-          this.utilityService.showAlert(errorMessage, 'Close', 3000); // Use the service method
+          this.utilityService.showAlert(errorMessage, 'Close', 3000);
         },
       });
   }

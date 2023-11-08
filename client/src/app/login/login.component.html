@@ -3,64 +3,62 @@
     <mat-card-title>Login</mat-card-title>
   </mat-card-header>
   <form [formGroup]="loginForm" class="flex flex-col">
+    <mat-form-field>
+      <input
+        #emailInput
+        matInput
+        formControlName="email"
+        placeholder="Email"
+        (keyup.enter)="handleLogin()"
+        required
+        tabindex="1"
+        autofocus
+      />
+      <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+        Email is required
+      </mat-error>
+      <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+        Please enter a valid email address
+      </mat-error>
 
+      <button mat-icon-button matSuffix>
+        <mat-icon>login</mat-icon>
+      </button>
+    </mat-form-field>
 
-  <mat-form-field>
-    <input
-      #emailInput
-      matInput
-      formControlName="email"
-      placeholder="Email"
-      (keyup.enter)="handleLogin()"
-      required
-      tabindex="1"
-      autofocus
-    />
-    <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
-      Email is required
-    </mat-error>
-    <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
-      Please enter a valid email address
-    </mat-error>
+    <mat-form-field>
+      <input
+        matInput
+        [type]="hidePassword ? 'password' : 'text'"
+        formControlName="password"
+        (keyup.enter)="handleLogin()"
+        placeholder="Password"
+        required
+        tabindex="2"
+      />
+      <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+        Error in password
+      </mat-error>
+      <button mat-icon-button matSuffix (click)="togglePasswordVisibility()">
+        <mat-icon>{{
+          hidePassword ? 'visibility_off' : 'visibility'
+        }}</mat-icon>
+      </button>
+    </mat-form-field>
 
-    <button mat-icon-button matSuffix>
-      <mat-icon>login</mat-icon>
-    </button>
-  </mat-form-field>
-
-  <mat-form-field>
-    <input
-      matInput
-      [type]="hidePassword ? 'password' : 'text'"
-      formControlName="password"
-      (keyup.enter)="handleLogin()"
-      placeholder="Password"
-      required
-      tabindex="2"
-    />
-    <mat-error
-      *ngIf="loginForm.get('password')?.hasError('required')"
-    >
-      Error in password
-    </mat-error>
-    <button mat-icon-button matSuffix (click)="togglePasswordVisibility()">
-      <mat-icon>{{ hidePassword ? "visibility_off" : "visibility" }}</mat-icon>
-    </button>
-  </mat-form-field>
-
-  <mat-card-actions>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="handleLogin()"
-      [hidden]="loading"
-      [disabled]="loading"
-    >
-      Login
-    </button>
-    <mat-spinner *ngIf="loading" color="accent" diameter="50" strokeWidth="5">
-      loading</mat-spinner
-    >
-  </mat-card-actions>
+    <mat-card-actions>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="handleLogin()"
+        [hidden]="loading"
+        [disabled]="loading"
+      >
+        Login
+      </button>
+      <mat-spinner *ngIf="loading" color="accent" diameter="50" strokeWidth="5">
+        loading</mat-spinner
+      >
+    </mat-card-actions>
   </form>
 </mat-card>
