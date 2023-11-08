@@ -1,105 +1,163 @@
 <mat-card *ngIf="rides.length === 0">
-    <mat-card-content>
-        No rides found.
-    </mat-card-content>
+  <mat-card-content> No rides found. </mat-card-content>
 </mat-card>
 
-<mat-card *ngIf="rides.length != 0">
-    <mat-card-content>
-        Rides where you are a driver
-    </mat-card-content>
+<mat-card *ngIf="rides.length !== 0">
+  <h1 class="text-center py-2">My Upcoming Driving</h1>
 </mat-card>
 
+<!--        *ngFor="let ride of searchedRides" (click)="onRideClick(ride.id)" -->
 <mat-card *ngFor="let ride of rides">
-    <mat-card-content>
-        <div class="grid-container">
-            <div class="grid-item-label">Start Date:</div>
-            <div class="grid-item date">{{ride.earliestDepartureTime | date:'h:mm a'}}</div>
+  <mat-card-content>
+    <div
+      class="flex items-center justify-between bg-darkGreyBackground rounded-2xl h-[7rem]"
+    >
+      <div class="flex items-center justify-center w-1/3">
+        <div class="flex flex-col items-center p-1">
+          <div>{{ ride.earliestDepartureTime | date: 'HH:mm' }}</div>
+          02:00
+          <!--          <div class="text-gray-300">{{calculateRideDuration(ride.earliestDepartureTime, ride.latestDepartureTime)}} </div>-->
+          <div>{{ ride.latestDepartureTime | date: 'HH:mm' }}</div>
+        </div>
+        <div class="flex flex-col items-center p-1">
+          <div>{{ ride.startAddress.street.city.cityName }}</div>
+          <mat-icon> south </mat-icon>
+          <div>{{ ride.destinationAddress.street.city.cityName }}</div>
+        </div>
+        <div></div>
+        <div class="flex">
+          <div *ngIf="ride.driver.profilePicture">
+            <img
+              class="h-[5rem] w-[5rem] rounded-2xl"
+              [src]="ride.driver.profilePicture"
+              alt="Profile Picture"
+            />
+          </div>
 
-            <div class="grid-item-label">Start Address:</div>
-            <div class="grid-item address">{{ride.startAddress.street.city.cityName}}</div>
-
-            <div class="grid-item-label">Details:</div>
-            <button mat-button (click)="navigateToDetailsPage()">Go to Details</button>
-
-            <div class="grid-item-label">Destination Date:</div>
-            <div class="grid-item date">{{ride.earliestDepartureTime | date:'h:mm a'}}</div>
-
-            <div class="grid-item-label">Destination Address:</div>
-            <div class="grid-item address">{{ride.destinationAddress.street.city.cityName}}</div>
-
-            <div class="grid-item-label">Price:</div>
-            <div class="grid-item price">{{ride.pricePerPerson}}</div>
-
-            <div class="grid-item-label">Profile:</div>
-            <div class="grid-item profile-pic"><img [src]="ride.driver.profilePicture" alt="Profile Picture"></div>
-
-            <div class="grid-item-label">Name:</div>
-            <div class="grid-item name">{{ride.driver.name}}</div>
-
-            <div class="grid-item-label">Surname:</div>
-            <div class="grid-item surname">{{ride.driver.surname}}</div>
-
-          <!-- Section for accepted passengers -->
-          <h4><strong>Passengers Who Drive:</strong></h4>
-          <div *ngFor="let userRide of ride.userRides">
-            <div class="user-detail" *ngIf="userRide.status.isAccepted === 1">
-              <p>{{ userRide.user.name }} {{ userRide.user.surname }}</p>
-              <button mat-button color="warn" (click)="deleteUser(userRide.statusId)">Delete</button>
-              <button mat-raised-button color="primary" (click)="handleOpenChat(ride.driver.id, userRide.userId)">Message a driver</button>
-
+          <div class="p-2">
+            <div>
+              {{ ride.driver.name }}
+            </div>
+            <div class="text-gray-300">{{ ride.pricePerPerson }} PLN</div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="ride.userRides.length !== 0 && help(ride)" class="w-2/3">
+        <h4 class='text-center'>Passengers Ready to Ride</h4>
+        <div class="flex">
+          <div *ngFor="let userRide of ride.userRides" class="w-1/2">
+            <div class="flex" *ngIf="userRide.status.isAccepted === 1">
+              <div class="flex items-center">
+                <div class="flex flex-col px-3">
+                  <div>{{ userRide.user.name }}</div>
+                  <div>{{ userRide.user.surname }}</div>
+                  <div>
+                    <span
+                      class="material-symbols-outlined cursor-pointer"
+                      (click)="deleteUser(userRide.statusId)"
+                      >delete</span
+                    >
+                    <span
+                      class="material-symbols-outlined cursor-pointer"
+                      (click)="handleOpenChat(ride.driver.id, userRide.userId)"
+                      >chat</span
+                    >
+                  </div>
+                </div>
+                <img
+                  class="h-[4rem] w-[4rem] rounded-3xl"
+                  [src]="userRide.user.profilePicture"
+                  alt="Profile Picture"
+                />
+              </div>
             </div>
           </div>
-
-          <!-- Section for waiting passengers -->
-          <h4><strong>Waiting For Accept:</strong></h4>
-          <div *ngFor="let userRide of ride.userRides">
-            <div class="user-detail" *ngIf="userRide.status.isAccepted === 0">
-              <p>{{ userRide.user.name }} {{ userRide.user.surname }}</p>
-              <button mat-button color="accent" (click)="acceptUser(userRide.statusId)">Accept</button>
-               </div>
-          </div>
-
-          <h4><strong>Passengers Who Could Drive with you:</strong></h4>
-<!--          todo: List passangers that are registered their offerts for ride -->
         </div>
-    </mat-card-content>
+      </div>
+    </div>
+    <div *ngIf="ride.userRides.length != 0">
+      <h4 class="text-center pt-4">Passengers Awaiting Approval</h4>
+      <div class="grid grid-cols-3 gap-2">
+        <div *ngFor="let userRide of ride.userRides">
+          <div
+            *ngIf="userRide.status.isAccepted === 0"
+            class="flex items-center p-2 my-3 bg-darkGreyBackground rounded-2xl w-full justify-center"
+          >
+            <div class="flex items-center">
+              <div class="flex flex-col px-3">
+                <div>
+                  {{ userRide.user.name }}
+                </div>
+                <div>
+                  {{ userRide.user.surname }}
+                </div>
+              </div>
+              <img
+                class="h-[4rem] w-[4rem] rounded-3xl"
+                [src]="userRide.user.profilePicture"
+                alt="Profile Picture"
+              />
+            </div>
+            <button
+              class="px-1"
+              mat-button
+              color="accent"
+              (click)="acceptUser(userRide.statusId)"
+            >
+              Accept
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <div>
+      <h4 class="text-center pt-4">Passengers Open to Carpooling</h4>
+    </div>
+  </mat-card-content>
 </mat-card>
 
 <!-- Display a card when there are passenger rides -->
-<mat-card *ngIf="ridesPassangers.length != 0">
-    <mat-card-content>
-        Ride where you are a passenger
-    </mat-card-content>
+<mat-card *ngIf="ridesPassangers.length !== 0">
+  <h1 class="p-2 flex justify-center">My Upcoming Passengers Trips</h1>
 </mat-card>
-
 <!-- Loop through the array of passenger rides -->
 <mat-card *ngFor="let userRide of ridesPassangers">
-    <mat-card-content>
-        <!-- Display departure information -->
-        <div class="ridesPassanger-detail">
-            <h3><strong>Departure Date:</strong></h3>
-            <p>{{ userRide.ride.earliestDepartureTime }}
-                - {{ userRide.ride.latestDepartureTime }}</p>
-        </div>
-        <div class="ridesPassanger-detail">
-            <h3><strong>Departure Time:</strong></h3>
-            <p>{{ userRide.ride.earliestDepartureTime }}
-                - {{ userRide.ride.latestDepartureTime }}</p>
-        </div>
-        <!-- Display other ride information (this would need to be calculated on the component side) -->
-        <div class="ridesPassanger-detail">
-            <h3><strong>Ride Duration:</strong></h3>
-            <p>Ride will take: {{ userRide.ride.duration }}</p>
-        </div>
-        <!-- Display passenger and driver information -->
-        <h4><strong>Driver:</strong></h4>
-        <div class="user-detail">
-            <p>{{ userRide.user.name }} {{ userRide.user.surname }}</p>
-        </div>
-      <button mat-raised-button color="primary" (click)="handleOpenChat(userRide.ride.driverId, userRide.userId)">Message a driver</button>
-        <!-- You can add other sections based on the userRide object structure -->
-    </mat-card-content>
-</mat-card>
+  <mat-card-content>
 
+    <div
+      class="flex items-center justify-between bg-darkGreyBackground rounded-2xl h-[7rem]"
+    >
+      <div class="flex items-center justify-center w-1/3">
+        <div class="flex flex-col items-center p-1">
+          <div>{{ userRide.ride.earliestDepartureTime | date: 'HH:mm' }}</div>
+          02:00
+          <!--          <div class="text-gray-300">{{calculateRideDuration(ride.earliestDepartureTime, ride.latestDepartureTime)}} </div>-->
+          <div>{{ userRide.ride.latestDepartureTime | date: 'HH:mm' }}</div>
+        </div>
+        <div class="flex flex-col items-center p-1">
+<!--          <div>{{ userRide.startAddress.street.city.cityName }}</div>-->
+          <mat-icon> south </mat-icon>
+<!--          <div>{{ userRide.destinationAddress.street.city.cityName }}</div>-->
+        </div>
+        <div></div>
+        <div class="flex">
+          <div *ngIf="userRide.ride.driver.profilePicture">
+            <img
+              class="h-[5rem] w-[5rem] rounded-2xl"
+              [src]="userRide.ride.driver.profilePicture"
+              alt="Profile Picture"
+            />
+          </div>
+
+          <div class="p-2">
+            <div>
+              {{ userRide.ride.driver.name }}
+            </div>
+            <div class="text-gray-300">{{ userRide.ride.pricePerPerson }} PLN</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
-  Rides,
+  Rides, RidesPassangers,
   RidesResponse,
   UserRides,
   UserRidesResponse,
@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 })
 export class YourRidesComponent implements OnInit {
   rides: Rides[] = [];
-  ridesPassangers: UserRides[] = [];
+  ridesPassangers: RidesPassangers[] = [];
 
   constructor(
     private http: HttpClient,
@@ -46,8 +46,10 @@ export class YourRidesComponent implements OnInit {
     });
 
     this.rideService.getRidesForPassenger().subscribe({
-      next: (userRidesResponse: UserRidesResponse) => {
-        this.ridesPassangers = userRidesResponse.userRides;
+    // @ts-ignore
+      next: (userRidesResponse: RidesPassangers[]) => {
+        this.ridesPassangers = userRidesResponse;
+        console.log(this.ridesPassangers)
       },
       error: (error) => {
         const errorMessage = error.message || 'An unknown error occurred';
@@ -55,22 +57,28 @@ export class YourRidesComponent implements OnInit {
       },
     });
 
-
-
-      this.rides.map(ride => {
-        const { pricePerPerson, seatsNumber } = ride;
-        this.rideService.getLookingForDrivers(pricePerPerson, seatsNumber, ride.startAddress.street.city.cityName, ride.destinationAddress.street.city.cityName, ride.earliestDepartureTime).subscribe({
+    this.rides.map((ride) => {
+      const { pricePerPerson, seatsNumber } = ride;
+      this.rideService
+        .getLookingForDrivers(
+          pricePerPerson,
+          seatsNumber,
+          ride.startAddress.street.city.cityName,
+          ride.destinationAddress.street.city.cityName,
+          ride.earliestDepartureTime,
+        )
+        .subscribe({
           next: (response) => {
             console.log(response);
-            ride.lookingForDrivers = response.lookingForDrivers
+            ride.lookingForDrivers = response.lookingForDrivers;
             this.utilityService.showAlert(response.message, 'Close', 3000);
           },
           error: (error) => {
             const errorMessage = error.message || 'An unknown error occurred';
             this.utilityService.showAlert(errorMessage, 'Close', 3000);
-          }
-        })
-      })
+          },
+        });
+    });
   }
 
   deleteUser(statusId: number): void {
@@ -104,7 +112,13 @@ export class YourRidesComponent implements OnInit {
   }
 
   handleOpenChat(driverId: number, passangerId: number) {
-    this.rideService.changeId(driverId, passangerId)
-    this.router.navigate(['/messages'])
+    this.rideService.changeId(driverId, passangerId);
+    this.router.navigate(['/messages']);
+  }
+
+  help(ride: any) {
+    return ride.userRides.some(
+      (userRide: any) => userRide.status.isAccepted === 1,
+    );
   }
 }
