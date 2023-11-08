@@ -13,8 +13,13 @@ export class SearchService {
     this.apiBaseUrl = environment.apiBaseUrl;
   }
 
-  getAllRides(startCity: string, destinationCity: string, selectedDate: string): Observable<RidesResponse> {
-    const url = `${this.apiBaseUrl}/rides/${startCity}/${destinationCity}/${selectedDate}`;
+  getAllRides(
+    startCity: string,
+    destinationCity: string,
+    selectedDate: string,
+    passangerCount: number
+  ): Observable<RidesResponse> {
+    const url = `${this.apiBaseUrl}/rides/${startCity}/${destinationCity}/${selectedDate}/${passangerCount}`;
     return this.http.get<RidesResponse>(url);
   }
 

@@ -109,9 +109,10 @@ export class SearchComponent implements OnInit {
   }
 
   handleSearchRides(): void {
-    const { startCity, destinationCity, selectedDate } = this.searchForm.value;
+    const { startCity, destinationCity, selectedDate, passangerCount } = this.searchForm.value;
+    console.log(startCity, destinationCity, selectedDate, passangerCount)
     this.search
-      .getAllRides(startCity, destinationCity, selectedDate)
+      .getAllRides(startCity, destinationCity, selectedDate, passangerCount)
       .subscribe((ridesResponse: RidesResponse) => {
         this.searchedRides = ridesResponse.rides;
       });
