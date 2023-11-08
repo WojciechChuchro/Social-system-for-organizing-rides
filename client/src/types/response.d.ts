@@ -23,16 +23,12 @@ export interface City {
   cityName: string;
 }
 
-export interface TimeWindow {
+export interface DepartureTime {
   earliestDepartureTime: string;
   latestDepartureTime: string;
-  earliestDepartureDate?: string;
-  latestDepartureDate?: string;
-  earliestDepartureHour?: string;
-  latestDepartureHour?: string;
 }
 
-export interface Ride extends TimeWindow {
+export interface Ride extends DepartureTime {
   id: number;
   driverId: number;
   driverName: string;
@@ -47,7 +43,19 @@ export interface Ride extends TimeWindow {
   duration?: string;
 }
 
-export interface Rides extends TimeWindow {
+export interface rideWithDriver {
+  destinationAddressId: number
+  driverId: number
+  driver: User;
+  earliestDepartureTime: string
+  id: number
+  latestDepartureTime: string
+  pricePerPerson: number
+  seatsNumber: number
+  startAddressId: number
+}
+
+export interface Rides extends DepartureTime {
   id: number;
   driver: User;
   startAddress: Address;
@@ -64,17 +72,17 @@ export interface LookingForDriverResponse extends MessageResponseOnly {
   lookingForDrivers: LookingForDrivers[];
 }
 export interface LookingForDrivers {
-  id: number
-  driverId: number
-  startAddressId: number
-  destinationAddressId: number
-  earliestDepartureTime: string
-  latestDepartureTime: string
-  pricePerPerson: number
-  seatsNumber: number
+  id: number;
+  driverId: number;
+  startAddressId: number;
+  destinationAddressId: number;
+  earliestDepartureTime: string;
+  latestDepartureTime: string;
+  pricePerPerson: number;
+  seatsNumber: number;
 }
 
-export interface UserRides extends TimeWindow {
+export interface UserRides extends DepartureTime {
   id: number;
   userId: number;
   lookingForDriverId?: number | null;
@@ -87,9 +95,24 @@ export interface UserRides extends TimeWindow {
   seatsNumber: number;
   registrationNumber: string;
   user: Users;
-  ride: Ride;
+  ride: rideWithDriver;
   lookingForDriver: LookingForDriver;
   status: Status;
+  startAddress: Address;
+  destinationAddress: Address;
+  driver: User;
+}
+
+export interface RidesPassangers {
+  id: number
+  lookingForDriver: LookingForDriver
+  lookingForDriverId: number
+  ride: rideWithDriver
+  rideId: number
+  status: Status
+  statusId:number
+  user: Users
+  userId:number
 }
 
 export interface UserRidesResponse {
@@ -109,7 +132,7 @@ export interface User {
   sessionToken: string;
 }
 
-export interface LookingForDriver extends TimeWindow {
+export interface LookingForDriver extends DepartureTime {
   id: number;
   startAddressId: number;
   destinationAddressId: number;
