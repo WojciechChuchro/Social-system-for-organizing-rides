@@ -44,9 +44,13 @@ const declarationComponents = [
   HeaderComponent,
   RegistrationComponent,
   LoginComponent,
+  RideDetailComponent,
+  MessagesComponent,
+  YourRidesComponent,
+  StylesLibraryComponent,
 ];
 
-const importModules = [
+const  importModules = [
   BrowserModule,
   AppRoutingModule,
   FormsModule,
@@ -63,30 +67,26 @@ const importModules = [
   MatRadioModule,
   MatCardModule,
   ReactiveFormsModule,
+  MatInputModule,
+  MatButtonModule,
+  MatSelectModule,
+  MatRadioModule,
+  MatCardModule,
+  MatNativeDateModule,
+  MatSnackBarModule,
+  ReactiveFormsModule,
+  MatProgressSpinnerModule,
+  MatDatepickerModule,
+  MatLineModule,
 ];
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     declarationComponents,
-    RideDetailComponent,
-    MessagesComponent,
-    YourRidesComponent,
-    StylesLibraryComponent,
   ],
   imports: [
     importModules,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatRadioModule,
-    MatCardModule,
-    MatNativeDateModule,
-    MatSnackBarModule,
-    ReactiveFormsModule,
-    MatProgressSpinnerModule,
-    MatDatepickerModule,
-    MatLineModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
