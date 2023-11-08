@@ -1,11 +1,11 @@
 <div>
-    <h2>Chat Messages</h2>
-<!--        todo: show who send message-->
-    <div *ngFor="let msg of messages">
-        {{ msg.text }}
-        {{ msg.sendTime | date: 'dd-MM-yyyy HH:mm'}}
-    </div>
+  <h2>Chat Messages</h2>
+  <!--        todo: show who send message-->
+  <div *ngFor="let msg of messages">
+    {{ msg.text }}
+    {{ msg.sendTime | date: 'dd-MM-yyyy HH:mm' }}
+  </div>
 
-    <input type="text" [(ngModel)]="message">
-    <button (click)="sendMessage()">Send</button>
+  <input type="text" [(ngModel)]="message" />
+  <button (click)="sendMessage()">Send</button>
 </div>
