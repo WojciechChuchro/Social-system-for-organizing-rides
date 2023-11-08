@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Users from '../database/models/users.model';
+
 import Rides, {
   getRidesByUserId,
   getRidesWithEveryChildrenTable,
@@ -24,7 +25,17 @@ export const getAllRides = async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
+function formatDate(inputDate: string): string {
+  const date = new Date(inputDate);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
 
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
 export const getRidesWithDrivers = async (req: Request, res: Response) => {
   try {
     const ridesData = await getRidesWithEveryChildrenTable();
@@ -34,6 +45,76 @@ export const getRidesWithDrivers = async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
+export const createRidePassenger = async (req: Request, res: Response) => {
+
+  const { userId } = res.locals.jwt;
+  try {
+    const user = await Users.query().findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    console.log(req.body)
+    const {
+      startCityName,
+      destinationCityName,
+      startStreetName,
+      startZipCode,
+      startHouseNumber,
+      earliestDepartureDate,
+      latestDepartureDate,
+      maxPrice,
+      seatsNumber,
+    } = req.body;
+    const parsedSeatsNumber = parseInt(seatsNumber);
+    const parsedMaxPrice = parseFloat(maxPrice);
+
+    if (isNaN(parsedSeatsNumber) || isNaN(parsedMaxPrice)) {
+      return res.status(400).json({ message: 'Invalid seats number and max price format' });
+    }
+
+    const cityIds: CityIds = await createStartAndDestinationCity(
+        startCityName,
+        destinationCityName,
+    );
+
+    // todo: What should I do with destination address
+    const streetIds: StreetIds = await createStartAndDestinationStreet(
+        startStreetName,
+        "Not specified",
+        cityIds.startCityId,
+        cityIds.destinationCityId,
+    );
+
+    const addressIds: AddressIds = await createStartAndDestinationAddress(
+        startZipCode,
+        startHouseNumber,
+        "00-000",
+        "0",
+        streetIds.startStreetId,
+        streetIds.destinationStreetId,
+    );
+
+    const newLookingForDriver = {
+      startAddressId: addressIds.startAddressId,
+      destinationAddressId: addressIds.destinationAddressId,
+      earliestDepartureTime: formatDate(earliestDepartureDate),
+      latestDepartureTime: formatDate(earliestDepartureDate),
+      maxPrice: parsedMaxPrice,
+      numberOfPeople: parsedSeatsNumber,
+    };
+
+    const insertedLookingForDriver = await LookingForDrivers.query().insert(newLookingForDriver);
+
+    return res
+        .status(201)
+        .json({ message: 'Looking for driver created successfully', ride: insertedLookingForDriver });
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 
 export const createRide = async (req: Request, res: Response) => {
 
@@ -119,9 +200,9 @@ export const GetRidesByUserAsPassenger = async (
   }
 
   try {
-    const userRides = await getUserRidesByUserId(userId);
+    const ridePassangers = await getUserRidesByUserId(userId);
 
-    return res.status(200).json({ userRides });
+    return res.status(200).json(ridePassangers);
   } catch (error) {
     console.error('Error', error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -253,10 +334,10 @@ export const getCities = async (req: Request, res: Response) => {
 };
 
 export const getSearchRides = async (req: Request, res: Response) => {
-  const {startCity, destinationCity, selectedDate} = req.params;
+  const {startCity, destinationCity, selectedDate, passangerCount} = req.params;
 
   try {
-    const rides = await getRidesWithFilters(startCity, destinationCity, selectedDate);
+    const rides = await getRidesWithFilters(startCity, destinationCity, selectedDate, parseInt(passangerCount));
 
     res.status(200).json({ rides, message: "Success" });
   }

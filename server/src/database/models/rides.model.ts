@@ -96,6 +96,7 @@ export async function getRidesWithFilters(
   startCity: string,
   destinationCity: string,
   selectedDate: string,
+  passangerCount: number
 ) {
   try {
     const ridesQuery = Rides.query()
@@ -107,11 +108,17 @@ export async function getRidesWithFilters(
         onlyDestinationCity(builder) {
           builder.andWhere('cityName', '=', destinationCity);
         },
+        passengerCount(builder) {
+          builder.andWhere('rides.seatsNumber', '>=', passangerCount);
+        }
       }).withGraphFetched(`[
       startAddress.[street.[city(onlyStartCity)]],
       destinationAddress.[street.[city(onlyDestinationCity)]]
       driver
-      ]`);
+     
+      ]`)
+        .modify('passengerCount')
+        .orderBy('rides.seatsNumber');
 
     const rides = await ridesQuery;
 
