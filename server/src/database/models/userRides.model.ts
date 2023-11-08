@@ -75,11 +75,8 @@ export async function getUserRidesByUserId(
 ): Promise<UserRides[]> {
   try {
     return await UserRides.query()
-      .select('userRides.*', 'rides.*') // select columns from both userRides and rides
-      .join('rides', 'userRides.rideId', 'rides.id') // join the rides table
-      .where('userRides.userId', userId) // filter by userId
-      .withGraphFetched('[user, ride, lookingForDriver, status]') // fetch related records
-      .orderBy('userRides.id'); // sort by userRides id
+        .where('userRides.userId', userId) // filter by userId
+        .withGraphFetched(`[user, status, lookingForDriver, ride.[driver, startAddress.[street.[city]],destinationAddress.[street.[city]]]]`)
   } catch (error) {
     console.error('Error getting userRides:', error);
     throw error;
