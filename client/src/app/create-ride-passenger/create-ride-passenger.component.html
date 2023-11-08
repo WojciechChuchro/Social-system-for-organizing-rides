@@ -1,58 +1,143 @@
-<mat-card class="flex-center-column-container">
+<mat-card class="flex-center-container">
   <mat-card-header>
-    <mat-card-title>Create Ride</mat-card-title>
+    <mat-card-title>Looking for Drivers</mat-card-title>
   </mat-card-header>
-  <mat-form-field>
-    <input
-      matInput
-      placeholder="starting point"
-      [(ngModel)]="starting_point"
-      required
-    />
-  </mat-form-field>
+  <form [formGroup]="rideForm">
+    <div class="flex-center-column-container">
+      <mat-form-field>
+        <mat-label>Start City</mat-label>
+        <input formControlName="startCityName" matInput />
+        <mat-error *ngIf="rideForm.get('startCityName')?.hasError('required')">
+          You must select a city from the list.
+        </mat-error>
+      </mat-form-field>
 
-  <mat-form-field>
-    <input
-      matInput
-      placeholder="Destination"
-      [(ngModel)]="destination"
-      required
-    />
-  </mat-form-field>
+      <div
+        *ngIf="cities.length > 0 && showCityList"
+        class="city-list-container"
+      >
+        <mat-list>
+          <mat-list-item
+            *ngFor="let city of cities"
+            (click)="onCitySelected(city)"
+          >
+            {{ city }}
+          </mat-list-item>
+        </mat-list>
+      </div>
 
-  <mat-form-field>
-    <input
-      matInput
-      placeholder="Earliest departure time"
-      [(ngModel)]="earliest_departure_time"
-      required
-    />
-  </mat-form-field>
+      <mat-form-field>
+        <mat-label>Destination City</mat-label>
+        <input formControlName="destinationCityName" matInput />
+        <mat-error
+          *ngIf="rideForm.get('destinationCityName')?.hasError('required')"
+        >
+          You must select a city from the list.
+        </mat-error>
+      </mat-form-field>
 
-  <mat-form-field>
-    <input
-      matInput
-      placeholder="Latest departure time"
-      [(ngModel)]="latest_departure_time"
-      required
-    />
-  </mat-form-field>
+      <div
+        *ngIf="destinationCities.length > 0 && showDestinationCityList"
+        class="city-list-container"
+      >
+        <mat-list>
+          <mat-list-item
+            *ngFor="let city of destinationCities"
+            (click)="onDestinationCitySelected(city)"
+          >
+            {{ city }}
+          </mat-list-item>
+        </mat-list>
+      </div>
 
-  <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="number_of_passengers"
-      placeholder="Number of passengers"
-      required
-    />
-  </mat-form-field>
+      <mat-form-field>
+        <mat-label>Start Street</mat-label>
+        <input formControlName="startStreetName" matInput />
+        <mat-error
+          *ngIf="rideForm.get('startStreetName')?.hasError('required')"
+        >
+          Start street is required.
+        </mat-error>
+      </mat-form-field>
 
-  <mat-form-field>
-    <input matInput [(ngModel)]="max_price" placeholder="Max price" required />
-  </mat-form-field>
-  <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="handleCreateRide()">
-      Register
-    </button>
-  </mat-card-actions>
+      <mat-form-field>
+        <mat-label>ZIP Code</mat-label>
+        <input formControlName="startZipCode" matInput />
+        <mat-error *ngIf="rideForm.get('startZipCode')?.hasError('required')">
+          ZIP code is required.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>House Number</mat-label>
+        <input formControlName="startHouseNumber" matInput />
+        <mat-error
+          *ngIf="rideForm.get('startHouseNumber')?.hasError('required')"
+        >
+          House number is required.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Earliest Departure Time</mat-label>
+        <input
+          matInput
+          [matDatepicker]="earliestDepartureDatePicker"
+          formControlName="earliestDepartureDate"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="earliestDepartureDatePicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #earliestDepartureDatePicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Latest Departure Time</mat-label>
+        <input
+          matInput
+          [matDatepicker]="latestDepartureDatePicker"
+          formControlName="latestDepartureDate"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="latestDepartureDatePicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #latestDepartureDatePicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Maximum Price</mat-label>
+        <input matInput type="number" formControlName="maxPrice" />
+        <mat-error *ngIf="rideForm.get('maxPrice')?.hasError('required')">
+          Price per person is required.
+        </mat-error>
+        <mat-error *ngIf="rideForm.get('maxPrice')?.hasError('min')">
+          Price should be greater than zero.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Seats Number</mat-label>
+        <input matInput type="number" formControlName="seatsNumber" />
+        <mat-error *ngIf="rideForm.get('seatsNumber')?.hasError('required')">
+          Number of seats is required.
+        </mat-error>
+        <mat-error *ngIf="rideForm.get('seatsNumber')?.hasError('min')">
+          Number of seats should be greater than zero.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="handleCreateRide()"
+          [disabled]="!rideForm.valid"
+        >
+          Look for a driver
+        </button>
+      </mat-card-actions>
+    </div>
+  </form>
 </mat-card>
