@@ -1,71 +1,39 @@
-<mat-card class="flex-center-column-container">
+<mat-card class="flex flex-col justify-center items-center">
   <mat-card-header>
     <mat-card-title>Registration</mat-card-title>
   </mat-card-header>
+
+  <div class="flex flex-col justify-center items-center gap-1">
+
   <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="registerForm.email"
-      placeholder="Email"
-      required
-      (keyup.enter)="handleRegister()"
-    />
+    <input matInput [(ngModel)]="registerForm.email" placeholder="Email" required (keyup.enter)="handleRegister()" />
   </mat-form-field>
 
   <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="registerForm.name"
-      placeholder="Name"
-      required
-      (keyup.enter)="handleRegister()"
-    />
+    <input matInput [(ngModel)]="registerForm.name" placeholder="Name" required (keyup.enter)="handleRegister()" />
   </mat-form-field>
 
   <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="registerForm.surname"
-      placeholder="Surname"
-      required
-      (keyup.enter)="handleRegister()"
-    />
+    <input matInput [(ngModel)]="registerForm.surname" placeholder="Surname" required (keyup.enter)="handleRegister()" />
   </mat-form-field>
 
   <mat-form-field>
-    <input
-      matInput
-      [(ngModel)]="registerForm.phoneNumber"
-      placeholder="Phone Number"
-      (keyup.enter)="handleRegister()"
-      required
-    />
+    <input matInput [(ngModel)]="registerForm.phoneNumber" placeholder="Phone Number" (keyup.enter)="handleRegister()" required/>
   </mat-form-field>
 
   <mat-form-field>
-    <input
-      matInput
-      type="password"
-      [(ngModel)]="registerForm.password"
-      placeholder="Password"
-      (keyup.enter)="handleRegister()"
-      required
-    />
+    <input matInput type="password" [(ngModel)]="registerForm.password" placeholder="Password" (keyup.enter)="handleRegister()" required />
   </mat-form-field>
 
   <mat-form-field>
-    <input
-      matInput
-      type="password"
-      [(ngModel)]="repeatPassword"
-      placeholder="Repeat Password"
-      (keyup.enter)="handleRegister()"
-      required
-    />
+    <input matInput type="password" [(ngModel)]="repeatPassword" placeholder="Repeat Password" (keyup.enter)="handleRegister()" required />
   </mat-form-field>
+
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="handleRegister()">
       Register
     </button>
   </mat-card-actions>
+  </div>
 </mat-card>
+

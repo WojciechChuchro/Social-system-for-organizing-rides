@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { filter, switchMap } from 'rxjs/operators';
 import { tap } from 'rxjs';
 import { cityValidator } from '../../validators/search';
-import * as moment from 'moment';
 import { UtilityService } from '../../services/utility.service';
 import { MessageResponseOnly } from '../../types/user';
 
@@ -46,18 +45,18 @@ export class CreateRideDriverComponent implements OnInit {
     this.rideForm
       .get('startCityName')
       ?.valueChanges.pipe(
-        tap((value) => {
-          if (value.trim().length === 0) {
-            this.cities = [];
-            this.showCityList = false;
-          }
-        }),
-        filter((value) => value.trim().length > 0),
-        switchMap((value) =>
-          // todo: Fix types
-          this.http.get<any>(`http://localhost:8080/api/get-cities/${value}`),
-        ),
-      )
+      tap((value) => {
+        if (value.trim().length === 0) {
+          this.cities = [];
+          this.showCityList = false;
+        }
+      }),
+      filter((value) => value.trim().length > 0),
+      switchMap((value) =>
+        // todo: Fix types
+        this.http.get<any>(`http://localhost:8080/api/get-cities/${value}`),
+      ),
+    )
       .subscribe((data) => {
         this.cities = data.filteredCities;
         this.showCityList = true;
@@ -72,17 +71,17 @@ export class CreateRideDriverComponent implements OnInit {
     this.rideForm
       .get('destinationCityName')
       ?.valueChanges.pipe(
-        tap((value) => {
-          if (value.trim().length === 0) {
-            this.destinationCities = [];
-            this.showDestinationCityList = false;
-          }
-        }),
-        filter((value) => value.trim().length > 0),
-        switchMap((value) =>
-          this.http.get<any>(`http://localhost:8080/api/get-cities/${value}`),
-        ),
-      )
+      tap((value) => {
+        if (value.trim().length === 0) {
+          this.destinationCities = [];
+          this.showDestinationCityList = false;
+        }
+      }),
+      filter((value) => value.trim().length > 0),
+      switchMap((value) =>
+        this.http.get<any>(`http://localhost:8080/api/get-cities/${value}`),
+      ),
+    )
       .subscribe((data) => {
         this.destinationCities = data.filteredCities;
         this.showDestinationCityList = true;
@@ -136,26 +135,26 @@ export class CreateRideDriverComponent implements OnInit {
       seatsNumber,
     } = formValue;
 
-    const startMoment = moment(startDate).set({
-      hour: parseInt(startTime.split(':')[0], 10),
-      minute: parseInt(startTime.split(':')[1], 10),
-      second: 0,
-    });
+    // const startMoment = moment(startDate).set({
+    //   hour: parseInt(startTime.split(':')[0], 10),
+    //   minute: parseInt(startTime.split(':')[1], 10),
+    //   second: 0,
+    // });
 
-    const formattedStartTime = startMoment.format('YYYY-MM-DD HH:mm:ss');
+    // const formattedStartTime = startMoment.format('YYYY-MM-DD HH:mm:ss');
 
     const durationMinutes =
       parseInt(duration.split(':')[0], 10) * 60 +
       parseInt(duration.split(':')[1], 10);
 
-    const latestDepartureMoment = moment(startMoment).add(
-      durationMinutes,
-      'minutes',
-    );
+    // const latestDepartureMoment = moment(startMoment).add(
+    //   durationMinutes,
+    //   'minutes',
+    // );
 
-    const formattedLatestDepartureTime = latestDepartureMoment.format(
-      'YYYY-MM-DD HH:mm:ss',
-    );
+    // const formattedLatestDepartureTime = latestDepartureMoment.format(
+    //   'YYYY-MM-DD HH:mm:ss',
+    // );
 
     return {
       destinationCityName,
@@ -163,8 +162,8 @@ export class CreateRideDriverComponent implements OnInit {
       startCityName,
       startStreetName,
       startZipCode,
-      earliestDepartureTime: formattedStartTime,
-      latestDepartureTime: formattedLatestDepartureTime,
+      earliestDepartureTime: "formattedStartTime",
+      latestDepartureTime: "formattedLatestDepartureTime",
       pricePerPerson,
       seatsNumber,
     };

@@ -96,7 +96,7 @@ export const validateJWT = (req: Request, res: Response): Response | void => {
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
       return res.status(401).json({
-        message: 'Unauthorized: Token has expired ',
+        message: 'Unauthorized: Token has expired',
         isValid: false,
       });
     } else if (error instanceof jwt.JsonWebTokenError) {
